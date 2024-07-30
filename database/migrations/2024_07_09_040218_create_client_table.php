@@ -11,19 +11,55 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tbl_client', function (Blueprint $table) {
-            $table->id('client_id');
-            $table->unsignedBigInteger('user_id');
+    //     if (!Schema::hasTable('tbl_client')) {
+    //     Schema::create('tbl_client', function (Blueprint $table) {
+    //         $table->id('client_id');
+    //         $table->unsignedBigInteger('user_id');
         
-            $table->foreign('user_id')->references('user_id')->on('tbl_users');
+    //         $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+    //     });
+    // }
+    if (!Schema::hasTable('tbl_transaction')) {
+        Schema::create('tbl_transaction', function (Blueprint $table) {
+            $table->id('transaction_id');
+            $table->unsignedBigInteger('client_id');
+            $table->unsignedBigInteger('staff_id');
+            $table->string('status');
+            $table->timestamps();
+
+            // Add foreign key constraints if needed
+            $table->foreign('client_id')->references('client_id')->on('tbl_client')->onDelete('cascade');
+            $table->foreign('staff_id')->references('staff_id')->on('tbl_staff')->onDelete('cascade');
         });
     }
+    
+    if (!Schema::hasTable('tbl_document')) {
+        Schema::create('tbl_document', function (Blueprint $table) {
+            $table->id('document_id');
+            $table->string('template');
+            $table->string('qrcode');
+            
 
+            $table->unsignedBigInteger('staff_id');
+        
+            $table->foreign('staff_id')->references('staff_id')->on('tbl_staff')->onDelete('cascade');
+
+            $table->unsignedBigInteger('client_id');
+        
+            $table->foreign('client_id')->references('client_id')->on('tbl_client')->onDelete('cascade');
+            $table->timestamps();
+        });
+
+    }
+    }
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('tbl_client');
+        // Schema::dropIfExists('tbl_client');
+        
+        Schema::dropIfExists('tbl_document');
+        Schema::dropIfExists('tbl_transaction');
     }
 };

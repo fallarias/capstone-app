@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('tbl_logs')) {
         Schema::create('tbl_logs', function (Blueprint $table) {
             $table->id('logs_id');
             $table->integer('account_id');
@@ -20,7 +21,7 @@ return new class extends Migration
             $table->string('log_message');
         });
     }
-
+}
     /**
      * Reverse the migrations.
      */

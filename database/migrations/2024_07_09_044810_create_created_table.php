@@ -11,26 +11,28 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('tbl_created_task')) {
         Schema::create('tbl_created_task', function (Blueprint $table) {
             $table->id('create_id');
-            $table->string('admin_lname');
-            $table->string('admin_fname');
-            $table->string('admin_mname');
+            $table->string('Office_name');
             $table->string('Office_task');
             $table->string('New_alloted_time');
             $table->timestamp('Date_created');
+            $table->string('soft_del');
             
-            $table->unsignedBigInteger('admin_id');
+            $table->unsignedBigInteger('user_id');
         
-            $table->foreign('admin_id')->references('admin_id')->on('tbl_admin');
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->timestamps();
         });
     }
+}
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('created');
+        Schema::dropIfExists('tbl_created_task');
     }
 };
