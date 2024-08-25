@@ -1,0 +1,291 @@
+/*------------------Global----------------------------*/
+body {
+    background-color: #18392B;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /*------------------mainPage css----------------------*/
+  .container {
+    max-width: 1900px;
+    margin: 0 auto;
+    padding: 15 px;
+    display: flex; 
+    justify-content: space-around;
+    align-items: center;
+    height: 95vh;
+  }
+  
+  .row {
+    height: 570px;
+    width: 100%; /* Adjusted to make it responsive */
+    max-width: 1900px; /* Added max-width to limit width */
+    margin: 0 auto; /* Center align row */
+    padding: 50px;
+    background-color: #0f965e;
+    border: 2px solid #bbb;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  
+  /* public/css/style.css */
+  .row .column {
+    height: 620px;
+    width: 290px; /* Adjust width as needed */
+    flex: 1; /* Adjust flex properties as needed */
+    background-color: #0f965e;
+    background-image: url('../img/ISU-Gate-Copy.jpg'); /* Relative path from CSS file */
+    background-size: cover;
+    background-position: center;
+    border: 1px solid #bbb;
+    border-radius: 5px 0 5px 5px; /* Top-left, top-right, bottom-right, bottom-left */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    position: relative;
+  }
+  
+  
+  .row .column::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 150, 94, 0.8);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius:5px;
+    z-index: 1;
+  }
+  
+  .column1 {
+    height: 580px;
+    width: 40px; /* Adjust width as needed */
+    flex: 0.6; /* Adjust flex properties as needed */
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #bbb;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+  
+  .image-container {
+    position: relative;
+    z-index: 2;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+  }
+  
+  .image {
+    width: 14%;
+    height: auto;
+    padding-top:130px;
+    margin-right: 30px;
+    border-radius: 10px;
+    position: relative;
+    align-items: center;
+    display: inline-block;
+    z-index: 3;
+    opacity: 1;
+  }
+  
+  .image1 {
+    width: 16%;
+    height: auto;
+    padding-top: 50px;
+    border-radius: 10px;
+    position: relative;
+    align-items: center;
+    display: inline-block;
+    z-index: 3;
+    opacity: 1;
+  }
+  
+  .bottom-text {
+    padding-top: 50px;
+    font-family: blithe;
+    font-weight: bold;
+    color: #fff;
+    font-size: 70px;
+    margin: 0;
+    text-align: center;
+  }
+  
+  .bottom-text1 {
+    padding-top: 5px;
+    color: #fff;
+    font-size: 16px;
+    margin: 0;
+    text-align: center;
+  }
+  
+  
+  form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    margin: 100px;
+  }
+  
+  .field {
+    margin-bottom: 15px;
+  }
+  
+  .field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .field input[type="text"],
+  .field input[type="password"] 
+  .field select{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  
+  
+  input[type="checkbox"] {
+    margin-bottom: 15px;
+  }
+  
+  .btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #0f965e;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn:hover {
+    background-color: #078021;
+  }
+  
+  p {
+    text-align: center;
+    margin-top: 15px;
+  }
+  
+  p a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  p a:hover {
+    text-decoration: underline;
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  /* Responsive design */
+  @media (max-width: 780px) {
+    .container {
+      margin-left: -5px;
+      margin-bottom: 200px;
+      max-width: 600px;
+      justify-content: space-around;
+      height: 600px;
+    }
+  
+    .row {
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+    }
+  
+    .row .column {
+      width: 718px;
+      margin-top: -50px;
+    }
+  
+    .column, .column1 {
+        width: 678px; /* Adjust width for responsiveness */
+        height: auto;
+        margin-bottom: none;
+    }
+    .column1 {
+      flex: 0.6; /* Adjust flex properties as needed */
+      background-color: #fff;
+      border: 1px solid #bbb;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      padding-bottom: 100px;
+    }
+  
+    .image-container {
+      position: relative;
+      z-index: 2;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+      padding: 10px;
+    }
+    
+    .image {
+      margin-top: -200px;
+      width: 12%; /* Adjust the width for mobile */
+      margin-left: 20px;
+      margin-right: 450px;
+       /* Center the image */
+    } 
+    .image1 {
+      width: 14%; /* Adjust the width for mobile */
+      margin: 0 auto; /* Center the image */
+    }
+  
+    .bottom-text {
+      padding-top: 20px;
+      color: #fff;
+      font-size: 60px;
+      text-align: center;
+    }
+    .bottom-text1 {
+      margin-top: -15px;
+      padding-bottom: -50px;
+      color: #fff;
+      font-size: 13px;
+      text-align: center;
+    }
+    form {
+      background:#fff;
+      border-radius: 8px;
+      width: 300px;
+      margin-right: 100px;
+      margin-left: 150px;
+      margin-bottom: 100px;
+      margin-top: -40px;
+    }
+  
+  }
+  
+  .accType{
+    padding: 8px 100px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  
+  }
+  

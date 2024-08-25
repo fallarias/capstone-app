@@ -20,7 +20,11 @@ class signupController extends Controller
             'account_type' => 'required',
         ]);
         
-         $user = User::create($attrs);
+        User::create([
+            'password' => $attrs['password'],
+            'email' => $attrs['email'],
+            'account_type' => $attrs['account_type']
+         ]);
        // Auth:login($user);
 
         return view('admin.login');

@@ -21,7 +21,7 @@
 		<tbody>
             @forelse($supplier as $counter => $row)
                 <tr>
-                    <td>{{ $counter + 1}}</td> 
+                    <td>{{$loop->iteration}}</td> 
                     <td>{{ $row->supplier_fname }}</td>
                     <td>{{ $row->supplier_mname }}</td>
                     <td>{{ $row->supplier_lname }}</td>

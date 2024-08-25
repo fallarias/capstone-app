@@ -2,10 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Document</title>
 </head>
 <body>
+<!-- App Bar @include('components.app-bar') -->
 
 <table border = "1">
 		<thead>
@@ -18,7 +24,7 @@
 		<tbody>
             @forelse($qrcode as $counter => $row)
                 <tr>
-                    <td>{{ $counter + 1}}</td> 
+                    <td>{{$loop->iteration}}</td> 
                     <td>{{ $row->time_in }}</td>
                     <td>{{ $row->time_out }}</td>
                     <td>{{ $row->staff_id }}</td>

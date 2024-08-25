@@ -18,7 +18,7 @@
 		<tbody>
             @forelse($transaction as $counter => $row)
                 <tr>
-                    <td>{{ $counter + 1}}</td> 
+                    <td>{{ $loop->iteration}}</td> 
                     <td>{{ $row->staff_id }}</td>
                     <td>{{ $row->client_id }}</td>
                     <td>{{ $row->status }}</td>

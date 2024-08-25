@@ -18,7 +18,7 @@
 		<tbody>
             @forelse($user as $counter => $row)
                 <tr>
-                    <td>{{ $counter + 1}}</td> 
+                    <td>{{ $loop->iteration}}</td> 
                     <td>{{ $row->email }}</td>
                     <td>{{ $row->account_type }}</td>
                     <td>{{ $row->password }}</td>

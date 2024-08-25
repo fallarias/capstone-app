@@ -1,0 +1,216 @@
+body {
+    background-color: #a0a0a0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  
+  .icon-container {
+    position: relative;
+    display: inline-block; /* Ensure container is inline with surrounding text */
+    transition: box-shadow 0.3s ease; /* Smooth transition for box-shadow */
+  }
+  
+  /* Tooltip text */
+  .tooltip-text {
+    visibility: hidden; /* Hide tooltip text by default */
+    width: 150px; /* Adjust width as needed */
+    background-color: black; /* Initial background color of tooltip */
+    color: #fff; /* Text color of tooltip */
+    text-align: center; /* Center text inside tooltip */
+    border-radius: 4px; /* Rounded corners */
+    padding: 10px; /* Padding around text */
+    position: absolute; /* Position relative to container */
+    z-index: 1; /* Ensure tooltip appears above other elements */
+    bottom: -40px; /* Position tooltip below the icon */
+    left: 50%; /* Center tooltip horizontally */
+    transform: translateX(-50%); /* Center tooltip horizontally */
+    opacity: 0; /* Hide tooltip initially */
+    transition: opacity 0.3s, background-color 0.3s; /* Smooth fade-in and background color change effect */
+  }
+  
+  /* Show tooltip text on hover */
+  .icon-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1; /* Show tooltip */
+    background-color: #555; /* Change background color on hover */
+  }
+  
+  /* Icon styles */
+  .icon-container i {
+    font-size: 24px;
+    color: white;
+    margin-right: 40px; /* Adjust spacing as needed */
+    margin-left: 40px; /* Adjust spacing as needed */
+    transition: color 0.3s, box-shadow 0.3s, transform 0.3s; /* Smooth color change, box-shadow, and transform effect for icon */
+    border-radius: 40px;
+  
+  }
+  
+  /* Change icon color and add circular glowing effect on hover */
+  .icon-container:hover i {
+    color: #D4AF37; /* Change icon color on hover */
+    box-shadow: 0 0 20px rgba(255, 255, 0, 0.8); /* Circular yellow glowing effect */
+    transform: scale(1.1); /* Slightly enlarges the icon on hover */
+    border-radius: 40px;
+  }
+  
+  .icon-container.active i {
+    color: yellow;
+  }
+  
+  
+  
+  /* dashboard.css */
+  
+  /* Main Content Container */
+  .main-content {
+    padding-left: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 50%;
+    height: 50%;
+  }
+  
+  .title{
+    font-size: 60px;
+    font-weight:bolder;
+    font-family:'Courier New', Courier, monospace;
+    color:#18392B;
+  }
+  .title1{
+    font-size: 40px;
+    font-weight:bolder;
+    font-family:'Courier New', Courier, monospace;
+    color:#18392B;
+  }
+  
+  /* Table Container */
+  .table-container {
+    margin-top: 20px;
+    width: 100%; /* Adjust width if needed */
+    max-width: 1000px; /* Example max-width for better control */
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+  }
+  
+  a {
+    color: #1e7edd;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  .stat-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    text-align: start;
+  }
+  .stat-item {
+    margin-right: 50px;
+    font-size: 1.2em;
+    position: relative; /* Needed for the pseudo-element positioning */
+    padding-bottom: 20px; /* Adds space for the line */
+  }
+  .stat-item h4 {
+    margin-bottom: 10px;
+    border-bottom: 2px solid #18392B; /* Customize the line here */
+    display: inline-block; /* Makes the line as long as the text */
+    padding-bottom: 5px;
+    width: 130px;
+  }
+  
+  .stat-item p {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #18392B; /* Text color */
+    cursor: pointer; /* Pointer cursor to indicate clickable */
+    text-decoration: none; /* Remove underline */
+  }
+  .stat-item a {
+    display: block;
+    margin-top: 5px;
+    color: #535252;
+  }
+  
+  .chart-container {
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  label{
+    color:#18392B;
+    margin-bottom: 5px;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 20px;
+  }
+  
+  input{
+    margin-bottom: 20px;
+    width: 400px;
+    height: 30px;
+    font-size: 20px;
+  }
+  
+  select{
+    margin-bottom: 20px;
+    width: 400px;
+    height: 30px;
+    font-size: 20px;
+  }
+  
+  .btn2{
+    margin-top:300px;
+    margin-left:250px;
+    border-radius: 5px;
+    height: 25px;
+  
+  }
+  .btn3{
+    margin-top: -58px;
+    margin-left:315px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #18392B;
+    color: #f4f4f4;
+  }
+  
+  .btn3:hover{
+    border-radius: 5px;
+    background-color: #18392B;
+    color: #D4AF37;
+  }
+  
+  .btn-clear {
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #ff6666; /* Optional: Change to your preferred color */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-clear:hover {
+    background-color: #ff3333; /* Optional: Darker shade on hover */
+  }

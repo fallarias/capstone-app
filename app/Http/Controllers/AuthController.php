@@ -52,12 +52,13 @@ class AuthController extends Controller
     // Fetch counts for data and user
     $supplier = Create::count();
     $user = User::count(); 
+    $users = User::all();
     $transaction = Transaction::count();
     $client = Client::count();
     // Return the admin dashboard view with the data and user count
     return redirect()->route('admin.dashboard')
                      ->with(['supplier' => $supplier, 'user' => $user, 'client' => $client
-                    ,'transaction' => $transaction]);
+                    ,'transaction' => $transaction, 'users' => $users]);
 }
 
 
@@ -65,5 +66,11 @@ class AuthController extends Controller
     {
         Auth::logout();
         return redirect()->route('admin.login');
+    }
+    public function person($id){
+
+        $user = User::where('user_id', $id)->first();
+
+        return view('admin.person', compact('user'));
     }
 }

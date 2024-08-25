@@ -16,7 +16,7 @@
 		<tbody>
             @forelse($clients as $counter => $row)
                 <tr>
-                    <td>{{ $counter + 1}}</td> 
+                    <td>{{ $loop->iteration}}</td> 
                     <td>{{ $row->user_id }}</td>
 
 

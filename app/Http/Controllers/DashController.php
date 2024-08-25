@@ -10,7 +10,7 @@ use App\Models\Transaction;
 use App\Models\Client;
 use App\Models\Request as ModelsRequest;
 use App\Models\qrcode;
-
+use Carbon\Carbon;
 class DashController extends Controller
 {
     public function task(){
@@ -19,8 +19,9 @@ class DashController extends Controller
         $user = User::count(); 
         $transaction = Transaction::count();
         $client = Client::count();
+        $users = User::all();
         // Return the admin dashboard view with the data and user count
-        return view('admin.dashboard', compact('supplier','user', 'client','transaction'));
+        return view('admin.dashboard', compact('supplier','user', 'client','transaction', 'users'));
     }
     public function create(){
         return view('admin.createtask');
@@ -45,8 +46,9 @@ class DashController extends Controller
         $user = User::count(); 
         $transaction = Transaction::count();
         $client = Client::count();
+        $users = User::all();
         // Return the admin dashboard view with the data and user count
-        return view('admin.dashboard', compact('supplier','user', 'client','transaction'));
+        return view('admin.dashboard', compact('supplier','user', 'client','transaction', 'users'));
     }
     public function list(){
         $data = Create::all()->where('soft_del','=','0');
@@ -85,8 +87,9 @@ class DashController extends Controller
         $user = User::count(); 
         $transaction = Transaction::count();
         $client = Client::count();
+        $users = User::all();
         // Return the admin dashboard view with the data and user count
-        return view('admin.dashboard', compact('supplier','user', 'client','transaction'));
+        return view('admin.dashboard', compact('supplier','user', 'client','transaction', 'users'));
     }
     public function delete($id){
         
@@ -98,8 +101,9 @@ class DashController extends Controller
         $user = User::count(); 
         $transaction = Transaction::count();
         $client = Client::count();
+        $users = User::all();
         // Return the admin dashboard view with the data and user count
-        return view('admin.dashboard', compact('supplier','user', 'client','transaction'));
+        return view('admin.dashboard', compact('supplier','user', 'client','transaction', 'users'));
                          
     }
 
@@ -124,9 +128,13 @@ class DashController extends Controller
         return view('admin.user', compact('user'));
     }
     public function request(){
+        $data = [
+            'labels' => Carbon::now()->subMonths()->format('F'),
+            'data' => [65, 59, 80, 81],
+        ];
         $request = ModelsRequest::all();
 
-        return view('admin.request', compact('request'));
+        return view('admin.request', compact('request','data'));
     }
     public function qrcode(){
         $qrcode = qrcode::all();
