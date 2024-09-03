@@ -14,7 +14,8 @@ use App\Models\Client;
 class ApiController extends Controller
 {
     public function register(Request $request){
-
+        
+        
         try {
             $attrs = $request->validate([
                 'firstname' => 'required',
@@ -23,18 +24,24 @@ class ApiController extends Controller
                 'account_type' => 'required',
                 'email' => 'required|email|unique:users',
                 'password' => 'required|min:6|confirmed',
-                'department' => 'required'
+                'department' => 'required',
+                'photo' => 'required|file|mimes:jpeg,jpg,png,pdf,zip,doc,docx|max:10240',
             ]);
+            foreach ($request->file('photo') as $file) {
+                
+                $filePath = $file->store('public');
+                User::create([
+                    'email' => $attrs['email'],
+                    'password' => bcrypt($attrs['password']), // Make sure to hash the password
+                    'lastname' => $attrs['lastname'],
+                    'gender' => $attrs['gender'],
+                    'account_type' => $attrs['account_type'],
+                    'firstname' => $attrs['firstname'],
+                    'department' => $attrs['department'],
+                    'photo' => $filePath,
+                ]);
+            }
             
-            User::create([
-                'email' => $attrs['email'],
-                'password' => bcrypt($attrs['password']), // Make sure to hash the password
-                'lastname' => $attrs['lastname'],
-                'gender' => $attrs['gender'],
-                'account_type' => $attrs['account_type'],
-                'firstname' => $attrs['firstname'],
-                'department' => $attrs['department'],
-            ]);
     
             return response([
                 'response' => 'success'
