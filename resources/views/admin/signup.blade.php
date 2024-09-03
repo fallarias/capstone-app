@@ -35,7 +35,7 @@
         </div>
         <div class="column1">
             <p style="font-size: 25px; font-weight:bold; margin-left: -190px; margin-top: 10px; margin-bottom: 70px"> Sign up <span style="font-weight: 10;">Now</span></p>
-            <form method="POST" action="{{route('admin.signup')}}">            
+            <form method="POST" action="{{route('admin.signups')}}">            
             @csrf
         @method('post')
         <div class="field input">

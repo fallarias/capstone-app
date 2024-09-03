@@ -14,11 +14,15 @@ return new class extends Migration
         if (!Schema::hasTable('users')) {
         Schema::create('users', function (Blueprint $table) {
             $table->id('user_id');
+            $table->string('firstname');
+            $table->string('lastname');
+            $table->string('gender');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('account_type');
+            $table->string('profile');
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('passnohash')->nullable();
+            $table->string('department');
             $table->rememberToken();
             $table->timestamps();
         });

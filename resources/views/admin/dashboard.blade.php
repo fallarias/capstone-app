@@ -15,7 +15,7 @@
 <body>
     <!-- App Bar -->
     
-
+    @include('components.app-bar')
     <!-- Main Content -->
     <div class="main-content">
         <h1 class="title">Dashboard</h1>

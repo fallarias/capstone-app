@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Document</title>
 </head>
 <body>
-<!-- App Bar @include('components.app-bar') -->
+App Bar @include('components.app-bar')
 
 <table border = "1">
 		<thead>
