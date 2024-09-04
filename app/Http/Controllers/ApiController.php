@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\Sanctum;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -58,23 +60,28 @@ class ApiController extends Controller
     }
 
     public function login_users(Request $request){
+            // Validate input fields
+            $fields = $request->validate([
+                'email' => 'required|email|exists:users',
+                'password' => 'required',
+            ]);
         
-        $attrs = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6'
-        ]);
-
-        if(!Auth::attempt($attrs)){
-            return Response([
-                'message' => 'Invalid credentials.'
-            ], 403);
-        }
-
-        return response([
-            'user' => auth()->user(),
-            'token' => auth()->user()->createToken('secret')->plainTextToken
-        ], 200);
+            // Attempt to find the user by email
+            $user = User::where('email', $fields['email'])->first();
         
+            // Check if the user exists and if the provided password matches
+            if (!$user || !Hash::check($fields['password'], $user->password)) {
+                return response()->json([
+                    'message' => 'The provided credentials are incorrect.'
+                ], 401); // 401 Unauthorized
+            }
+            // Generate a token for the user
+            $token = $user->createToken($request->email);
+            // Return the user and token as a JSON response
+            return response()->json([
+                'user' => $user,
+                'token' => $token->plainTextToken
+            ], 200); // 200 OK
     }
 
     public function client_file() {
