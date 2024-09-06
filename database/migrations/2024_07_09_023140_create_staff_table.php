@@ -11,24 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-    //     if (!Schema::hasTable('tbl_staff')) {
-    //     Schema::create('tbl_staff', function (Blueprint $table) {
-    //         $table->id('staff_id');
-    //         $table->string('Employee_lname');
-    //         $table->string('Employee_fname');
-    //         $table->string('Employee_mname');
-    //         $table->string('Office_name');
-    //         $table->string('Allotted_time');
-    //         $table->string('Task');
-    //         $table->string('task_details');
+        if (!Schema::hasTable('tbl_staff')) {
+        Schema::create('tbl_staff', function (Blueprint $table) {
+            $table->id('staff_id');
+            $table->string('Employee_lname');
+            $table->string('Employee_fname');
+            $table->string('Employee_mname');
+            $table->string('Office_name');
+            $table->string('Allotted_time');
+            $table->string('Task');
+            $table->string('task_details');
 
             
-    //         $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id');
         
-    //         $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
-    //         $table->timestamps();
-    //     });
-    // }
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->timestamps();
+        });
+    }
     if (!Schema::hasTable('tbl_qrcode')) {
         Schema::create('tbl_qrcode', function (Blueprint $table) {
             $table->id('qrcode_id');
@@ -48,7 +48,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Schema::dropIfExists('tbl_staff');
+        Schema::dropIfExists('tbl_staff');
         Schema::dropIfExists('tbl_qrcode');
     }
 };

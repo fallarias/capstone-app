@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-    //     if (!Schema::hasTable('tbl_client')) {
-    //     Schema::create('tbl_client', function (Blueprint $table) {
-    //         $table->id('client_id');
-    //         $table->unsignedBigInteger('user_id');
+        if (!Schema::hasTable('tbl_client')) {
+        Schema::create('tbl_client', function (Blueprint $table) {
+            $table->id('client_id');
+            $table->unsignedBigInteger('user_id');
         
-    //         $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
-    //     });
-    // }
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+        });
+    }
     if (!Schema::hasTable('tbl_transaction')) {
         Schema::create('tbl_transaction', function (Blueprint $table) {
             $table->id('transaction_id');
@@ -57,9 +57,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Schema::dropIfExists('tbl_client');
+        //Schema::dropIfExists('tbl_client');
         
-        Schema::dropIfExists('tbl_document');
+        //Schema::dropIfExists('tbl_document');
         Schema::dropIfExists('tbl_transaction');
     }
 };

@@ -16,13 +16,14 @@ return new class extends Migration
             $table->id('user_id');
             $table->string('firstname');
             $table->string('lastname');
-            $table->string('gender');
+            $table->string('middlename');
             $table->string('email')->unique();
             $table->string('account_type');
-            $table->string('profile');
+            $table->string('department');
+            $table->string('profile_picture')->nullable();   
+            $table->string('is_delete')->default('active');        
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('department');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -34,6 +35,8 @@ return new class extends Migration
              $table->timestamp('created_at')->nullable();
          });
         }
+
+
          if (!Schema::hasTable('sessions')) {
          Schema::create('sessions', function (Blueprint $table) {
              $table->string('id')->primary();
@@ -51,8 +54,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //Schema::dropIfExists('users');
-        //Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('users');
+        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }
 };
