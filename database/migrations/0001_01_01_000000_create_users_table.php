@@ -12,20 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         if (!Schema::hasTable('users')) {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id('user_id');
-            $table->string('firstname');
-            $table->string('lastname');
-            $table->string('gender');
-            $table->string('email')->unique();
-            $table->string('account_type');
-            $table->string('profile');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->string('department');
-            $table->rememberToken();
-            $table->timestamps();
-        });
+            Schema::create('users', function (Blueprint $table) {
+                $table->id('user_id');
+                $table->string('firstname');
+                $table->string('lastname');
+                $table->string('gender');
+                $table->string('email')->unique();
+                $table->string('account_type');
+                $table->timestamp('email_verified_at')->nullable();
+                $table->string('password');
+                $table->string('department');
+                $table->rememberToken();
+                $table->timestamps();
+            });
         }
         if (!Schema::hasTable('password_reset_tokens')) {
         Schema::create('password_reset_tokens', function (Blueprint $table) {

@@ -38,8 +38,7 @@ Route::get('/person/{id}', [AuthController::class, 'person'])->name('admin.perso
 Route::get('/upload', [FileController::class, 'upload'])->name('admin.upload');
 Route::get('/uploaded_files', [FileController::class, 'uploaded_files'])->name('admin.uploaded_files');
 Route::post('/upload', [FileController::class, 'upload_files'])->name('admin.upload_file');
-//testing
-Route::get('/document/{id}', [FileController::class, 'showDocument'])->name('document.show');
+
 
 // Route::group(['middleware'=> ['auth:sanctum']], function(){
 // });

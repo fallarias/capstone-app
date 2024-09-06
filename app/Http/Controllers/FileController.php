@@ -13,39 +13,45 @@ class FileController extends Controller
         return view('admin.upload');
     }
 
-    public function uploaded_files(){
-
-    $files = File::all();
-
-    foreach ($files as $file) {
-        if (in_array($file->type, ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])) {
+    public function uploaded_files() {
+        $files = File::all();
+    
+        foreach ($files as $file) {
             $filePath = storage_path('app/' . $file->filepath);
-
-            try {
-                // Load the Word document
-                $phpWord = IOFactory::load($filePath);
-
-                // Convert the document to HTML
-                $htmlWriter = IOFactory::createWriter($phpWord, 'HTML');
-                $htmlContent = '';
-
-                ob_start();
-                $htmlWriter->save('php://output');
-                $file->htmlContent = ob_get_contents(); // Store the HTML content in the file object
-                ob_end_clean();
-            } catch (\Exception $e) {
-                // Log the error or handle it as needed
-                Log::error('Error processing Word document: ' . $e->getMessage());
-                $file->htmlContent = '<p>Could not display document. Error: ' . $e->getMessage() . '</p>';
+            
+            if (in_array($file->type, ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])) {
+                try {
+                    // Load the Word document
+                    $phpWord = IOFactory::load($filePath);
+                    
+                    // Convert the document to HTML
+                    $htmlWriter = IOFactory::createWriter($phpWord, 'HTML');
+                    ob_start();
+                    $htmlWriter->save('php://output');
+                    $htmlContent = ob_get_clean();
+                    
+                    // Strip unwanted tags
+                    $htmlContent = preg_replace('/<head>.*<\/head>/s', '', $htmlContent);
+                    $htmlContent = preg_replace('/<style>.*<\/style>/s', '', $htmlContent);
+                    $htmlContent = preg_replace('/<!DOCTYPE html.*?>/', '', $htmlContent);
+                    $htmlContent = preg_replace('/<html.*?>|<\/html>|<body.*?>|<\/body>/s', '', $htmlContent);
+                    
+                    $file->htmlContent = $htmlContent;
+                } catch (\Exception $e) {
+                    Log::error('Error processing Word document: ' . $e->getMessage());
+                    $file->htmlContent = '<p>Could not display document. Error: ' . $e->getMessage() . '</p>';
+                }
+            } elseif ($file->type == 'application/pdf') {
+                $file->pdfUrl = Storage::url($file->filepath);
+            } else {
+                $file->htmlContent = null;
+                $file->pdfUrl = null;
             }
-        } else {
-            $file->htmlContent = null; // Non-Word documents won't have HTML content
         }
+    
+        return view('admin.uploaded_files', compact('files'));
     }
-
-    return view('admin.uploaded_files', compact('files'),['htmlContent' => $htmlContent]);
-
-    }
+    
 
     public function upload_files(Request $request){
 
@@ -63,9 +69,9 @@ class FileController extends Controller
                     'type' => $file->getClientMimeType(),
                 ]);
             }
-            return redirect()->back()->with('success', 'File uploaded successfully.');
+            return redirect()->route('admin.uploaded_files')->with('success', 'File uploaded successfully.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to upload file: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to upload file: Something went wrong ');// . $e->getMessage()
         }
     }
     

@@ -37,6 +37,12 @@
             <span style="margin-left: 10px; color: white;">Notifications</span>
         </a>
 
+        <!-- Upload File Icon -->
+        <a href="{{ url('/upload') }}" class="icon-container {{ Request::is('upload') ? 'active' : '' }}" style="margin-bottom: 40px; display: flex; align-items: center;margin-left: -70px; text-decoration:none">
+            <i class="fas fa-upload" style="font-size: 24px;"></i>
+            <span style="margin-left: 10px; color: white;">Upload</span>
+        </a>
+
         <!-- Logout Icon at the Bottom -->
         <div style="margin-top: 15px;">
             <a href="{{ url('/logout') }}" class="icon-container" style="display: flex; align-items: center; text-decoration: none; color: white; margin-left: -70px; text-decoration:none">
