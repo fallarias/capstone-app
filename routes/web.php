@@ -40,6 +40,3 @@ Route::get('/uploaded_files', [FileController::class, 'uploaded_files'])->name('
 Route::post('/upload', [FileController::class, 'upload_files'])->name('admin.upload_file');
 //testing
 Route::get('/document/{id}', [FileController::class, 'showDocument'])->name('document.show');
-
-// Route::group(['middleware'=> ['auth:sanctum']], function(){
-// });
