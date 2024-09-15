@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('tbl_logs')) {
-        Schema::create('tbl_logs', function (Blueprint $table) {
-            $table->id('logs_id');
+        if (!Schema::hasTable('audit_trails')) {
+        Schema::create('audit_trails', function (Blueprint $table) {
+            $table->id('audit_id');
             $table->integer('account_id');
             $table->string('account_type');
             $table->timestamp('log_date');
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('logs');
+        Schema::dropIfExists('audit_trails');
     }
 };

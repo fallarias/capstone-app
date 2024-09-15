@@ -16,9 +16,11 @@ return new class extends Migration
                 $table->id('user_id');
                 $table->string('firstname');
                 $table->string('lastname');
-                $table->string('gender');
+                $table->string('middlename');
                 $table->string('email')->unique();
                 $table->string('account_type');
+                $table->string('profile_picture')->nullable();   
+                $table->string('is_delete')->default('active');       
                 $table->timestamp('email_verified_at')->nullable();
                 $table->string('password');
                 $table->string('department');

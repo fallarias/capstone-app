@@ -8,11 +8,14 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+    <title>Document</title>
 </head>
 <body>
 App Bar @include('components.app-bar') 
-<table border = "1">
+<div style="display: flex; justify-content: center; margin-top: 40px; width:1000px; margin-left:400px">
+
+<table border = "1px ">
 		<thead>
 			<th>#</th>
 			<th>Office Name</th>
@@ -28,9 +31,9 @@ App Bar @include('components.app-bar')
                 <td>{{ $row->Office_task }}</td>
                 <td>{{ $row->New_alloted_time }}</td>
                 <td>
-                    <a href="{{ route('admin.edit', ['id' => $row->create_id]) }}">edit</a></td>
+                    <a href="{{ route('admin.editTaskPage', ['id' => $row->create_id]) }}">edit</a></td>
             <td>
-                <form action='{{route('admin.delete', $row->create_id)}}' method="POST">
+                <form action='{{route('admin.deleteTask', $row->create_id)}}' method="POST">
                     @csrf
                     <button type="submit">delete</button>
                     </form>
@@ -46,6 +49,7 @@ App Bar @include('components.app-bar')
         
 		</tbody>
 	</table>
+</div>
     <a href="{{url('/dashboard')}}">Back</a>
 </body>
 </html>

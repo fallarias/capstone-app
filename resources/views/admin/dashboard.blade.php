@@ -14,7 +14,6 @@
 </head>
 <body>
     <!-- App Bar -->
-    
     @include('components.app-bar')
     <!-- Main Content -->
     <div class="main-content">
@@ -48,21 +47,115 @@
         <div class="chart-container">
             <canvas id="requestChart" width="680" height="200"></canvas>
         </div>
+
+            <!-- First Doughnut Chart (Online and Offline Users) -->
+        <div class="chart-container">
+            <canvas id="onlineUsersChart"width="230" height="100" style="margin-left: 700px; margin-top:-340px;"></canvas>
+        </div>
+
+    <!-- Second Doughnut Chart (Online and Offline Staff) -->
+        <div class="chart-container">
+            <canvas id="onlineStaffChart"width="240" height="100"style="margin-left: 930px; margin-top:-380px;"> </canvas>
+        </div>
+
     </div>
 
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']; // Example day labels
-        const dailyData = [12, 19, 3, 5, 2, 3, 7]; // Replace with your daily request data
-        const weeklyData = [80, 110, 90, 120, 95, 85, 100]; // Replace with your weekly request data
+        const onlineUsersPercentage = 75; // Percentage for online users
+        const offlineUsersPercentage = 100 - onlineUsersPercentage;
+
+        const onlineUsersData = {
+            labels: ['Online Users', 'Offline Users'], // Text for first chart
+            datasets: [{
+                data: [onlineUsersPercentage, offlineUsersPercentage],
+                backgroundColor: ['#28a745', '#e0e0e0'],
+                hoverBackgroundColor: ['#218838', '#d6d6d6'],
+            }]
+        };
+
+        const onlineUsersConfig = {
+            type: 'doughnut',
+            data: onlineUsersData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // First Doughnut Chart for Online Users
+        const onlineUsersChart = new Chart(
+            document.getElementById('onlineUsersChart'),
+            onlineUsersConfig
+        );
+
+
+        // Second Doughnut Chart for Online Staff
+        const onlineStaffPercentage = 60; // Adjust your online staff percentage
+        const offlineStaffPercentage = 100 - onlineStaffPercentage;
+
+        const onlineStaffData = {
+            labels: ['Online Staff', 'Offline Staff'], // Updated text for second chart
+            datasets: [{
+                data: [onlineStaffPercentage, offlineStaffPercentage],
+                backgroundColor: ['#18392B', '#e0e0e0'],
+                hoverBackgroundColor: ['#18392B', '#d6d6d6'],
+            }]
+        };
+
+        const onlineStaffConfig = {
+            type: 'doughnut',
+            data: onlineStaffData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // Second Doughnut Chart for Online Staff
+        const onlineStaffChart = new Chart(
+            document.getElementById('onlineStaffChart'),
+            onlineStaffConfig
+        );
+
+
+        // Line chart for requests per day and week
+        const labels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        const dailyData = [12, 19, 3, 5, 2, 3, 7];
+        const weeklyData = [80, 110, 90, 120, 95, 85, 100];
 
         const data = {
             labels: labels,
             datasets: [{
                 label: 'Requests per Day',
                 data: dailyData,
-                borderColor: '#007bff',
-                backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                borderColor: 'rgba(40, 167, 69, 0.2)',
+                backgroundColor: '#18392B',
                 fill: true,
                 tension: 0.1
             }, {

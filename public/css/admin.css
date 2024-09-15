@@ -1,216 +1,522 @@
 body {
-    background-color: #a0a0a0;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+  background-color: #cdcdcd;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+.icon-container {
+  position: relative;
+  display: inline-block; /* Ensure container is inline with surrounding text */
+  transition: box-shadow 0.3s ease; /* Smooth transition for box-shadow */
+}
+
+/* Tooltip text */
+.tooltip-text {
+  visibility: hidden; /* Hide tooltip text by default */
+  width: 150px; /* Adjust width as needed */
+  background-color: black; /* Initial background color of tooltip */
+  color: #fff; /* Text color of tooltip */
+  text-align: center; /* Center text inside tooltip */
+  border-radius: 4px; /* Rounded corners */
+  padding: 10px; /* Padding around text */
+  position: absolute; /* Position relative to container */
+  z-index: 1; /* Ensure tooltip appears above other elements */
+  bottom: -40px; /* Position tooltip below the icon */
+  left: 50%; /* Center tooltip horizontally */
+  transform: translateX(-50%); /* Center tooltip horizontally */
+  opacity: 0; /* Hide tooltip initially */
+  transition: opacity 0.3s, background-color 0.3s; /* Smooth fade-in and background color change effect */
+}
+
+/* Show tooltip text on hover */
+.icon-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1; /* Show tooltip */
+  background-color: #555; /* Change background color on hover */
+}
+
+/* Icon styles */
+.icon-container i {
+  font-size: 24px;
+  color: white;
+  margin-right: 40px; /* Adjust spacing as needed */
+  margin-left: 40px; /* Adjust spacing as needed */
+  transition: color 0.3s, box-shadow 0.3s, transform 0.3s; /* Smooth color change, box-shadow, and transform effect for icon */
+  border-radius: 40px;
+
+}
+
+/* Change icon color and add circular glowing effect on hover */
+.icon-container:hover i {
+  color: #D4AF37; /* Change icon color on hover */
+  box-shadow: 0 0 20px rgba(255, 255, 0, 0.8); /* Circular yellow glowing effect */
+  transform: scale(1.1); /* Slightly enlarges the icon on hover */
+  border-radius: 40px;
+}
+
+.icon-container.active i {
+  color: yellow;
+}
+
+
+
+/* dashboard.css */
+
+/* Main Content Container */
+.main-content {
+  padding-left: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 50%;
+  height: 50%;
+}
+
+.title{
+  font-size: 60px;
+  font-weight:bolder;
+  font-family:'Courier New', Courier, monospace;
+  color:#18392B;
+}
+.title1{
+  font-size: 40px;
+  font-weight:bolder;
+  font-family:'Courier New', Courier, monospace;
+  color:#18392B;
+}
+
+/* Table Container */
+.table-container {
+  margin-top: 20px;
+  width: 100%; /* Adjust width if needed */
+  max-width: 1000px; /* Example max-width for better control */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+a {
+  color: #1e7edd;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.stat-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  text-align: start;
+}
+.stat-item {
+  margin-right: 50px;
+  font-size: 1.2em;
+  position: relative; /* Needed for the pseudo-element positioning */
+  padding-bottom: 20px; /* Adds space for the line */
+}
+.stat-item h4 {
+  margin-bottom: 10px;
+  border-bottom: 2px solid #18392B; /* Customize the line here */
+  display: inline-block; /* Makes the line as long as the text */
+  padding-bottom: 5px;
+  width: 130px;
+}
+
+.stat-item p {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #18392B; /* Text color */
+  cursor: pointer; /* Pointer cursor to indicate clickable */
+  text-decoration: none; /* Remove underline */
+}
+.stat-item a {
+  display: block;
+  margin-top: 5px;
+  color: #535252;
+}
+
+.chart-container {
+  margin-top: 30px;
+  text-align: center;
+}
+
+label{
+  color:#18392B;
+  margin-bottom: 5px;
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 20px;
+}
+
+input{
+  margin-bottom: 20px;
+  width: 400px;
+  height: 30px;
+  font-size: 20px;
+}
+
+select{
+  margin-bottom: 20px;
+  width: 400px;
+  height: 30px;
+  font-size: 20px;
+}
+
+.btn2{
+  margin-top:300px;
+  margin-left:270px;
+  border-radius: 5px;
+  height: 25px;
+
+}
+.btn3{
+  margin-top: -41px;
+  margin-left:315px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  background-color: #18392B;
+  color: #f4f4f4;
+}
+
+.btn3:hover{
+  border-radius: 5px;
+  background-color: #18392B;
+  color: #D4AF37;
+}
+
+.btn-clear {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background-color: #ff6666; /* Optional: Change to your preferred color */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-clear:hover {
+  background-color: #ff3333; /* Optional: Darker shade on hover */
+}
+
+
+table thead th{
+  background-color: #18392B;
+  color: #f4f4f4;
   
-  
-  .icon-container {
-    position: relative;
-    display: inline-block; /* Ensure container is inline with surrounding text */
-    transition: box-shadow 0.3s ease; /* Smooth transition for box-shadow */
-  }
-  
-  /* Tooltip text */
-  .tooltip-text {
-    visibility: hidden; /* Hide tooltip text by default */
-    width: 150px; /* Adjust width as needed */
-    background-color: black; /* Initial background color of tooltip */
-    color: #fff; /* Text color of tooltip */
-    text-align: center; /* Center text inside tooltip */
-    border-radius: 4px; /* Rounded corners */
-    padding: 10px; /* Padding around text */
-    position: absolute; /* Position relative to container */
-    z-index: 1; /* Ensure tooltip appears above other elements */
-    bottom: -40px; /* Position tooltip below the icon */
-    left: 50%; /* Center tooltip horizontally */
-    transform: translateX(-50%); /* Center tooltip horizontally */
-    opacity: 0; /* Hide tooltip initially */
-    transition: opacity 0.3s, background-color 0.3s; /* Smooth fade-in and background color change effect */
-  }
-  
-  /* Show tooltip text on hover */
-  .icon-container:hover .tooltip-text {
-    visibility: visible;
-    opacity: 1; /* Show tooltip */
-    background-color: #555; /* Change background color on hover */
-  }
-  
-  /* Icon styles */
-  .icon-container i {
-    font-size: 24px;
-    color: white;
-    margin-right: 40px; /* Adjust spacing as needed */
-    margin-left: 40px; /* Adjust spacing as needed */
-    transition: color 0.3s, box-shadow 0.3s, transform 0.3s; /* Smooth color change, box-shadow, and transform effect for icon */
-    border-radius: 40px;
-  
-  }
-  
-  /* Change icon color and add circular glowing effect on hover */
-  .icon-container:hover i {
-    color: #D4AF37; /* Change icon color on hover */
-    box-shadow: 0 0 20px rgba(255, 255, 0, 0.8); /* Circular yellow glowing effect */
-    transform: scale(1.1); /* Slightly enlarges the icon on hover */
-    border-radius: 40px;
-  }
-  
-  .icon-container.active i {
-    color: yellow;
-  }
-  
-  
-  
-  /* dashboard.css */
-  
-  /* Main Content Container */
-  .main-content {
-    padding-left: 250px;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    width: 50%;
-    height: 50%;
-  }
-  
-  .title{
-    font-size: 60px;
-    font-weight:bolder;
-    font-family:'Courier New', Courier, monospace;
-    color:#18392B;
-  }
-  .title1{
-    font-size: 40px;
-    font-weight:bolder;
-    font-family:'Courier New', Courier, monospace;
-    color:#18392B;
-  }
-  
-  /* Table Container */
-  .table-container {
-    margin-top: 20px;
-    width: 100%; /* Adjust width if needed */
-    max-width: 1000px; /* Example max-width for better control */
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  th, td {
-    padding: 10px;
-    text-align: center;
-    border: 1px solid #ddd;
-  }
-  
-  th {
-    background-color: #f4f4f4;
-  }
-  
-  a {
-    color: #1e7edd;
-    text-decoration: none;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-  }
-  
-  .stat-container {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    text-align: start;
-  }
-  .stat-item {
-    margin-right: 50px;
-    font-size: 1.2em;
-    position: relative; /* Needed for the pseudo-element positioning */
-    padding-bottom: 20px; /* Adds space for the line */
-  }
-  .stat-item h4 {
-    margin-bottom: 10px;
-    border-bottom: 2px solid #18392B; /* Customize the line here */
-    display: inline-block; /* Makes the line as long as the text */
-    padding-bottom: 5px;
-    width: 130px;
-  }
-  
-  .stat-item p {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #18392B; /* Text color */
-    cursor: pointer; /* Pointer cursor to indicate clickable */
-    text-decoration: none; /* Remove underline */
-  }
-  .stat-item a {
-    display: block;
-    margin-top: 5px;
-    color: #535252;
-  }
-  
-  .chart-container {
-    margin-top: 30px;
-    text-align: center;
-  }
-  
-  label{
-    color:#18392B;
-    margin-bottom: 5px;
-    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-size: 20px;
-  }
-  
-  input{
-    margin-bottom: 20px;
-    width: 400px;
-    height: 30px;
-    font-size: 20px;
-  }
-  
-  select{
-    margin-bottom: 20px;
-    width: 400px;
-    height: 30px;
-    font-size: 20px;
-  }
-  
-  .btn2{
-    margin-top:300px;
-    margin-left:250px;
-    border-radius: 5px;
-    height: 25px;
-  
-  }
-  .btn3{
-    margin-top: -58px;
-    margin-left:315px;
-    padding: 10px 15px;
-    border-radius: 5px;
-    background-color: #18392B;
-    color: #f4f4f4;
-  }
-  
-  .btn3:hover{
-    border-radius: 5px;
-    background-color: #18392B;
-    color: #D4AF37;
-  }
-  
-  .btn-clear {
-    margin-top: 15px;
-    padding: 10px 15px;
-    background-color: #ff6666; /* Optional: Change to your preferred color */
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .btn-clear:hover {
-    background-color: #ff3333; /* Optional: Darker shade on hover */
-  }
+}
+
+table tbody tr td{
+  border: 1px solid #18392B;
+}
+
+
+
+/* Example styling for the online users list */
+.online-container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.online-container h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.online-container ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.user img.avatar {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+.user-info {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.user-info h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.user-info p {
+  margin: 0;
+  font-size: 12px;
+  color: #999;
+}
+
+.hours-used {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.view-more {
+  display: block;
+  margin-top: 15px;
+  text-decoration: none;
+  font-size: 12px;
+  color: #999;
+  text-align: right;
+}
+
+.hidden { display: none; }
+
+.green-box {
+  width: 140%;
+  height: auto; /* Change to auto to adjust height based on content */
+  background-color: rgba(0, 128, 0, 0.2); /* Transparent green */
+  margin-top: 20px; /* Space between the heading and the box */
+  border-radius: 10px; /* Optional: Add rounded corners */
+  padding: 20px; /* Add padding to the box */
+  box-sizing: border-box; /* Include padding in the element's total width and height */
+  display: flex; /* Use flexbox */
+  flex-direction: column; /* Stack children vertically */
+  align-items: flex-start; /* Align items to the start */
+  position: relative; /* Set position to relative to use absolute positioning for child elements */
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center; /* Center items vertically within each label */
+  margin-right: 20px; /* Adjust this value to change the spacing */
+}
+
+.checkbox-label input {
+  background-color: white;
+  margin-right: 10px; /* Add space between checkbox and label text */
+  transform: scale(1.5); /* Adjust the scale factor to resize the checkbox */
+  -webkit-appearance: none; /* Remove default styling */
+  width: 20px; /* Set the width */
+  height: 20px; /* Set the height */
+  border: 1px solid #333; /* Optional: Add a border */
+  border-radius: 3px; /* Optional: Add rounded corners */
+  cursor: pointer; /* Change cursor to pointer */
+}
+
+.checkbox-label input:checked {
+  background-color: #28a745; /* Change background color when checked */
+  border: 1px solid #28a745; /* Change border color when checked */
+}
+
+.hidden {
+  display: none; /* Hide elements with the hidden class */
+}
+
+.checkbox-container {
+  position: absolute; /* Position the container absolutely */
+  top: 10px; /* Adjust top distance from the top */
+  right: 20px; /* Adjust right distance from the right */
+}
+
+.custom-file-upload {
+  display: inline-block;
+  margin-left: 40px;
+  width: 290px; /* Adjust width as needed */
+  height: 20px; /* Adjust height as needed */
+  padding: 10px; /* Adjust padding as needed */
+  background-color: #f1f1f1; /* Adjust background color as needed */
+  border: 1px solid #ccc; /* Adjust border as needed */
+  cursor: pointer; /* Change cursor to pointer */
+  text-align: center; /* Center text */
+}
+.upload-btn{
+  margin-top: 20px;
+  display: inline-block;
+  margin-left: 180px;
+  width: 200px; /* Adjust width as needed */
+  height: 40px; /* Adjust height as needed */
+  padding: 10px; /* Adjust padding as needed */
+  border-radius: 5px;
+  background-color: #f1f1f1; /* Adjust background color as needed */
+  border: 1px solid #ccc; /* Adjust border as needed */
+  cursor: pointer; /* Change cursor to pointer */
+  text-align: center; /* Center text */
+}
+
+.upload-btn1{
+  margin-top: 20px;
+  display: inline-block;
+  margin-left: 410px;
+  width: 200px; /* Adjust width as needed */
+  height: 40px; /* Adjust height as needed */
+  padding: 10px; /* Adjust padding as needed */
+  background-color: #f1f1f1; /* Adjust background color as needed */
+  border-radius: 5px;
+  border: 1px solid #ccc; /* Adjust border as needed */
+  cursor: pointer; /* Change cursor to pointer */
+  text-align: center; /* Center text */
+}
+.clicked {
+  background-color: #4CAF50; /* Change to green */
+  color: white; /* Change text color */
+}
+a {
+text-decoration: none;
+color: #007bff; /* Link color */
+display: flex;
+align-items: center;
+}
+
+
+/* FOR THE TABLE AND STYLE FOR INSIDE THE TABLE OF UPLOADED FILES */
+a i {
+margin-right: 8px; /* Space between icon and text */
+}
+i {
+font-size: 100px;
+}
+
+/* Modal-specific styles */
+.modal-dialog-fullscreen {
+max-width: 100vw;
+height: 100vh;
+margin: 0;
+}
+
+.modal-content {
+height: 100%;
+border-radius: 0;
+}
+
+.modal .small-word-content {
+font-size: 12px !important; /* Increase font size inside modal */
+line-height: 1.5 !important; /* Adjust line height for readability */
+max-width: 100%; /* Allow content to use the full width */
+}
+.small-word-content {
+font-size: 12px;
+margin: 0;
+word-spacing: 0;
+max-width: 100%; /* Ensure content fits within the width of the modal */
+}
+
+.modal-fullscreen .modal-body {
+overflow-y: auto; /* Allow vertical scrolling */
+overflow-x: auto; /* Prevent horizontal scrolling */
+padding-left: 250px;
+margin-bottom: 10px;
+max-height: calc(100vh - 60px); /* Adjust the height as needed */
+}
+
+
+
+/* Apply basic formatting */
+.modal-content p {
+margin: 0;
+line-height: 1;
+font-size: 14px; /* Adjust font size as needed */
+}
+
+.modal-content table {
+width: 100%;
+border-collapse: collapse;
+}
+
+.modal-content table td {
+border: 1px solid #ddd; /* Add borders if necessary */
+padding: 8px;
+}
+
+
+table {
+width: 100%;
+border-collapse: collapse; /* Ensures there are no gaps between borders */
+}
+
+th, td {
+border: 1px solid black; /* Adds border to table cells */
+padding: 8px;
+text-align: left;
+}
+
+th {
+background-color: #f2f2f2; /* Optional: Adds background color to table headers */
+}
+
+/* Optional: Zebra striping for better readability */
+tr:nth-child(even) {
+background-color: #f9f9f9;
+}
+
+
+
+.file-list {
+width: 1000px;
+margin-top: 10px;
+padding: 10px;
+border-top: 1px solid #ddd;
+}
+
+.upload-btn {
+padding: 10px 20px;
+background-color: #28a745;
+color: white;
+border: none;
+cursor: pointer;
+border-radius: 5px;
+}
+
+.upload-btn:hover {
+background-color: #218838;
+}
+.dropzone-box {
+width: 500px;
+height: 300px;
+border: 3px dashed #aaa;
+border-radius: 10px;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+color: #333;
+margin-left: 280px;
+position: relative;
+}
+
+.dropzone-box:hover {
+border-color: #28a745;
+}
+
+.dropzone-box.highlight {
+background-color: rgba(100, 200, 100, 0.2);
+}
+
+.file-display {
+margin-top: 10px;
+color: #333;
+text-align: left; /* Align text to the left */
+max-height: 100px;
+overflow-y: auto; /* Add scroll if needed */
+}

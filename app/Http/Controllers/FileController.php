@@ -9,51 +9,16 @@ use App\Models\File;
 use Illuminate\Support\Facades\Storage;
 class FileController extends Controller
 {
-    public function upload(){
-        return view('admin.upload');
-    }
 
-    public function uploaded_files() {
+
+    public function upload() {
         $files = File::all();
     
-        foreach ($files as $file) {
-            $filePath = storage_path('app/' . $file->filepath);
-            
-            if (in_array($file->type, ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'])) {
-                try {
-                    // Load the Word document
-                    $phpWord = IOFactory::load($filePath);
-                    
-                    // Convert the document to HTML
-                    $htmlWriter = IOFactory::createWriter($phpWord, 'HTML');
-                    ob_start();
-                    $htmlWriter->save('php://output');
-                    $htmlContent = ob_get_clean();
-                    
-                    // Strip unwanted tags
-                    $htmlContent = preg_replace('/<head>.*<\/head>/s', '', $htmlContent);
-                    $htmlContent = preg_replace('/<style>.*<\/style>/s', '', $htmlContent);
-                    $htmlContent = preg_replace('/<!DOCTYPE html.*?>/', '', $htmlContent);
-                    $htmlContent = preg_replace('/<html.*?>|<\/html>|<body.*?>|<\/body>/s', '', $htmlContent);
-                    
-                    $file->htmlContent = $htmlContent;
-                } catch (\Exception $e) {
-                    Log::error('Error processing Word document: ' . $e->getMessage());
-                    $file->htmlContent = '<p>Could not display document. Error: ' . $e->getMessage() . '</p>';
-                }
-            } elseif ($file->type == 'application/pdf') {
-                $file->pdfUrl = Storage::url($file->filepath);
-            } else {
-                $file->htmlContent = null;
-                $file->pdfUrl = null;
-            }
-        }
-    
-        return view('admin.uploaded_files', compact('files'));
+        return view('admin.uploadPdfPage', compact('files'));
     }
     
 
-    public function upload_files(Request $request){
+    public function upload_pdf(Request $request){
 
         $attrs = $request->validate([
             'filepath.*' => 'required|file|mimes:jpeg,jpg,png,pdf,zip,doc,docx|max:10240', // Include doc and docx
@@ -63,16 +28,29 @@ class FileController extends Controller
             foreach ($request->file('filepath') as $file) {
                 $filePath = $file->store('public');
                 File::create([
-                    'filename' => time() . '_' . $file->getClientOriginalName(),
+                    'filename' => $file->getClientOriginalName(),
                     'filepath' => $filePath,
                     'size' => $file->getSize(),
                     'type' => $file->getClientMimeType(),
                 ]);
             }
-            return redirect()->route('admin.uploaded_files')->with('success', 'File uploaded successfully.');
+
+
+            return redirect()->back()->with('success', 'File is successfully uploaded.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to upload file: Something went wrong ');// . $e->getMessage()
         }
+    }
+
+
+
+    public function delete_pdf($file){
+
+        $filePath = File::findOrFail($file);
+        $filePath->delete();
+        return redirect()->back()->with('success', 'File is successfully uploaded.');
+
+
     }
     
 }

@@ -12,6 +12,7 @@
 </head>
 <body>
 App Bar @include('components.app-bar')
+<div style="display: flex; justify-content: center; margin-top: 40px; width:1000px; margin-left:400px">
 
 <table border = "1">
 		<thead>
@@ -37,7 +38,8 @@ App Bar @include('components.app-bar')
                     </tr>
             @endforelse
 		</tbody>
-	</table><br>
+	</table>
+</div><br>
     <a href="{{url('/dashboard')}}">Back</a>
 </body>
 </html>

@@ -10,15 +10,15 @@
             <i class="fas fa-chart-pie"></i>
             <span style="margin-left: 10px; color: white;">Dashboard</span>
         </a>
-        <a href="{{ url('/create') }}" class="icon-container {{ Request::is('create') ? 'active' : '' }}" style="margin-bottom: 50px; display: flex; align-items: center; margin-left: -70px; text-decoration:none">
+        <a href="{{ url('/create/task') }}" class="icon-container {{ Request::is('create') ? 'active' : '' }}" style="margin-bottom: 50px; display: flex; align-items: center; margin-left: -70px; text-decoration:none">
             <i class="fas fa-file-alt"></i>
             <span style="margin-left: 10px; color: white;">Create Task</span>
         </a>
-        <a href="{{ url('/list') }}" class="icon-container {{ Request::is('list') ? 'active' : '' }}" style="margin-bottom: 40px; display: flex; align-items: center; margin-left: -70px; text-decoration:none">
+        <a href="{{ url('/listOfTask') }}" class="icon-container {{ Request::is('list') ? 'active' : '' }}" style="margin-bottom: 40px; display: flex; align-items: center; margin-left: -70px; text-decoration:none">
             <i class="fas fa-edit"></i>
             <span style="margin-left: 10px; color: white;">Edit Task</span>
         </a>
-        <a href="{{ url('/list') }}" class="icon-container {{ Request::is('list') ? 'active' : '' }}" style="margin-bottom: 40px; display: flex; align-items: center; margin-left: -70px; text-decoration:none">
+        <a href="{{ url('/listOfTask') }}" class="icon-container {{ Request::is('list') ? 'active' : '' }}" style="margin-bottom: 40px; display: flex; align-items: center; margin-left: -70px; text-decoration:none">
             <i class="fas fa-clipboard-list"></i>
             <span style="margin-left: 10px; color: white;">List of Available Tasks</span>
         </a>
@@ -26,10 +26,11 @@
             <i class="fas fa-qrcode"></i>
             <span style="margin-left: 10px; color: white;">QR Code</span>
         </a>
+        <!-- Request Route
         <a href="{{ url('/request') }}" class="icon-container {{ Request::is('request') ? 'active' : '' }}" style="margin-bottom: 40px; display: flex; align-items: center; margin-left: -70px; text-decoration:none">
             <i class="fas fa-database"></i>
             <span style="margin-left: 10px; color: white;">Request Data</span>
-        </a>
+        </a> -->
 
         <!-- Notification Icon -->
         <a href="{{ url('/notification') }}" class="icon-container {{ Request::is('notification') ? 'active' : '' }}" style="margin-bottom: 40px; display: flex; align-items: center;margin-left: -70px; text-decoration:none">

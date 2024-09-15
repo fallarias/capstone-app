@@ -1,44 +1,63 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\signupController;
-use App\Http\Controllers\DashController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\AuthController;
-use App\Models\File;
+use App\Http\Controllers\TaskController;
 
-Route::get('/', function () {
-     return view('welcome');
- });
+// Route::get('/', function () {
+//      return view('welcome');
+//  });
 
 
+Route::get('/', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
+Route::post('/login/admin', [AuthController::class, 'login'])->name('admin.logins');
 
-Route::get('/signup', [signupController::class, 'index'])->name('admin.signup');
-Route::post('/signup', [signupController::class, 'submit'])->name('admin.signups');
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
-Route::post('/login', [AuthController::class, 'login'])->name('admin.logins');
+
 // middleware
-Route::get('/dashboard', [DashController::class, 'task'])->name('admin.dashboard');
-Route::get('/logout', [AuthController::class, 'logout'])->name('admin.logout');
-Route::get('/create', [DashController::class, 'create'])->name('admin.createtask');
-Route::post('/create', [DashController::class, 'createtask'])->name('admin.create');
-Route::get('/list', [DashController::class, 'list'])->name('admin.listtask');
-Route::get('/edit/{id}', [DashController::class, 'edit'])->name('admin.edit');
-Route::post('/update/{id}', [DashController::class, 'update'])->name('admin.update');
-Route::post('/delete/{id}', [DashController::class, 'delete'])->name('admin.delete');
-Route::get('/supplier', [DashController::class, 'supplier'])->name('admin.supplier');
-Route::get('/user', [DashController::class, 'user'])->name('admin.user');
-Route::get('/clients', [DashController::class, 'clients'])->name('admin.clients');
-Route::get('/transaction', [DashController::class, 'transaction'])->name('admin.transaction');
-Route::get('/qrcode', [DashController::class, 'qrcode'])->name('admin.qrcode');
-Route::get('/request', [DashController::class, 'request'])->name('admin.request');
-
-Route::get('/person/{id}', [AuthController::class, 'person'])->name('admin.person');
-
-Route::get('/upload', [FileController::class, 'upload'])->name('admin.upload');
-Route::get('/uploaded_files', [FileController::class, 'uploaded_files'])->name('admin.uploaded_files');
-Route::post('/upload', [FileController::class, 'upload_files'])->name('admin.upload_file');
+Route::group(['middleware'=> ['auth:sanctum']], function(){
 
 
-// Route::group(['middleware'=> ['auth:sanctum']], function(){
-// });
+    Route::controller(DashboardController::class)->group(function () {
+
+        Route::get('/dashboard', 'dashboard')->name('admin.dashboard');
+        
+    });
+
+    Route::controller(TaskController::class)->group(function () {
+
+        Route::get('/create/task', 'create')->name('admin.createTaskPage');
+        Route::post('/create_task', 'createOfficeTask')->name('admin.create');
+        Route::get('/listOfTask',  'list')->name('admin.listOfTaskPage');
+        Route::get('/edit/{id}',  'edit')->name('admin.editTaskPage');
+        Route::post('/update/{id}', 'update')->name('admin.update');
+        Route::post('/delete/{id}',  'delete_task')->name('admin.deleteTask');
+        Route::get('/supplier', 'supplier')->name('admin.supplierListPage');
+        Route::get('/user', 'user')->name('admin.allUserProfile');
+        Route::get('/client/list','clients')->name('admin.clientListPage');
+        Route::get('/transaction', 'transaction')->name('admin.transactionListPage');
+        Route::get('/qrcode', 'qrcode')->name('admin.qrcodePage');
+        
+        
+    });
+
+
+    Route::controller(FileController::class)->group(function () {
+
+        Route::get('/upload',  'upload')->name('admin.uploadPdfPage');
+        Route::post('/upload/pdf', 'upload_pdf')->name('admin.upload_file');
+        Route::delete('/upload/{file}','delete_pdf')->name('admin.pdfFileDelete');
+
+    });
+
+    Route::controller(AuthController::class)->group(function () {
+
+        Route::get('/logout', 'logout')->name('admin.logout');
+        Route::get('/admin/profile/{id}', 'admin_profile')->name('admin.adminProfilePage');
+        
+    });
+
+    
+});

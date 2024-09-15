@@ -27,27 +27,7 @@ return new class extends Migration
             $table->timestamps();
         });
     }
-    if (!Schema::hasTable('tbl_request')) {
-        Schema::create('tbl_request', function (Blueprint $table) {
-            $table->id('request_id');
-            $table->string('client_lname');
-            $table->string('client_fname');
-            $table->string('client_mname');
-            $table->string('Office_use');
-            $table->string('Request_type');
-            $table->string('Reason_of_request');
-
-            $table->unsignedBigInteger('client_id');
-            $table->foreign('client_id')->references('client_id')->on('tbl_client');
-
-            $table->unsignedBigInteger('transaction_id');     
-            $table->foreign('transaction_id')->references('transaction_id')->on('tbl_transaction');
-
-            $table->unsignedBigInteger('supplier_id');      
-            $table->foreign('supplier_id')->references('supplier_id')->on('tbl_supplier');
-            $table->timestamps();
-        });
-    }
+    
 }
     /**
      * Reverse the migrations.

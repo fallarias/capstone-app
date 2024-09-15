@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,7 +32,7 @@
 
 
             <label>Office Task</label>
-            <select name="office_task" id="office_task">
+            <select name="task" id="office_task">
                 <option value="" disabled selected></option> <!-- Default "None" option -->
                 <option value="office1">Office 1</option>
                 <option value="office2">Office 2</option>
@@ -40,7 +41,7 @@
                 <!-- Add more options as needed -->
             </select>
             <label>Task Alloted Time</label>
-            <select name="task_time" id="task_time">
+            <select name="time" id="task_time">
                 <option value="" disabled selected></option> <!-- Default "None" option -->
                 <option value="office1">Office 1</option>
                 <option value="office2">Office 2</option>
@@ -48,8 +49,8 @@
                 <option value="office4">Office 4</option>
                 <!-- Add more options as needed -->
             </select>
-            <button type="reset" class="btn-clear">Clear All</button>\
-            <button type="button" class="btn3">Proceed</button>
+            <button type="reset" class="btn-clear">Clear All</button>
+            <button type="submit" class="btn3">Proceed</button>
 
         </form>
         <button type="button" class="btn2" onclick="window.history.back();">Go Back</button>
