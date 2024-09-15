@@ -55,13 +55,23 @@ class FileController extends Controller
 
 
 
-    public function delete_pdf($file){
 
-        $filePath = File::findOrFail($file);
-        $filePath->delete();
-        return redirect()->back()->with('success', 'File is successfully uploaded.');
+    public function delete_pdf($file)
+    {
+        $fileRecord = File::findOrFail($file);
 
+        $relativePath = str_replace('public/', '', $fileRecord->filepath);
 
+        if ($relativePath && Storage::disk('public')->exists($relativePath)) {
+            Storage::disk('public')->delete($relativePath); // Delete the file
+        } 
+        
+        $fileRecord->delete();
+
+        
+        return redirect()->back()->with('success', 'File is successfully deleted.');
     }
+
+
     
 }
