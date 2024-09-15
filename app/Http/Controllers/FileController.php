@@ -14,6 +14,17 @@ class FileController extends Controller
     public function upload() {
         $files = File::all();
     
+        foreach ($files as $file) {
+            $filePath = storage_path('app/' . $file->filepath);
+            
+            if ($file->type == 'application/pdf') {
+                $file->pdfUrl = Storage::url($file->filepath);
+            } else {
+                $file->htmlContent = null;
+                $file->pdfUrl = null;
+            }
+        }
+    
         return view('admin.uploadPdfPage', compact('files'));
     }
     
