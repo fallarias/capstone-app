@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
             $table->string('action'); // Log action (e.g., 'create', 'update')
-            $table->text('message'); // Log message
+            $table->string('account_type');
+            $table->string('message'); // Log message
             $table->unsignedBigInteger('user_id')->nullable(); 
+            $table->timestamp('Date');
             $table->timestamps();
 
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');

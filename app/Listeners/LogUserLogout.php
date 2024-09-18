@@ -28,15 +28,17 @@ class LogUserLogout
         if ($event->user) {
             Logs::create([
                 'action' => 'Logout',
-                'message' => $event->user->account_type . ' logged out successfully.',
-                'user_id' => $event->user->user_id,
+                'account_type' => $event->user->account_type,
+                'message' => 'Logged out successfully.',
+                'user_id' => $event->user->user_id, // Get the user ID from the event
             ]);
         } else {
             // Handle case where user is null
             Logs::create([
                 'action' => 'Logout',
-                'message' => 'User logged out, but user information is missing.',
-                'user_id' => null,
+                'account_type' => $event->user->account_type,
+                'message' => 'Logged Out Successfully.',
+                'user_id' => null, // Get the user ID from the event
             ]);
         }
     }

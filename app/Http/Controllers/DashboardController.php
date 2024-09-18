@@ -7,6 +7,7 @@ use App\Models\Supplier;
 use App\Models\User;
 use App\Models\Transaction;
 use App\Models\Client;
+use App\Models\Logs;
 
 class DashboardController extends Controller
 {
@@ -20,6 +21,11 @@ class DashboardController extends Controller
         // Return the admin dashboard view with the data and user count
         return view('admin.dashboard', compact('supplier','user', 'client','transaction', 'users'));
     }
-    
+
+    public function logs(){
+        $logs = Logs::all();
+
+        return view('admin.logsPage', compact('logs'));
+    }
 
 }

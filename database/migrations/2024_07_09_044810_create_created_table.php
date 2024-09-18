@@ -11,6 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('task')) {
+            Schema::create("task", function (Blueprint $table) {
+                $table->id('task_id');
+                $table->string("name");
+                $table->timestamp("date");
+                $table->integer("status")->default(0);
+                $table->integer("soft_del")->default(0);
+                $table->timestamps();
+            });
+        }
         if (!Schema::hasTable('tbl_created_task')) {
         Schema::create('tbl_created_task', function (Blueprint $table) {
             $table->id('create_id');
@@ -19,10 +29,11 @@ return new class extends Migration
             $table->string('New_alloted_time');
             $table->timestamp('Date_created');
             $table->string('soft_del');
-            
+            $table->unsignedBigInteger('task_id');
             $table->unsignedBigInteger('user_id');
         
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->foreign('task_id')->references('task_id')->on('task')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -34,5 +45,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('tbl_created_task');
+        Schema::dropIfExists('task');
     }
 };

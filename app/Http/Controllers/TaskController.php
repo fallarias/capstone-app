@@ -10,6 +10,7 @@ use App\Models\Transaction;
 use App\Models\Client;
 use App\Models\Request as ModelsRequest;
 use App\Models\qrcode;
+use App\Models\Task;
 use Carbon\Carbon;
 
 class TaskController extends Controller
@@ -23,33 +24,59 @@ class TaskController extends Controller
 
 
     public function createOfficeTask(Request $request){
+
         $attrs = $request->validate([
-            'office_name' => 'required',
-            'task' => 'required',
-            'time' => 'required',
-        ]);
-        
-        Create::create([
-            'Office_name' => $attrs['office_name'],
-            'Office_task' => $attrs['task'],
-            'New_alloted_time' => $attrs['time'],
-            'user_id' => 1,
-            'soft_del' => 0,
+            'office_name' => 'required|array|min:1',
+            'office_name.*' => 'required|string',
+            'task' => 'required|array|min:1',
+            'task.*' => 'required|string',
+            'time' => 'required|array|min:1',
+            'time.*' => 'required|string',
+            'task_name'=> 'required|string',
         ]);
         
 
-        $supplier = Supplier::count(); //suppliers not create task
-        $user = User::count(); 
-        $transaction = Transaction::count();
-        $client = Client::count();
-        $users = User::all();
-        // Return the admin dashboard view with the data and user count
-        return view('admin.dashboard', compact('supplier','user', 'client','transaction', 'users'));
+        // Check if the task_name already exists
+        $taskName = Task::Create(['name' => $attrs['task_name']]);
+
+        // Get the task ID directly 
+        $taskId = $taskName->task_id;
+
+        $user = User::where('account_type', 'Admin')->first();
+
+        if(!empty($attrs['office_name']) || !empty($attrs['task']) || !empty($attrs['time'])|| !empty($attrs['task_name'])){ 
+
+            $office_names = $request->input('office_name');
+            $task = $request->input('task'); // Retrieves an array of office names
+            $time = $request->input('time');
+
+            // Iterate over the arrays and group data based on index
+            foreach ($office_names as $index => $office_name) {
+                // Retrieve corresponding task and time for each office
+                $tasks = $task[$index];
+                $times = $time[$index];
+
+                // Now you can group the data and process it (e.g., save it to the database)
+                Create::create([
+                    'Office_name' => $office_name,
+                    'Office_task' => $tasks,
+                    'New_alloted_time' => $times,
+                    'user_id' => $user->user_id,
+                    'task_id' => $taskId, 
+                    'soft_del' => 0,
+                ]);
+            }
+            
+            // Return the admin dashboard view with the data and user count
+            return redirect()->back()->with('success', 'Task is successfully added.');
+
+        }
+        
     }
 
     public function list(){
 
-        $data = Create::all()->where('soft_del','=','0');
+        $data = Task::all()->where('soft_del','=','0');
         return view('admin.listOfTaskPage', compact('data'));
 
     }
@@ -58,8 +85,12 @@ class TaskController extends Controller
 
     public function edit($id){
 
-        $data = Create::findOrFail($id);
-        return view('admin.editTaskPage', compact('data'));
+        $task = Task::findOrFail($id);
+        if($task){
+            $data_task = Task::all()->where('task_id', '=', $id)->first();
+        }
+        $data = Create::all()->where('task_id',$id);
+        return view('admin.editTaskPage', compact('data',"task","data_task"));
 
     }
 

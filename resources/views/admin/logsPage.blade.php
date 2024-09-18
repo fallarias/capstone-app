@@ -8,8 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Document</title>
 </head>
 <body>
 @include('components.app-bar')
@@ -17,25 +16,27 @@
 <table border = "1">
 		<thead>
 			<th>#</th>
-			<th>Client ID</th>
+            <th>User ID</th>
+			<th>Action</th>
+            <th>Account Type</th>
+            <th>Date</th>
 	
 		</thead>
 		<tbody>
-            @forelse($clients as $counter => $row)
+            @forelse($logs as $log)
                 <tr>
                     <td>{{ $loop->iteration}}</td> 
-                    <td>{{ $row->user_id }}</td>
-
-
+                    <td>{{ $log->user_id }}</td>
+                    <td>{{ $log->action }}</td>
+                    <td>{{ $log->account_type }}</td>
+                    <td>{{ $log->Date }}</td>
                 </tr>
                 @empty
                     <tr>
-                        <td colspan="8">No Users Found</td>
+                        <td colspan="8">No Logs Found</td>
                     </tr>
             @endforelse
 		</tbody>
-	</table><br>
-    <a href="{{url('/dashboard')}}">Back</a>
-    </div>
+	</table><br><br>
 </body>
 </html>

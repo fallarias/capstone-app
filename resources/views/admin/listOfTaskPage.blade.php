@@ -18,24 +18,27 @@ App Bar @include('components.app-bar')
 <table border = "1px ">
 		<thead>
 			<th>#</th>
-			<th>Office Name</th>
-			<th>Office Task</th>
-			<th>New Alloted Time</th>
+			<th>Task</th>
+			<th>Date Created</th>
 		</thead>
 		<tbody>
         @forelse($data as $counter => $row)
 
             <tr>
                 <td>{{ $loop->iteration}}</td> 
-                <td>{{ $row->Office_name }}</td>
-                <td>{{ $row->Office_task }}</td>
-                <td>{{ $row->New_alloted_time }}</td>
+                <td>{{ $row->name }}</td>
+                <td>{{ $row->date }}</td>
+
                 <td>
-                    <a href="{{ route('admin.editTaskPage', ['id' => $row->create_id]) }}">edit</a></td>
+                    <a href="{{ route('admin.editTaskPage', ['id' => $row->task_id]) }}">edit</a></td>
+                    <td><form action='{{route('admin.deleteTask', $row->task_id)}}' method="POST">
+                        @csrf
+                        <button type="submit">Activate</button>
+                    </form></td>
             <td>
-                <form action='{{route('admin.deleteTask', $row->create_id)}}' method="POST">
+                <form action='{{route('admin.deleteTask', $row->task_id)}}' method="POST">
                     @csrf
-                    <button type="submit">delete</button>
+                    <button type="submit">Deactivate</button>
                     </form>
                 </td>
                 

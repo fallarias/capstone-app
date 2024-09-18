@@ -28,9 +28,10 @@ class LogUserRegistration
     {
         // Log user registration
         Logs::create([
-            'action' => 'register',
-            'message' => 'User registered successfully.',
-            'user_id' => $event->user->user_id, // Correct user ID reference
+            'action' => 'Register',
+            'account_type' => $event->user->account_type,
+            'message' => 'Registered Successfully.',
+            'user_id' => $event->user->user_id, // Get the user ID from the event
         ]);
     }
 }

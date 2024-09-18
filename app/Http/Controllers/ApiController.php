@@ -10,10 +10,7 @@ use App\Models\File;
 use Illuminate\Auth\Events\Registered;
 use App\Events\UserLoggedOut;
 use App\Events\UserLoggedIn;
-use App\Models\UserOtp;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
-use PhpOffice\PhpWord\IOFactory;
+
 
 use Illuminate\Support\Facades\Storage;
 use Auth;
@@ -30,7 +27,7 @@ class ApiController extends Controller
             'firstname' => 'required|string|max:255',
             'middlename' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'account_type' => 'required|string',
+            'user_type' => 'required|string',
             'is_delete' => 'default|active',
             'department' => 'required|string',
             'password' => ['required', 'confirmed', 'min:8', 'max:255', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'],
@@ -51,10 +48,10 @@ class ApiController extends Controller
             
             event(new Registered($user));
 
-            return [
+            return response()->json([
                 'user' => $user,
                 'token' => $token->plainTextToken,
-            ];
+            ]);
         }
     }
 
@@ -103,32 +100,30 @@ class ApiController extends Controller
 
 
     
-    public function client_files() {
+    public function client_file() {
         $files = File::all();
     
         foreach ($files as $file) {
-            $filePath = storage_path('app/' . $file->filepath);
-            
             if ($file->type == 'application/pdf') {
-                $file->pdfUrl = Storage::url($file->filepath);
-                $file->htmlContent = null;  // Set htmlContent null for PDFs
+                // Use Storage::url() to get the URL
+                $file->pdfUrl = url(Storage::url($file->filepath));
+                
+                // Remove the .pdf extension from the file name
+                $file->filename = pathinfo($file->filename, PATHINFO_FILENAME);
+                
+                $file->htmlContent = null;
             } else {
                 $file->htmlContent = null;
                 $file->pdfUrl = null;
             }
-            
         }
-        
+    
         return response([
             'files' => $files
         ], 200);
     }
+    
 
-    public function client_file()
-    {
-        return response([
-            'files' => File::all()
-        ], 200);
-    }
+    
     
 }

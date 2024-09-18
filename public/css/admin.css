@@ -1,5 +1,5 @@
 body {
-  background-color: #cdcdcd;
+  background-color: #ebe7e7;
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
@@ -493,7 +493,7 @@ background-color: #218838;
 }
 .dropzone-box {
 width: 500px;
-height: 300px;
+height: 200px;
 border: 3px dashed #aaa;
 border-radius: 10px;
 display: flex;
@@ -513,10 +513,60 @@ border-color: #28a745;
 background-color: rgba(100, 200, 100, 0.2);
 }
 
-.file-display {
-margin-top: 10px;
-color: #333;
-text-align: left; /* Align text to the left */
-max-height: 100px;
-overflow-y: auto; /* Add scroll if needed */
+/* Container for the file display */
+#fileDisplay {
+  display: flex; /* Arrange items in a row */
+  overflow-x: auto; /* Enable horizontal scrolling */
+  white-space: nowrap; /* Prevent line breaks */
+  padding: 10px;
+  gap: 10px; /* Optional: Add spacing between file entries */ 
+  /* New styles for limiting and centering */
+  max-width: 80%; /* Limit the maximum width of the container */
+  margin: 0 auto; /* Center the container horizontally */
+  box-sizing: border-box; /* Include padding and border in the width */
+}
+
+/* Each file entry box */
+.file-entry {
+  display: inline-flex; /* Inline flex to keep items horizontal */
+  align-items: center; /* Vertically center items */
+  border-radius: ;
+  border-bottom-left-radius: 10px; /* Optional: Add rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow */
+}
+
+.file-name {
+  flex-grow: 1; /* Allow the file name to grow */
+  max-width: 200px; /* Set a maximum width for the file name */
+  overflow: hidden; /* Hide the overflow text */
+  text-overflow: ellipsis; /* Show ellipsis (...) for overflow text */
+  white-space: nowrap; /* Prevent the text from wrapping to a new line */
+  margin-bottom: 80px;
+
+}
+
+.remove-file {
+  background: none; /* Remove button background */
+  border: none; /* Remove button border */
+  color: red; /* Set button color */
+  font-size: 26px; /* Set button font size */
+  cursor: pointer; /* Change cursor on hover */
+  padding: 0; /* Remove default button padding */
+  margin-left: 195px; /* Optional: Add some space between the name and button */
+  margin-top: -120px;
+}
+
+
+.files-box {
+  width: 94%;
+  height: auto; /* Change to auto to adjust height based on content */
+  background-color: rgba(0, 128, 0, 0.2); /* Transparent green */
+  margin-top: 20px; /* Space between the heading and the box */
+  border-radius: 10px; /* Optional: Add rounded corners */
+  padding: 20px; /* Add padding to the box */
+  box-sizing: border-box; /* Include padding in the element's total width and height */
+  display: flex; /* Use flexbox */
+  flex-direction: column; /* Stack children vertically */
+  align-items: flex-start; /* Align items to the start */
+  position: relative; /* Set position to relative to use absolute positioning for child elements */
 }

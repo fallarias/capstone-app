@@ -24,7 +24,8 @@ class LogUserLogin
     {
         Logs::create([
             'action' => 'Login',
-            'message' => $event->user->account_type . ' logged in successfully.',
+            'account_type' => $event->user->account_type,
+            'message' => 'Logged In Successfully',
             'user_id' => $event->user->user_id, // Get the user ID from the event
         ]);
         

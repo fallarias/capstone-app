@@ -14,6 +14,7 @@ class Create extends Model
         'Office_task',
         'New_alloted_time',
         'user_id',
+        'task_id',
         'soft_del',
     ];
     protected $table = 'tbl_created_task';

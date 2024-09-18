@@ -52,6 +52,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // to update users table first delete the sessions table then comment the code for sessions table
+        // and update the user then uncomment the code for sessions table and 
+        //run php artisan migrate:refresh
+
         //Schema::dropIfExists('users');
         //Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');

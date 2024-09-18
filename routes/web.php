@@ -23,7 +23,7 @@ Route::group(['middleware'=> ['auth:sanctum']], function(){
     Route::controller(DashboardController::class)->group(function () {
 
         Route::get('/dashboard', 'dashboard')->name('admin.dashboard');
-        
+        Route::get('/logs', 'logs')->name('admin.logsPage');
     });
 
     Route::controller(TaskController::class)->group(function () {

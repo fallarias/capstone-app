@@ -20,8 +20,15 @@ use Illuminate\Support\Facades\Route;
     Route::post('/login', 'login');
     //Route::post('/mobile', 'mobile_otp');
     //Route::post('/email', 'email_otp');
-    Route::get('/client_file', 'client_file')->middleware('auth:sanctum');
-    Route::post('/logout', 'logout')->middleware('auth:sanctum');
+
+
+    //Authenticated User Only
+    Route::group(['middleware'=> ['auth:sanctum']], function(){
+        Route::get('/client_file', 'client_file');
+        Route::post('/logout', 'logout');
+    });
+
+    
 });
 
 

@@ -38,7 +38,7 @@
                 </a>
             </div>
             <div class="stat-item">
-                <a href="{{url('/clients')}}">
+                <a href="{{url('/client/list')}}">
                     <h4>Clients</h4>
                     <p>{{ $client }}</p>
                 </a>
