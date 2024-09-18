@@ -14,9 +14,6 @@ return new class extends Migration
         if (!Schema::hasTable('tbl_supplier')) {
         Schema::create('tbl_supplier', function (Blueprint $table) {
             $table->id('supplier_id');
-            $table->string('supplier_lname');
-            $table->string('supplier_fname');
-            $table->string('supplier_mname');
             $table->string('address');
             $table->string('type_of_service');
             $table->string('service_desc');
@@ -34,7 +31,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //Schema::dropIfExists('tbl_supplier');
-        Schema::dropIfExists('tbl_request');
+        Schema::dropIfExists('tbl_supplier');
+        
     }
 };

@@ -84,7 +84,7 @@
                                     <form action="{{ route('admin.pdfFileDelete', $file->file_id) }}" method="POST">
                                         @csrf
                                         @method('DELETE') <!-- Ensure this is a DELETE request -->
-                                        <button type="submit" class="fas fa-trash-alt" style="font-size:40px; margin-top:20px; color:red"></button>
+                                        <button type="submit" class="fas fa-trash-alt" style="font-size:40px; margin-top:20px; color:red;border:0"></button>
                                     </form>
                                 </div>
                                 <div class="file-icon" style="margin-right: 20px;">

@@ -11,12 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Creating New Task</title>
     <style>
-        .form-container {
-            margin-top: 86px;
-            margin-left: 400px;
-            margin-right: 50px;
-            
-        }
+
         .form-content {
             margin-bottom: 10px;
             width: fit-content;
@@ -29,6 +24,13 @@
             cursor: pointer;
             display: block;
             margin-top: 20px;
+        }
+        input, select{
+            width: 20%;
+            height: 100%;
+        }
+        input{
+            font-size: medium;
         }
     </style>
 </head>
@@ -56,7 +58,7 @@
     @endif
 
     @include('components.app-bar')
-
+    <div style="display: flex; justify-content: center; margin-top: 40px; width:1000px; margin-left:400px">
     <div>
         <form action="{{ route('admin.update', $task->task_id) }}" method="POST">
             <!-- Container for dynamic form content -->
@@ -68,22 +70,25 @@
                     @foreach($data as $item)
                         @csrf
                         <h3>Step {{$loop->iteration}}</h3>
+                        <input type="hidden" name="data[{{ $loop->index }}][create_id]" value="{{ $item->create_id }}">
                         <label for="office_name">Office Name:</label>
-                        <input type="text" id="office_name_1" name="Office_name" value="{{ $item->Office_name }}">
+                        <input type="text" id="office_name_1" name="data[{{ $loop->index }}][Office_name]" value="{{ $item->Office_name }}">
 
                         <label for="Office_task">Office Task:</label>
-                        <input type="text" id="office_task_1" name="Office_task" value="{{ $item->Office_task }}">
+                        <input type="text" id="office_task_1" name="data[{{ $loop->index }}][Office_task]" value="{{ $item->Office_task }}">
 
                         <label for="New_alloted_time">Allotted Time:</label>
-                        <input type="text" id="task_time_1" name="New_alloted_time" value="{{ $item->New_alloted_time }}"><br>
+                        <input type="text" id="task_time_1" name="data[{{ $loop->index }}][New_alloted_time]" value="{{ $item->New_alloted_time }}"><br>
                         <!-- Add other fields as needed -->
                     @endforeach
+
                     <!-- Plus icon at the bottom of the form -->
                     <i class="plus-icon" id="add-form">+</i>
                 </div>
                     <button type="submit" style="margin-bottom:100px;">Update</button>
             </div>
         </form>
+    </div>
     </div>
     <script>
         let formCount = 1; // Counter to give unique IDs to each form element

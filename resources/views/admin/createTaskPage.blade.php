@@ -33,7 +33,9 @@
         input, select{
             width: 13%;
             height: 100%;
+            font-size: medium;
         }
+        
     </style>
 </head>
 <body>

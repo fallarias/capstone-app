@@ -17,9 +17,6 @@
 <table border = "1">
 		<thead>
 			<th>#</th>
-			<th>Supplier Firstname</th>
-            <th>Supplier Middle name</th>
-            <th>Supplier Lastname</th>
             <th>Address</th>
 			<th>Type of Service</th>	
             <th>Service Description</th>
@@ -29,9 +26,6 @@
             @forelse($supplier as $counter => $row)
                 <tr>
                     <td>{{$loop->iteration}}</td> 
-                    <td>{{ $row->supplier_fname }}</td>
-                    <td>{{ $row->supplier_mname }}</td>
-                    <td>{{ $row->supplier_lname }}</td>
                     <td>{{ $row->address}}</td>
                     <td>{{ $row->type_of_service}}</td>
                     <td>{{ $row->service_desc }}</td>

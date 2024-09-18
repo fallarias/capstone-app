@@ -97,20 +97,21 @@ class TaskController extends Controller
     public function update(Request $request, $id)
     {
         $attrs = $request->validate([
-            'Office_name' => 'required',
-            'Office_task' => 'required',
-            'New_alloted_time' => 'required',
+            'data' => 'required|array',
+            'data.*.create_id' => 'required|exists:tbl_created_task,create_id', // Assuming 'creates' is the table name
+            'data.*.Office_name' => 'required|string',
+            'data.*.Office_task' => 'required|string',
+            'data.*.New_alloted_time' => 'required|string',
         ]);
 
-        // Find the record by ID
-        $record = Create::findOrFail($id);
-
-        // Update the record
-        $record->update([
-            'Office_name' => $attrs['Office_name'],
-            'Office_task' => $attrs['Office_task'],
-            'New_alloted_time' => $attrs['New_alloted_time'],
-        ]);
+        foreach ($request->data as $record) {
+            $data = Create::findOrFail($record['create_id']);
+            $data->update([
+                'Office_name' => $record['Office_name'],
+                'Office_task' => $record['Office_task'],
+                'New_alloted_time' => $record['New_alloted_time'],
+            ]);
+        }
 
         // Redirect to a specific page or view
         $supplier = Supplier::count(); //suppliers not create task
@@ -124,17 +125,13 @@ class TaskController extends Controller
     }
     public function delete_task($id){
         
-        $record = Create::findOrFail($id);
+        $record = Task::findOrFail($id);
         $record->update([
             'soft_del' => 1,
         ]);
-        $supplier = Supplier::count(); //suppliers not create task
-        $user = User::count(); 
-        $transaction = Transaction::count();
-        $client = Client::count();
-        $users = User::all();
+
         // Return the admin dashboard view with the data and user count
-        return view('admin.dashboard', compact('supplier','user', 'client','transaction', 'users'));
+        return redirect()->back()->with('success', 'Task has been Deactivated.');
                          
     }
 
@@ -165,19 +162,14 @@ class TaskController extends Controller
         return view('admin.allUserProfile', compact('user'));
     }
 
-    public function request(){
-        $data = [
-            'labels' => Carbon::now()->subMonths()->format('F'),
-            'data' => [65, 59, 80, 81],
-        ];
-        $request = ModelsRequest::all();
+    public function task_activate($id){
 
-        return view('admin.request', compact('request','data'));
-    }
+        $activate = Task::findOrFail($id);
+        $activate->update([
+            'status' => 1,
+        ]);
 
-    public function qrcode(){
-        $qrcode = qrcode::all();
-
-        return view('admin.qrcodePage', compact('qrcode'));
+        // Return the admin dashboard view with the data and user count
+        return redirect()->back()->with('success', 'Task is successfully Activated.');
     }
 }

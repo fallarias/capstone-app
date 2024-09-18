@@ -39,7 +39,7 @@ Route::group(['middleware'=> ['auth:sanctum']], function(){
         Route::get('/client/list','clients')->name('admin.clientListPage');
         Route::get('/transaction', 'transaction')->name('admin.transactionListPage');
         Route::get('/qrcode', 'qrcode')->name('admin.qrcodePage');
-        
+        Route::post('/activate/{id}', 'task_activate')->name('admin.taskActivate');
         
     });
 

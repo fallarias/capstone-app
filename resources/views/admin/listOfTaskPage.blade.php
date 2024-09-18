@@ -12,8 +12,20 @@
     <title>Document</title>
 </head>
 <body>
-App Bar @include('components.app-bar') 
+@include('components.app-bar') 
 <div style="display: flex; justify-content: center; margin-top: 40px; width:1000px; margin-left:400px">
+
+
+@if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Great...',
+                text: @json(session('success')),
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
 
 <table border = "1px ">
 		<thead>
@@ -30,15 +42,20 @@ App Bar @include('components.app-bar')
                 <td>{{ $row->date }}</td>
 
                 <td>
-                    <a href="{{ route('admin.editTaskPage', ['id' => $row->task_id]) }}">edit</a></td>
-                    <td><form action='{{route('admin.deleteTask', $row->task_id)}}' method="POST">
+                    <a href="{{ route('admin.editTaskPage', ['id' => $row->task_id]) }}">edit</a>
+                </td>
+
+                <td>
+                    <form action='{{route('admin.taskActivate', $row->task_id)}}' method="POST">
                         @csrf
                         <button type="submit">Activate</button>
-                    </form></td>
-            <td>
-                <form action='{{route('admin.deleteTask', $row->task_id)}}' method="POST">
-                    @csrf
-                    <button type="submit">Deactivate</button>
+                    </form>
+                </td>
+
+                <td>
+                    <form action='{{route('admin.deleteTask', $row->task_id)}}' method="POST">
+                        @csrf
+                        <button type="submit">Deactivate</button>
                     </form>
                 </td>
                 
