@@ -18,6 +18,10 @@ return new class extends Migration
                 $table->timestamp("date");
                 $table->integer("status")->default(0);
                 $table->integer("soft_del")->default(0);
+                $table->String('filename')->nullable();
+                $table->String('filepath')->nullable();
+                $table->integer('size')->nullable();
+                $table->string('type')->nullable();
                 $table->timestamps();
             });
         }

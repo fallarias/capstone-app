@@ -35,10 +35,8 @@
                 <th>#</th>
                 <th>Task</th>
                 <th>Date Created</th>
-                <th>Actions</th>
                 <th>Template</th>
                 <th>Template Name</th>
-                <th>Status</th>
             </thead>
             <tbody>
                 @forelse($data as $task)
@@ -46,33 +44,15 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $task->name }}</td>
                         <td>{{ $task->date }}</td>
-
-                        <td style="display: flex; gap: 20px; justify-content: center;">
-                            <form action="{{ route('admin.editTaskPage', $task->task_id) }}" method="GET">
-                                @csrf
-                                <button type="submit">Edit</button>
-                            </form>
-                            <form action="{{ route('admin.taskActivate', $task->task_id) }}" method="POST">
-                                @csrf
-                                <button type="submit">Activate</button>
-                            </form>
-                            <form action="{{ route('admin.deleteTask', $task->task_id) }}" method="POST">
-                                @csrf
-                                <button type="submit">Deactivate</button>
-                            </form>
-                        </td>
-
-                        <td>
+                        <td style="display: flex; justify-content: center; align-items: center; text-align: center;">
                             @forelse($task->files as $file)
-                            @if($file->thumbnailUrl)
-                                <a href="{{ $file->pdfUrl }}" target="_blank">
-                                    <img src="{{ $file->thumbnailUrl }}" alt="PDF Thumbnail" style="width: 70px; cursor: pointer;">
-                                </a>
-                            @else
-                                <a href="{{ $file->pdfUrl }}" target="_blank">
-                                    <i class="fas fa-file-pdf" style="font-size: 70px; cursor: pointer;"></i>
-                                </a>
-                            @endif  
+                                @if($file->pdfUrl)
+                                    <a href="{{ $file->pdfUrl }}" target="_blank">
+                                        <i class="fas fa-file-pdf" style="font-size: 70px; cursor: pointer;"></i>
+                                    </a>
+                                @else
+                                    <p>No PDF available.</p>
+                                @endif
                             @empty
                                 <p>No files for this task.</p>
                             @endforelse
@@ -80,15 +60,7 @@
                         <td>
                             {{$file->filename}}
                         </td>
-                        <td>
-                            @if($task->status == 0)
-                                <p>Deactivate</p>
-                            @elseif ($task->status == 1)
-                                <p>Activated</p>
-                            @else
-                                <p>None</p>
-                            @endif
-                        </td>
+
                     </tr>
                 @empty
                     <tr>

@@ -35,24 +35,6 @@ return new class extends Migration
         });
     }
     
-    if (!Schema::hasTable('tbl_document')) {
-        Schema::create('tbl_document', function (Blueprint $table) {
-            $table->id('document_id');
-            $table->string('template');
-            $table->string('qrcode');
-            
-
-            $table->unsignedBigInteger('staff_id');
-        
-            $table->foreign('staff_id')->references('staff_id')->on('tbl_staff')->onDelete('cascade');
-
-            $table->unsignedBigInteger('client_id');
-        
-            $table->foreign('client_id')->references('client_id')->on('tbl_client')->onDelete('cascade');
-            $table->timestamps();
-        });
-
-    }
     }
     /**
      * Reverse the migrations.

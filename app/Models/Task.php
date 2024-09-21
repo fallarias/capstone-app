@@ -13,9 +13,17 @@ class Task extends Model
         "name",
         "status",
         "soft_del",
+        'filename',
+        'filepath',
+        'size',
+        'type',
     ];
 
     protected $table = 'task';
 
     protected $primaryKey  = 'task_id';
+    public function files()
+    {
+        return $this->hasMany(Task::class, 'task_id', 'task_id');
+    }
 }

@@ -28,17 +28,7 @@ return new class extends Migration
              $table->timestamps();
          });
      }
-    if (!Schema::hasTable('tbl_qrcode')) {
-        Schema::create('tbl_qrcode', function (Blueprint $table) {
-            $table->id('qrcode_id');
-            $table->dateTime('time_in');
-            $table->dateTime('time_out');
-            $table->unsignedBigInteger('staff_id');
- 
-            $table->foreign('staff_id')->references('staff_id')->on('tbl_staff')->onDelete('cascade');
-            $table->timestamps();
-        });
-    }
+
     
 }
 
@@ -47,7 +37,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Schema::dropIfExists('tbl_staff');
+        //Schema::dropIfExists('tbl_staff');
         Schema::dropIfExists('tbl_qrcode');
     }
 };

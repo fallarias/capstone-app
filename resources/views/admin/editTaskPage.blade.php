@@ -11,31 +11,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Creating New Task</title>
     <style>
-
         .form-content {
             margin-bottom: 10px;
             width: fit-content;
             padding: 20px;
             border: 1px solid #ccc;
+            position: relative;
         }
-
-        .plus-icon {
+        .plus-icon, .minus-icon {
             font-size: 24px;
             cursor: pointer;
             display: block;
             margin-top: 20px;
         }
-        input, select{
+        .minus-icon {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            color: red;
+        }
+        input, select {
             width: 20%;
             height: 100%;
         }
-        input{
+        input {
             font-size: medium;
         }
     </style>
 </head>
 <body>
-@if($errors->any())
+    @if($errors->any())
         <script>
             Swal.fire({
                 icon: 'error',
@@ -53,93 +58,110 @@
                 title: 'Great...',
                 text: @json(session('success')),
                 confirmButtonText: 'OK'
-            });
+            }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '{{ route("admin.dashboard") }}'; // Replace with your actual dashboard route
+            }
+        });
         </script>
     @endif
 
     @include('components.app-bar')
     <div style="display: flex; justify-content: center; margin-top: 40px; width:1000px; margin-left:400px">
     <div>
-        <form action="{{ route('admin.update', $task->task_id) }}" method="POST">
-            <!-- Container for dynamic form content -->
+        <form id="task-form" action="{{ route('admin.update', $task->task_id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
             <div id="form-container" class="form-container">
                 <label for="">Name</label>
-                <input type="text" required placeholder="{{$data_task->name}}">
-                <!-- Initial form -->
-                <div class="form-content">
-                    @foreach($data as $item)
-                        @csrf
+                <input type="text" value="{{$data_task->name}}" name="task_name"><br>
+                <input type="file" name="filepath" accept=".pdf" />
+                
+                @foreach($data as $item)
+                    <div class="form-content">
+
                         <h3>Step {{$loop->iteration}}</h3>
                         <input type="hidden" name="data[{{ $loop->index }}][create_id]" value="{{ $item->create_id }}">
                         <label for="office_name">Office Name:</label>
-                        <input type="text" id="office_name_1" name="data[{{ $loop->index }}][Office_name]" value="{{ $item->Office_name }}">
+                        <input type="text" id="office_name_{{ $loop->index }}" name="data[{{ $loop->index }}][Office_name]" value="{{ $item->Office_name }}" required>
 
                         <label for="Office_task">Office Task:</label>
-                        <input type="text" id="office_task_1" name="data[{{ $loop->index }}][Office_task]" value="{{ $item->Office_task }}">
+                        <input type="text" id="office_task_{{ $loop->index }}" name="data[{{ $loop->index }}][Office_task]" value="{{ $item->Office_task }}" required>
 
                         <label for="New_alloted_time">Allotted Time:</label>
-                        <input type="text" id="task_time_1" name="data[{{ $loop->index }}][New_alloted_time]" value="{{ $item->New_alloted_time }}"><br>
-                        <!-- Add other fields as needed -->
-                    @endforeach
-
-                    <!-- Plus icon at the bottom of the form -->
-                    <i class="plus-icon" id="add-form">+</i>
-                </div>
-                    <button type="submit" style="margin-bottom:100px;">Update</button>
+                        <input type="text" id="task_time_{{ $loop->index }}" name="data[{{ $loop->index }}][New_alloted_time]" value="{{ $item->New_alloted_time }}" required><br>
+                    </div>
+                @endforeach
             </div>
+            <i class="plus-icon" id="add-form">+</i>
+            <button type="submit" style="margin-bottom:100px;">Update</button>
         </form>
     </div>
     </div>
+
     <script>
-        let formCount = 1; // Counter to give unique IDs to each form element
+        let formCount = {{ count($data) }}; // Initialize the form counter based on the existing forms
 
         // Function to create a new form and add it to the container
         function createForm() {
             formCount++; // Increment the form counter
 
-            // Define the new form content with unique IDs and name[]
             const formContent = `
                 <div class="form-content">
-                    <label for="office_name_${formCount}">Name of the Office</label>
-                    <select name="office_name[]" id="office_name_${formCount}">
-                        <option value="" disabled selected></option>
+                    <i class="minus-icon" onclick="removeForm(this)">-</i>
+                    <label for="office_name_${formCount}">Office Name:</label>
+                    <select name="data[${formCount}][Office_name]" id="office_name_${formCount}" required>
+                        <option value="" disabled selected>Select Office</option>
                         <option value="EO Office">EO Office</option>
                         <option value="Procurement Office">Procurement Office</option>
                         <option value="Budget Office">Budget Office</option>
                         <option value="Accounting Office">Accounting Office</option>
                         <option value="Supplies Office">Supplies Office</option>
                     </select><br>
-                    <label>Office Task</label>
-                    <input type="text" name="task[]" id="office_task_${formCount}"><br>
 
-                    <label>Task Alloted Time</label>
-                    <input type="text" name="time[]"  id="task_time_${formCount}">
+                    <label for="office_task_${formCount}">Office Task:</label>
+                    <input type="text" name="data[${formCount}][Office_task]" id="office_task_${formCount}" required><br>
 
-                    <!-- Plus icon at the bottom of the form -->
-                    <i class="plus-icon" id="add-form">+</i>
+                    <label for="task_time_${formCount}">Allotted Time:</label>
+                    <input type="text" name="data[${formCount}][New_alloted_time]" id="task_time_${formCount}" required>
                 </div>
             `;
 
-            // Remove the current plus icon from the last form
-            const lastPlusIcon = document.querySelector('.plus-icon');
-            if (lastPlusIcon) {
-                lastPlusIcon.remove();
-            }
-
-            // Create a new div and set its inner HTML to the new form content
             const newFormDiv = document.createElement('div');
             newFormDiv.innerHTML = formContent;
 
             // Append the new form to the form container
             document.getElementById('form-container').appendChild(newFormDiv);
+        }
 
-            // Add the event listener to the new plus icon
-            const newPlusIcon = newFormDiv.querySelector('.plus-icon');
-            newPlusIcon.addEventListener('click', createForm);
+        // Function to remove a form content
+        function removeForm(element) {
+            element.parentElement.remove();
         }
 
         // Add the initial event listener to the first plus icon
         document.getElementById('add-form').addEventListener('click', createForm);
+
+        // Prevent form submission if any input is empty
+        document.getElementById('task-form').addEventListener('submit', function(event) {
+            const inputs = document.querySelectorAll('input[required], select[required]');
+            let valid = true;
+            
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    valid = false;
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Validation Error',
+                        text: 'Please fill out all required fields before submitting.',
+                        confirmButtonText: 'OK'
+                    });
+                    event.preventDefault();
+                    return;
+                }
+            });
+
+            return valid;
+        });
     </script>
 
 </body>

@@ -22,19 +22,6 @@
             <i class="fas fa-clipboard-list"></i>
             <span style="margin-left: 10px; color: white;">List of Available Tasks</span>
         </a>
-        
-        <!-- Request Route
-        <a href="{{ url('/request') }}" class="icon-container {{ Request::is('request') ? 'active' : '' }}" style="margin-bottom: 40px; display: flex; align-items: center; margin-left: -70px; text-decoration:none">
-            <i class="fas fa-database"></i>
-            <span style="margin-left: 10px; color: white;">Request Data</span>
-        </a> -->
-
-        <!-- Notification Icon -->
-        <!-- <a href="{{ url('/notification') }}" class="icon-container {{ Request::is('notification') ? 'active' : '' }}" style="margin-bottom: 40px; display: flex; align-items: center;margin-left: -70px; text-decoration:none">
-            <i class="fas fa-bell" style="font-size: 24px;"></i>
-            <span style="margin-left: 10px; color: white;">Notifications</span>
-        </a> -->
-
         <!-- Upload File Icon -->
         <a href="{{ url('/upload') }}" class="icon-container {{ Request::is('upload') ? 'active' : '' }}" style="margin-bottom: 40px; display: flex; align-items: center;margin-left: -70px; text-decoration:none">
             <i class="fas fa-upload" style="font-size: 24px;"></i>

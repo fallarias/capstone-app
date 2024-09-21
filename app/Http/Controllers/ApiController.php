@@ -6,12 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator; 
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use App\Models\File;
 use Illuminate\Auth\Events\Registered;
 use App\Events\UserLoggedOut;
 use App\Events\UserLoggedIn;
-
-
+use App\Models\Task;
 use Illuminate\Support\Facades\Storage;
 use Auth;
 class ApiController extends Controller
@@ -101,7 +99,7 @@ class ApiController extends Controller
 
     
     public function client_file() {
-        $files = File::all();
+        $files = Task::all();
     
         foreach ($files as $file) {
             if ($file->type == 'application/pdf') {

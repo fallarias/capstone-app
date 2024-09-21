@@ -15,8 +15,33 @@
 <body>
     <!-- App Bar -->
     @include('components.app-bar')
+    
     <!-- Main Content -->
     <div class="main-content">
+    @if($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Error',
+                text: @json($errors->first()),
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
+
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Great...',
+                text: @json(session('success')),
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
+        <!-- Add Code -->
+        @include('components.addOffice')
+
         <h1 class="title">Dashboard</h1>
         <div class="stat-container">
             <div class="stat-item" style="margin-right: 40px;">
@@ -37,10 +62,10 @@
                     <p>{{ $transaction }}</p>
                 </a>
             </div>
-            <div class="stat-item">
-                <a href="{{url('/client/list')}}">
-                    <h4>Clients</h4>
-                    <p>{{ $client }}</p>
+            <div class="stat-item" style=" display: flex;align-items: center;height: 120px;">
+                <a href="{{url('/activated/task')}}">
+                    <h4>Activated Task</h4>
+                    <p>{{ $activate }}</p>
                 </a>
             </div>
         </div>
