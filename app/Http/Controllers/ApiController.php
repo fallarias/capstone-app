@@ -25,7 +25,7 @@ class ApiController extends Controller
             'firstname' => 'required|string|max:255',
             'middlename' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'user_type' => 'required|string',
+            'account_type' => 'required|string',
             'is_delete' => 'default|active',
             'department' => 'required|string',
             'password' => ['required', 'confirmed', 'min:8', 'max:255', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'],
