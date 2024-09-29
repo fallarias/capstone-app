@@ -17,8 +17,10 @@
 <table border = "1">
 		<thead>
 			<th>#</th>
-			<th>Staff ID</th>
-            <th>Client ID</th>
+			<th>User ID</th>
+            <th>Task ID</th>
+            <th>Total of Office</th>
+            <th>Office Done</th>
             <th>Status</th>
 
 		</thead>
@@ -26,11 +28,11 @@
             @forelse($transaction as $counter => $row)
                 <tr>
                     <td>{{ $loop->iteration}}</td> 
-                    <td>{{ $row->staff_id }}</td>
-                    <td>{{ $row->client_id }}</td>
+                    <td>{{ $row->user_id }}</td>
+                    <td>{{ $row->task_id }}</td>
+                    <td>{{ $row->Total_Office_of_Request }}</td>
+                    <td>{{ $row->Office_Done }}</td>
                     <td>{{ $row->status }}</td>
-
-
                 </tr>
                 @empty
                     <tr>
