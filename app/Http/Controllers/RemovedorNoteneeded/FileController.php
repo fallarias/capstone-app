@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\RemovedorNoteneeded;
 
 use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpWord\IOFactory;
 use Illuminate\Http\Request;
 use App\Models\File;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
 class FileController extends Controller
 {
 

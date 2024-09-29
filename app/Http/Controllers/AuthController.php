@@ -78,5 +78,18 @@ class AuthController extends Controller
         return view('admin.person', compact('user'));
     }
 
+    public function user_accept($id){
 
+        $user = User::findOrFail($id);  
+
+        $user->where('user_id', $id)->update(['status' => 'Accepted']);
+        return back()->with(['success'=> 'Status update to User Accepted.']);
+    }
+    public function user_reject($id){
+
+        $user = User::findOrFail($id);  
+
+        $user->where('user_id', $id)->update(['status' => 'Not Accepted']);
+        return back()->with(['success'=> 'Status update to User Not Accepted.']);
+    }
 }

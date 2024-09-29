@@ -67,7 +67,7 @@ body {
 
 /* Main Content Container */
 .main-content {
-  padding-left: 320px;
+  padding-left: 300px;
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -120,14 +120,39 @@ a:hover {
 }
 
 .stat-container {
+  width: 90%; /* Takes 90% of the screen width */
+  max-width: 1200px; /* Prevents it from being too wide on large monitors */
+  min-width: 320px; /* Prevents it from shrinking too much on small screens */
+  margin: 0 auto; /* Center the container */
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+
+
+.stat-container1 {
+  width: auto; /* Adjust this value to your preferred width */
+  height: auto;
+  margin: 0 auto; /* Centers the container horizontally */
+  display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
   text-align: start;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); /* Adds a shadow */
+
 }
+
 .stat-item {
-  margin-right: 50px;
-  font-size: 1.2em;
+  max-width: fit-content;
+  font-size: .9em;
   position: relative; /* Needed for the pseudo-element positioning */
   padding-bottom: 20px; /* Adds space for the line */
 }
@@ -530,7 +555,6 @@ background-color: rgba(100, 200, 100, 0.2);
 .file-entry {
   display: inline-flex; /* Inline flex to keep items horizontal */
   align-items: center; /* Vertically center items */
-  border-radius: ;
   border-bottom-left-radius: 10px; /* Optional: Add rounded corners */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow */
 }

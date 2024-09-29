@@ -71,8 +71,7 @@ class GetRouteController extends Controller
 
     }
     public function user(){
-        $user = User::all();
-
+        $user = User::whereIn('account_type', ['client', 'office staff', 'supplier'])->get();
         return view('admin.allUserProfile', compact('user'));
     }
 }

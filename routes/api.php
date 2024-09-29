@@ -18,17 +18,16 @@ use Illuminate\Support\Facades\Route;
  Route::controller(ApiController::class)->group(function () {
     Route::post('/register', 'register');
     Route::post('/login', 'login');
-    //Route::post('/mobile', 'mobile_otp');
-    //Route::post('/email', 'email_otp');
-
-
+    
     //Authenticated User Only
     Route::group(['middleware'=> ['auth:sanctum']], function(){
         Route::get('/client_file', 'client_file');
         Route::post('/logout', 'logout');
+        Route::post('/transaction', 'transaction');
+        Route::post('/scanned_data', 'scanned_data');
+        Route::get('/template_history/{id}', 'template_history');
+        Route::get('/task_document/{userId}', 'task_document');
     });
-
-    
 });
 
 

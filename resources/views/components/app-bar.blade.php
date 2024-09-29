@@ -22,11 +22,7 @@
             <i class="fas fa-clipboard-list"></i>
             <span style="margin-left: 10px; color: white;">List of Available Tasks</span>
         </a>
-        <!-- Upload File Icon -->
-        <a href="{{ url('/upload') }}" class="icon-container {{ Request::is('upload') ? 'active' : '' }}" style="margin-bottom: 40px; display: flex; align-items: center;margin-left: -70px; text-decoration:none">
-            <i class="fas fa-upload" style="font-size: 24px;"></i>
-            <span style="margin-left: 10px; color: white;">Upload</span>
-        </a>
+        
         <!-- Logs Page Icon -->
         <a href="{{ url('/logs') }}" class="icon-container {{ Request::is('logs') ? 'active' : '' }}" style="margin-bottom: 40px; display: flex; align-items: center;margin-left: -70px; text-decoration:none">
             <i class="fas fa-book" style="font-size: 24px;"></i>

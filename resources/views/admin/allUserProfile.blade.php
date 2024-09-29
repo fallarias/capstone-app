@@ -13,6 +13,17 @@
 <body>
 @include('components.app-bar')
 <div style="display: flex; justify-content: center; margin-top: 40px; width:1000px; margin-left:400px">
+        
+@if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Great...',
+            text: @json(session('success')),
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
 
 <table border = "1">
 		<thead>
@@ -22,9 +33,9 @@
             <th>Middle Name</th>
 			<th>Email</th>
             <th>Account Type</th>
-            <th>Password</th>
+            <th>Status</th>
             <th>Profile Picture</th>
-	
+            <th>Action</th>
 		</thead>
 		<tbody>
             @forelse($user as $counter => $row)
@@ -35,8 +46,18 @@
                     <td>{{ $row->middlename }}</td>
                     <td>{{ $row->email }}</td>
                     <td>{{ $row->account_type }}</td>
-                    <td>{{ $row->password }}</td>
+                    <td>{{ $row->status }}</td>
                     <td>{{ $row->profile_picture }}</td>
+                    <td>
+                        <form action="{{route('admin.accept', $row->user_id)}}" method="POST">
+                            @csrf
+                            <button type = "submit">Accept User</button>
+                        </form>
+                        <form action="{{route('admin.reject', $row->user_id)}}" method="POST">
+                            @csrf
+                            <button type = "submit">Not Accept User</button>
+                        </form>
+                    </td>
                 </tr>
                 @empty
                     <tr>

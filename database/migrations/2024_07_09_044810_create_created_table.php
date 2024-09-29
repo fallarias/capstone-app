@@ -41,6 +41,22 @@ return new class extends Migration
             $table->timestamps();
         });
     }
+    if (!Schema::hasTable('tbl_transaction')) {
+        Schema::create('tbl_transaction', function (Blueprint $table) {
+            $table->id('transaction_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('task_id');
+            $table->integer('Total_Office_of_Request');
+            $table->integer('Office_Done')->default(0);
+            $table->string('status')->default('ongoing');
+            $table->timestamps();
+
+            // Add foreign key constraints if needed
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->foreign('task_id')->references('task_id')->on('task')->onDelete('cascade');
+           
+        });
+    }
 }
 
     /**
@@ -49,6 +65,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('tbl_created_task');
+        Schema::dropIfExists('tbl_transaction');
         Schema::dropIfExists('task');
     }
 };
