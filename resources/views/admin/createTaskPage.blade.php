@@ -258,6 +258,16 @@
             });
         </script>
     @endif
+    @if(session('success_office'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Great...',
+                text: @json(session('success_office')),
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
     
 
     @include('components.app-bar')

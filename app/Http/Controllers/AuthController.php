@@ -92,4 +92,6 @@ class AuthController extends Controller
         $user->where('user_id', $id)->update(['status' => 'Not Accepted']);
         return back()->with(['success'=> 'Status update to User Not Accepted.']);
     }
+
+    
 }

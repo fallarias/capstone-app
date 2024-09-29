@@ -69,7 +69,7 @@ Route::group(['middleware'=> ['auth:sanctum']], function(){
         Route::get('/admin/profile/{id}', 'admin_profile')->name('admin.adminProfilePage');
         Route::post('/user/accept/{id}', 'user_accept')->name('admin.accept');
         Route::post('/user/reject/{id}', 'user_reject')->name('admin.reject');
-
+        
     });
 
     

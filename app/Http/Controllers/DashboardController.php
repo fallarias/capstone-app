@@ -14,7 +14,7 @@ class DashboardController extends Controller
     public function dashboard(){
 
         $supplier = Supplier::count(); //suppliers not create task
-        $user = User::count(); 
+        $user = User::whereIn('account_type', ['client', 'office staff', 'supplier'])->count();
         $transaction = Transaction::count();
         $activate = Task::where("status", 1)->where('soft_del', 0)->count();
         $users = User::all();

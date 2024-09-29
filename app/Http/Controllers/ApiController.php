@@ -189,12 +189,7 @@ class ApiController extends Controller
                         ->where('task_id', $taskId)
                         ->update(['status' => 'finished']);
                         //return response()->json(['message' => 'Transaction finished!'], 200);
-                        $email_finished = User::where('user_id', $userId)->first();
-                        Mail::send('admin.notifPage', ['email' => $email_finished->email], function ($message) use ($email_finished) {
-                            $message->to($email_finished->email);
-                            $message->subject('Task Finished');
-                        });
-                
+                        
                         //return response()->json(['success' => 'OTP sent to your email.']);
                     }
             
