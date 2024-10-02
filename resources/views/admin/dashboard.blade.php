@@ -10,43 +10,49 @@
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <style>
+.stat-container {
+    display: flex;
+    margin-top: 20px;
+}
 
+
+.stat-item:hover {
+    transform: translateY(-10px);
+}
+
+.chart-container {
+    margin-top: 30px;
+}
+
+.animated-box {
+    animation: popUp 0.5s ease-in-out;
+}
+
+@keyframes popUp {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+        </style>
 </head>
 <body>
     <!-- App Bar -->
     @include('components.app-bar')
     
-    <!-- Main Content -->
     <div class="main-content">
-    @if($errors->any())
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Validation Error',
-                text: @json($errors->first()),
-                confirmButtonText: 'OK'
-            });
-        </script>
-    @endif
-
-    @if(session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Great...',
-                text: @json(session('success')),
-                confirmButtonText: 'OK'
-            });
-        </script>
-    @endif
         <!-- Add Code -->
-        @include('components.addOffice')
-
         <h1 class="title">Dashboard</h1>
-        <div class="stat-container">
+        <div class="stat-container" style="margin-left: 0px;">
             <div class="stat-item" style="margin-right: 40px;">
                 <a href="{{url('/supplier')}}">
-                    <h4>Suppliers</h4>
+                    <h4 style="width: 130px;">Suppliers</h4>
                     <p>{{ $supplier }}</p>
                 </a>
             </div>
@@ -56,32 +62,39 @@
                     <p>{{ $user }}</p>
                 </a>
             </div>
-            <div class="stat-item" style="margin-right: 20px;">
+            <div class="stat-item" style="margin-right: 45px;">
                 <a href="{{url('/transaction')}}">
-                    <h4 style="width: 160px;">Transactions</h4>
+                    <h4 style="width: 130px;">Transactions</h4>
                     <p>{{ $transaction }}</p>
                 </a>
             </div>
-            <div class="stat-item" style=" display: flex;align-items: center;height: 120px;">
+            <div class="stat-item" style=" display: flex;align-items: center;height: 115px;">
                 <a href="{{url('/activated/task')}}">
-                    <h4>Activated Task</h4>
+                    <h4 style="width: 130px;">Activated Task</h4>
                     <p>{{ $activate }}</p>
                 </a>
             </div>
         </div>
+
+        <div class="stat-container" style="margin-left: 0px;">
         <div class="chart-container">
-            <canvas id="requestChart" width="680" height="200"></canvas>
+            <canvas id="requestChart" width="700" height="200"></canvas>
+        </div>
         </div>
 
             <!-- First Doughnut Chart (Online and Offline Users) -->
-        <div class="chart-container">
-            <canvas id="onlineUsersChart"width="230" height="100" style="margin-left: 700px; margin-top:-340px;"></canvas>
+        <div class="stat-container1" style="margin-left: 770px; margin-top: -485px;">
+        <div class="chart-container ">
+            <canvas id="onlineUsersChart"width="190" height="100" ></canvas>
+        </div>
         </div>
 
     <!-- Second Doughnut Chart (Online and Offline Staff) -->
+    <div class="stat-container1"  style="margin-left: 1000px; margin-top: -240px;">
         <div class="chart-container">
-            <canvas id="onlineStaffChart"width="240" height="100"style="margin-left: 930px; margin-top:-380px;"> </canvas>
+            <canvas id="onlineStaffChart"width="190" height="100"> </canvas>
         </div>
+    </div>
 
     </div>
 

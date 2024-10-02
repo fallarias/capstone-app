@@ -19,6 +19,7 @@ return new class extends Migration
                 $table->string('middlename');
                 $table->string('email')->unique();
                 $table->string('account_type');
+                $table->string('status')->default('Not Accepted');
                 $table->string('profile_picture')->nullable();   
                 $table->string('is_delete')->default('active');       
                 $table->timestamp('email_verified_at')->nullable();
@@ -35,15 +36,15 @@ return new class extends Migration
              $table->timestamp('created_at')->nullable();
          });
         }
-         if (!Schema::hasTable('sessions')) {
-         Schema::create('sessions', function (Blueprint $table) {
-             $table->string('id')->primary();
-             $table->foreignId('user_id')->nullable()->constrained('users', 'user_id')->onDelete('cascade')->index();
-             $table->string('ip_address', 45)->nullable();
-             $table->text('user_agent')->nullable();
-             $table->longText('payload');
-             $table->integer('last_activity')->index();
-         });
+        if (!Schema::hasTable('sessions')) {
+            Schema::create('sessions', function (Blueprint $table) {
+                $table->string('id')->primary();
+                $table->foreignId('user_id')->nullable()->constrained('users', 'user_id')->onDelete('cascade')->index();
+                $table->string('ip_address', 45)->nullable();
+                $table->text('user_agent')->nullable();
+                $table->longText('payload');
+                $table->integer('last_activity')->index();
+            });
         }
     }
 

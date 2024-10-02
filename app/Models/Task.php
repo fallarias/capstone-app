@@ -26,4 +26,5 @@ class Task extends Model
     {
         return $this->hasMany(Task::class, 'task_id', 'task_id');
     }
+
 }

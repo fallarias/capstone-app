@@ -3,7 +3,7 @@
 use App\Http\Controllers\GetRouteController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\FileController;
+use App\Http\Controllers\RemovedorNoteneeded\FileController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TaskController;
 
@@ -15,7 +15,6 @@ use App\Http\Controllers\TaskController;
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');
 Route::post('/login/admin', [AuthController::class, 'login'])->name('admin.logins');
-
 
 // middleware
 Route::group(['middleware'=> ['auth:sanctum']], function(){
@@ -68,6 +67,8 @@ Route::group(['middleware'=> ['auth:sanctum']], function(){
 
         Route::get('/logout', 'logout')->name('admin.logout');
         Route::get('/admin/profile/{id}', 'admin_profile')->name('admin.adminProfilePage');
+        Route::post('/user/accept/{id}', 'user_accept')->name('admin.accept');
+        Route::post('/user/reject/{id}', 'user_reject')->name('admin.reject');
         
     });
 

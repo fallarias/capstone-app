@@ -208,7 +208,7 @@ class TaskController extends Controller
             'office_name' => $attrs['office_name'],
         ]);
 
-        return redirect()->back()->with('success', 'Office is successfully added.');
+        return redirect()->back()->with('success_office', 'Office is successfully added.');
     }
 
 
