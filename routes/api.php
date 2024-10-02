@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\TaskController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,7 +24,6 @@ use Illuminate\Support\Facades\Route;
 
     //Authenticated User Only
     Route::group(['middleware'=> ['auth:sanctum']], function(){
-        Route::get('/client_file', 'client_file');
         Route::post('/logout', 'logout');
     });
 

@@ -211,4 +211,48 @@ class TaskController extends Controller
         return redirect()->back()->with('success', 'Office is successfully added.');
     }
 
+
+
+
+//VIEWING OF TASK IN FLUTTER
+            public function viewTask()
+            {
+                $tasks = Task::all();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'All tasks retrieved successfully',
+                    'data' => $tasks
+                ], 200);
+            }
+
+            public function getFile($id) {
+                try {
+                    // Find the task by its ID
+                    $task = Task::findOrFail($id);
+            
+                    // Check if the file exists in the storage
+                    if (!Storage::exists($task->filepath)) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'File not found',
+                        ], 404);
+                    }
+            
+                    // Get the file content and its MIME type
+                    $file = Storage::get($task->filepath);
+                    $type = Storage::mimeType($task->filepath);
+            
+                    // Return the file as a response with appropriate headers for inline viewing
+                    return response($file, 200)
+                        ->header('Content-Type', $type)
+                        ->header('Content-Disposition', 'inline; filename="' . $task->filename . '"');
+                } catch (\Exception $e) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Error retrieving file: ' . $e->getMessage(),
+                    ], 500);
+                }
+            }
+            
+
 }
