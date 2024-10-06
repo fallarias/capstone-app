@@ -59,7 +59,8 @@ Route::group(['middleware'=> ['auth:sanctum']], function(){
         Route::get('/user', 'user')->name('admin.allUserProfile');
         Route::get('/activated/task','activated_task')->name('admin.activateTaskListPage');
         Route::get('/transaction', 'transaction')->name('admin.transactionListPage');
-        
+        Route::get('/audit', 'audit_trails')->name('admin.auditTrails');
+
     });
 
 

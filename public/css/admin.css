@@ -66,12 +66,22 @@ body {
 /* dashboard.css */
 
 /* Main Content Container */
+.container {
+  width: 100%; /* Relative to the viewport */
+  max-width: 1200px; /* To prevent stretching too much on large screens */
+}
+
+
+
+/* dashboard.css */
+
+/* Main Content Container */
 .main-content {
   padding-left: 300px;
   display: flex;
   flex-direction: column;
   align-items: start;
-  width: 50%;
+  width: 65%;
   height: 50%;
 }
 

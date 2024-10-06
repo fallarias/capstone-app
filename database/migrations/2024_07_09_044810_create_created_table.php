@@ -49,6 +49,7 @@ return new class extends Migration
             $table->integer('Total_Office_of_Request');
             $table->integer('Office_Done')->default(0);
             $table->string('status')->default('ongoing');
+            $table->timestamp('deadline');
             $table->timestamps();
 
             // Add foreign key constraints if needed

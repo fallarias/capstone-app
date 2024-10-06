@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Audit extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'office_name',
+        'start',
+        'finished',
+        'deadline',
+        'user_id',
+        'task_id',
+    ];
+    
+    protected $table = 'audit_trails';
+    protected $primaryKey = 'audit_id';
+
 }

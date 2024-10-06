@@ -14,11 +14,15 @@ return new class extends Migration
         if (!Schema::hasTable('audit_trails')) {
         Schema::create('audit_trails', function (Blueprint $table) {
             $table->id('audit_id');
-            $table->integer('account_id');
-            $table->string('account_type');
-            $table->timestamp('log_date');
-            $table->string('log_type');
-            $table->string('log_message');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('task_id');
+            $table->timestamp('start')->nullable();
+            $table->timestamp('deadline')->nullable();
+            $table->timestamp('finished')->nullable();
+            $table->string('office_name');
+            $table->timestamps();
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->foreign('task_id')->references('task_id')->on('task')->onDelete('cascade');
         });
     }
 }

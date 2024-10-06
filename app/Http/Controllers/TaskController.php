@@ -79,13 +79,13 @@ class TaskController extends Controller
     
 
     public function edit($id){
-
+        $offices = NewOffice::all();
         $task = Task::findOrFail($id);
         if($task){
             $data_task = Task::all()->where('task_id', '=', $id)->first();
         }
         $data = Create::all()->where('task_id',$id);
-        return view('admin.editTaskPage', compact('data',"task","data_task"));
+        return view('admin.editTaskPage', compact('data',"task","data_task","offices"));
 
     }
 
@@ -210,5 +210,6 @@ class TaskController extends Controller
 
         return redirect()->back()->with('success_office', 'Office is successfully added.');
     }
+
 
 }

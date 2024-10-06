@@ -43,6 +43,7 @@
         </style>
 </head>
 <body>
+    <div class="container">
     <!-- App Bar -->
     @include('components.app-bar')
     
@@ -50,12 +51,12 @@
         <!-- Add Code -->
         <h1 class="title">Dashboard</h1>
         <div class="stat-container" style="margin-left: 0px;">
-            <div class="stat-item" style="margin-right: 40px;">
+            <!-- <div class="stat-item" style="margin-right: 40px;">
                 <a href="{{url('/supplier')}}">
                     <h4 style="width: 130px;">Suppliers</h4>
                     <p>{{ $supplier }}</p>
                 </a>
-            </div>
+            </div> -->
             <div class="stat-item" style="margin-right: 50px;">
                 <a href="{{url('/user')}}">
                     <h4>Users</h4>
@@ -97,7 +98,7 @@
     </div>
 
     </div>
-
+    </div>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

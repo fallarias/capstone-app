@@ -1,0 +1,19 @@
+
+   INFO  No scheduled commands are ready to run.  
+
+Running Laravel scheduler at 06/10/2024 21:56:59.24 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 06/10/2024 21:57:27.16 
+Running Laravel scheduler at 06/10/2024 21:59:24.18 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 06/10/2024 21:59:24.90 
+Running Laravel scheduler at 06/10/2024 22:00:26.50 
+
+  2024-10-06 22:00:27 Running ["artisan" inspire] ............................................................ 1s DONE
+  ⇂ "C:\xampp\php\php.exe" "artisan" inspire > "NUL" 2>&1  
+
+Finished running at 06/10/2024 22:00:28.71 

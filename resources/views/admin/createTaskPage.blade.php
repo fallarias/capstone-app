@@ -8,229 +8,10 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/createTask.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Creating New Task</title>
-    <style>
-        .form-container {
-            margin-top: 20px;
-        }
-
-        .form-content {
-            width: 75%;
-            position: relative;
-            padding: 20px;
-            border: 1px solid #ddd;
-            margin-bottom: 20px;
-            border-radius: 8px;
-        }
-        .close-icon {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            margin : auto;
-            background-color: white;
-            color: red;
-            border: none;
-            border-radius: 50%;
-            width: 25px;
-            height: 25px;
-            text-align: center;
-            line-height: 25px;
-            cursor: pointer;
-            font-size: 30px;
-        }
-
-
-
-        .plus-icon{
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .plus-icon {
-            display: block;
-            margin-top: 20px;
-            margin-right: 700px;
-        }
-
-
-
-        input, select {
-            width: 13%;
-            height: 100%;
-            font-size: medium;
-        }
-
-
-
-        .main-content {
-            max-width: 600px;
-            margin-left: 300px;
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-        }
-        .title1 {
-            margin-left: -550px;
-            text-align: center;
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
-        label, input {
-            width: 95%;
-            margin: auto;
-            display: block;
-            margin-bottom: 10px;
-        }
-        input[type="text"], input[type="file"] {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .btn3, .btn2, .btn-clear {
-            width: 49%;
-            background-color: #18392B;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn3:hover, .btn2:hover {
-            background-color: #555;
-        }
-
-        .btn-clear:hover {
-            background-color: red;
-        }
-
-        .btn4{
-            width: 101%;
-            background-color: #18392B;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn4:hover{
-            background-color: #28a745;
-        }
-
-        .plus-icon {
-            display: inline-block;
-            background-color: #28a745; /* Green background */
-            color: white; /* White plus icon color */
-            border-radius: 50%; /* Makes the icon a circle */
-            width: 40px; /* Circle width */
-            height: 40px; /* Circle height */
-            text-align: center; /* Center the plus icon */
-            line-height: 40px; /* Vertically center the plus icon */
-            font-size: 24px; /* Font size for the plus icon */
-            cursor: pointer; /* Pointer cursor on hover */
-        }
-        .plus-icon:hover {
-            background-color: #218838; /* Darker green on hover */
-        }
-        select {
-            width: 100%; /* Makes the select take up the full width of its container */
-            padding: 8px;
-            margin-top: 5px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-
-
-
-        /* Button styling */
-        #openModalButton {
-            padding: 10px 20px;
-            background-color: #18392B;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        #openModalButton:hover {
-            background-color: #318392B3;
-        }
-
-        /* Modal container */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Modal content box */
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            max-height: 80%; /* Max height as a percentage of the viewport */
-            overflow-y: auto; 
-        }
-
-        /* Close button styling */
-        .close {
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            color: red;
-        }
-
-        .close:hover, .close:focus {
-            color: #a42914;
-        }
-
-
-
-
-        /* Custom Save button styling */
-        button[type="submit"] {
-            width: 100%;
-            padding: 12px 25px;
-            background-color: #007bff; /* Blue background */
-            color: white; /* White text */
-            border: none;
-            border-radius: 8px; /* Rounded corners */
-            font-size: 16px; /* Medium font size */
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
-            transition: all 0.3s ease;
-        }
-
-        /* Hover and active effects for Save button */
-        button[type="submit"]:hover {
-            background-color: #0056b3; /* Darker blue on hover */
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Increased shadow */
-            transform: translateY(-2px); /* Lift effect */
-        }
-
-        button[type="submit"]:active {
-            transform: translateY(2px); /* Slight push-down effect */
-            background-color: #004085; /* Even darker blue when clicked */
-        }
-
-        
-    </style>
+    
 </head>
 <body>
     @if($errors->any())
@@ -253,7 +34,7 @@
                 confirmButtonText: 'OK'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = '{{ route("admin.dashboard") }}'; // Replace with your actual dashboard route
+                    window.location.href = '{{ route("admin.listOfTaskPage") }}'; // Replace with your actual dashboard route
                 }
             });
         </script>
@@ -359,7 +140,11 @@
         <input type="text" name="task[]" id="office_task_${formCount}" value="${task}" required>
 
         <label>Task Allotted Time</label>
-        <input type="text" name="time[]" id="task_time_${formCount}" value="${time}" required>
+        <select name="time[]" id="task_time_${formCount}" required>
+            @for ($i = 1; $i <= 100; $i++)
+                <option value="{{ $i }}">{{ $i }} hour{{ $i !== 1 ? 's' : '' }}</option>
+            @endfor
+        </select>
     </div>
             `;
 
@@ -407,7 +192,7 @@
             formContents.forEach((form) => {
                 const officeName = form.querySelector('select[name="office_name[]"]');
                 const task = form.querySelector('input[name="task[]"]');
-                const time = form.querySelector('input[name="time[]"]');
+                const time = form.querySelector('select[name="time[]"]');
 
                 if (officeName && officeName.value && task && task.value && time && time.value) {
                     isValid = true;

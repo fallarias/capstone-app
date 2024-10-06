@@ -14,10 +14,12 @@
             <i class="fas fa-file-alt"></i>
             <span style="margin-left: 10px; color: white;">Create Task</span>
         </a>
-        <a href="{{ url('/listOfTask') }}" class="icon-container {{ Request::is('list') ? 'active' : '' }}" style="margin-bottom: 40px; display: flex; align-items: center; margin-left: -70px; text-decoration:none">
-            <i class="fas fa-edit"></i>
-            <span style="margin-left: 10px; color: white;">Edit Task</span>
+
+        <a href="{{ url('/audit') }}" class="icon-container {{ Request::is('audit') ? 'active' : '' }}" style="margin-bottom: 40px; display: flex; align-items: center; margin-left: -70px; text-decoration:none">
+            <i class="fas fa-book"></i>
+            <span style="margin-left: 10px; color: white;">Audit Trails</span>
         </a>
+        
         <a href="{{ url('/listOfTask') }}" class="icon-container {{ Request::is('list') ? 'active' : '' }}" style="margin-bottom: 40px; display: flex; align-items: center; margin-left: -70px; text-decoration:none">
             <i class="fas fa-clipboard-list"></i>
             <span style="margin-left: 10px; color: white;">List of Available Tasks</span>

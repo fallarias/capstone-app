@@ -12,6 +12,7 @@ class Transaction extends Model
         'user_id',
         'task_id',
         'Total_Office_of_Request',
+        'deadline',
         'Office_Done',
         'status',
     ];
