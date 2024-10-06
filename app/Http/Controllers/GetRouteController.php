@@ -19,7 +19,8 @@ class GetRouteController extends Controller
     public function create(){
         
         $offices = NewOffice::all();
-        return view('admin.createTaskPage', compact('offices'));
+        $name = Task::all();
+        return view('admin.createTaskPage', compact('offices', 'name'));
 
     }
 

@@ -71,6 +71,16 @@
         </form>
         <!--<button type="button" class="btn2" style="height:40px; padding:auto; margin-top:20px; margin-left:390px" onclick="window.history.back();">Go Back</button> -->
     </div>
+
+    <div>
+        <label for="">Recent Task</label>
+            @forelse($name as $counter)    
+                <p>{{ $counter->name }}</p>
+            @empty
+                <p>no recent task</p>
+            @endforelse
+    </div>
+
     <div id="inputModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>

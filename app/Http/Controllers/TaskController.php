@@ -212,4 +212,14 @@ class TaskController extends Controller
     }
 
 
+        // In your controller
+        public function showListOfTasks()
+        {
+            $currentPage = 'list_of_tasks'; // Define the variable
+            // Fetch data as necessary here
+            
+            return view('admin.listOfTaskPage', compact('currentPage'));
+        }
+
+
 }

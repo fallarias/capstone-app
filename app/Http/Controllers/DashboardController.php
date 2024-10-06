@@ -27,5 +27,19 @@ class DashboardController extends Controller
 
         return view('admin.logsPage', compact('logs'));
     }
+    public function getStats() {
+        $supplier = Supplier::count();
+        $user = User::whereIn('account_type', ['client', 'office staff', 'supplier'])->count();
+        $transaction = Transaction::count();
+        $activate = Task::where("status", 1)->where('soft_del', 0)->count();
+
+        // Return the counts as JSON for AJAX requests
+        return response()->json([
+            'supplier' => $supplier,
+            'user' => $user,
+            'transaction' => $transaction,
+            'activate' => $activate,
+        ]);
+    }
 
 }

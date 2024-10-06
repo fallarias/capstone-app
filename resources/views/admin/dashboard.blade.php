@@ -38,45 +38,31 @@
         transform: scale(1);
         opacity: 1;
     }
+
+    90% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    80% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
         </style>
 </head>
 <body>
-    <div class="container">
+
+<div class="container">
     <!-- App Bar -->
     @include('components.app-bar')
     
     <div class="main-content">
         <!-- Add Code -->
         <h1 class="title">Dashboard</h1>
-        <div class="stat-container" style="margin-left: 0px;">
-            <!-- <div class="stat-item" style="margin-right: 40px;">
-                <a href="{{url('/supplier')}}">
-                    <h4 style="width: 130px;">Suppliers</h4>
-                    <p>{{ $supplier }}</p>
-                </a>
-            </div> -->
-            <div class="stat-item" style="margin-right: 50px;">
-                <a href="{{url('/user')}}">
-                    <h4>Users</h4>
-                    <p>{{ $user }}</p>
-                </a>
-            </div>
-            <div class="stat-item" style="margin-right: 45px;">
-                <a href="{{url('/transaction')}}">
-                    <h4 style="width: 130px;">Transactions</h4>
-                    <p>{{ $transaction }}</p>
-                </a>
-            </div>
-            <div class="stat-item" style=" display: flex;align-items: center;height: 115px;">
-                <a href="{{url('/activated/task')}}">
-                    <h4 style="width: 130px;">Activated Task</h4>
-                    <p>{{ $activate }}</p>
-                </a>
-            </div>
-        </div>
 
+        @include('admin.autoReload')
         <div class="stat-container" style="margin-left: 0px;">
         <div class="chart-container">
             <canvas id="requestChart" width="700" height="200"></canvas>
@@ -227,5 +213,7 @@
             config
         );
     </script>
+
+
 </body>
 </html>
