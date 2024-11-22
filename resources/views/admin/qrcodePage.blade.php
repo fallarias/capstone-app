@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Document</title>
 </head>
 <body>
-App Bar @include('components.app-bar')
+App Bar @include('components.app-bar', ['admin' => $admin])
 <div style="display: flex; justify-content: center; margin-top: 40px; width:1000px; margin-left:400px">
 
 <table border = "1">

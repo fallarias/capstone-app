@@ -17,3 +17,114 @@ Running Laravel scheduler at 06/10/2024 22:00:26.50
   ⇂ "C:\xampp\php\php.exe" "artisan" inspire > "NUL" 2>&1  
 
 Finished running at 06/10/2024 22:00:28.71 
+Running Laravel scheduler at 07/10/2024 21:45:39.86 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 21:45:41.14 
+Running Laravel scheduler at 07/10/2024 21:46:40.26 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 21:46:40.85 
+Running Laravel scheduler at 07/10/2024 21:47:40.32 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 21:47:40.90 
+Running Laravel scheduler at 07/10/2024 21:48:40.31 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 21:48:40.89 
+Running Laravel scheduler at 07/10/2024 21:49:40.23 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 21:49:40.84 
+Running Laravel scheduler at 07/10/2024 21:50:40.26 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 21:50:41.02 
+Running Laravel scheduler at 07/10/2024 21:51:40.23 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 21:51:40.84 
+Running Laravel scheduler at 07/10/2024 21:52:40.28 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 21:52:41.00 
+Running Laravel scheduler at 07/10/2024 21:53:40.28 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 21:53:41.03 
+Running Laravel scheduler at 07/10/2024 21:54:40.28 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 21:54:41.05 
+Running Laravel scheduler at 07/10/2024 21:55:40.32 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 21:55:41.09 
+Running Laravel scheduler at 07/10/2024 21:56:40.31 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 21:56:41.17 
+Running Laravel scheduler at 07/10/2024 21:57:40.26 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 21:57:40.98 
+Running Laravel scheduler at 07/10/2024 21:58:40.23 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 21:58:40.88 
+Running Laravel scheduler at 07/10/2024 21:59:40.31 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 21:59:41.11 
+Running Laravel scheduler at 07/10/2024 22:00:40.26 
+
+  2024-10-07 22:00:40 Running ["artisan" inspire] ...................................................... 687.59ms DONE
+  ⇂ "C:\xampp\php\php.exe" "artisan" inspire > "NUL" 2>&1  
+
+^CRunning Laravel scheduler at 07/10/2024 22:01:40.26 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 22:01:41.16 
+Running Laravel scheduler at 07/10/2024 22:02:40.36 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 22:02:41.12 
+Running Laravel scheduler at 07/10/2024 22:03:40.30 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 22:03:41.05 
+Running Laravel scheduler at 07/10/2024 22:04:40.26 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 22:04:40.87 
+Running Laravel scheduler at 07/10/2024 22:05:40.34 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 22:05:40.96 
+Running Laravel scheduler at 07/10/2024 22:06:40.24 
+
+   INFO  No scheduled commands are ready to run.  
+
+Finished running at 07/10/2024 22:06:40.79 
+Running Laravel scheduler at 08/10/2024  7:28:03.85 

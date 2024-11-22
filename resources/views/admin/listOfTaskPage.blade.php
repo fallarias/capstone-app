@@ -9,20 +9,11 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <title>Document</title>
-</head>
-<body>
-
-<div style="text-align:center">
-    @include('components.app-bar') 
-
-    <!-- Filter Form -->
-    <div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px; margin-left: -50px;">
-    <form action="{{ route('admin.listOfTaskPage') }}" method="GET" style="display: flex; gap: 15px; align-items: center; margin-bottom: 20px;">
-        <!-- Custom CSS Styles -->
-        <style>
+    <style>
             .form-control {
                 width: 250px;
                 padding: 5px;
@@ -143,36 +134,38 @@
 
 
         </style>
+</head>
+<body>
 
+<div style="text-align:center">
+    @include('components.app-bar', ['admin' => $admin]) 
+
+    <!-- Filter Form -->
+    <div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px; margin-left: -50px;">
+    <form onsubmit="event.preventDefault(); searchTask();" style="display: flex; gap: 15px; align-items: center; margin-bottom: 20px;">
         <!-- Search Task Name -->
-        <input type="text" name="task_name" class="form-control" placeholder="Search task name" value="{{ request('task_name') }}" title="Search by task name">
+        <input type="text" id="task_name" name="task_name" class="form-control" placeholder="Search task name" title="Search by task name">
 
         <!-- Search Button -->
-        <button type="submit" class="btn btn-primary">Search</button>
+        <button type="button" class="btn btn-primary" onclick="searchTask()">Search</button>
 
-        <!-- Download Icon -->
-        <!-- Download Icon -->
-
-
-        <!-- Delete Icon -->
+        <!-- Delete Icon 
         <button type="button" class="trash-btn" title="Delete">
             <i class="fas fa-trash-alt"></i>
-        </button>
-
+        </button>-->
     </form>
 </div>
 
-
     <div style="display: flex; justify-content: center; margin-top: -10px; width:1000px; margin-left:400px">
         <style>
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                    border-radius: 8px;
-                    overflow: hidden;
-                }
-            th, td { text-align: center; }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+                overflow: hidden;
+            }
+            th, td { text-align: center; background-color:white; }
             button { font-size: 17px; }
         </style>
 
@@ -207,21 +200,15 @@
                         <td style="display: flex; gap: 20px; justify-content: center; padding: 10px;">
                             <form action="{{ route('admin.editTaskPage', $task->task_id) }}" method="GET">
                                 @csrf
-                                <button type="submit" style="background-color: #4CAF50; color: white; border: none; padding: 13px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;width:120px">
-                                    Edit
-                                </button>
+                                <button type="submit" style="background-color: #4CAF50; color: white; border: none; padding: 13px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;width:120px">Edit</button>
                             </form>
                             <form action="{{ route('admin.taskActivate', $task->task_id) }}" method="POST">
                                 @csrf
-                                <button type="submit" style="background-color: #0275d8; color: white; border: none; padding: 13px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;width:120px">
-                                    Activate
-                                </button>
+                                <button type="submit" style="background-color: #0275d8; color: white; border: none; padding: 13px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;width:120px">Activate</button>
                             </form>
                             <form action="{{ route('admin.deleteTask', $task->task_id) }}" method="POST">
                                 @csrf
-                                <button type="submit" style="background-color: #d9534f; color: white; border: none; padding: 13px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;">
-                                    Deactivate
-                                </button>
+                                <button type="submit" style="background-color: #d9534f; color: white; border: none; padding: 13px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;">Deactivate</button>
                             </form>
                         </td>
 
@@ -262,16 +249,15 @@
             </tbody>
         </table>
     </div>
-    <div id="pagination" style="display: flex; justify-content: center; align-items: center; margin-top: 20px;
-    margin-left: 200px;">
+
+    <div id="pagination" style="display: flex; justify-content: center; align-items: center; margin-top: 20px; margin-left: 200px;">
         <button onclick="prevPage()" class="elastic-btn">
             <i class="fas fa-caret-left"></i>
         </button>
         <span id="pageNumbers" style="margin: 0 20px;"></span>
         <button onclick="nextPage()" class="elastic-btn">
-                <i class="fas fa-caret-right"></i>
-    </button>
-
+            <i class="fas fa-caret-right"></i>
+        </button>
     </div>
 </div>
 </body>
@@ -280,33 +266,37 @@
     const rowsPerPage = 5;
     let currentPage = 1;
 
+
     function searchTask() {
-        const searchValue = document.getElementById('task_name').value.toLowerCase(); 
-        const rows = document.querySelectorAll('#taskTable tbody tr'); 
+    const searchValue = document.getElementById('task_name').value.toLowerCase().trim();
+    const rows = document.querySelectorAll('#taskTable tbody tr');
 
-        let found = false;
+    const searchTerms = searchValue.split(' ').filter(term => term);
+    let found = false;
 
-        rows.forEach((row) => {
-            const action = row.cells[2].innerText.toLowerCase();
-            if (action.includes(searchValue)) {
-                row.style.display = '';
-                found = true;
-            } else {
-                row.style.display = 'none';
-            }
-        });
+    rows.forEach((task) => {
+        const name = task.cells[1].innerText.toLowerCase();
+        const matches = searchTerms.every(term => name.includes(term));
 
-        if (!found) {
-            Swal.fire({
-                title: 'No Match',
-                text: `No tasks found matching "${searchValue}"`,
-                icon: 'warning',
-                confirmButtonText: 'OK'
-            });
+        if (matches) {
+            task.style.display = ''; // Show the row
+            found = true;
+        } else {
+            task.style.display = 'none'; // Hide the row
         }
+    });
 
-        return false;
+    // Show SweetAlert if no tasks were found
+    if (!found && searchValue) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'No Tasks Found',
+            text: `No tasks named "${searchValue}" match your search criteria.`,
+            confirmButtonText: 'OK'
+        });
     }
+}
+
 
     function paginateTable() {
         const rows = document.querySelectorAll('#taskTable tbody tr');
@@ -345,5 +335,21 @@
     document.addEventListener('DOMContentLoaded', function() {
         paginateTable();
     });
+</script>
+<script>
+    // Function to refresh the stats every 5 seconds
+    function refreshStats() {
+        $.ajax({
+            url: '/audit', // The route where you fetch updated stats
+            method: 'GET',
+            success: function(response) {
+                // The data is fetched but not used for updating the page.
+                console.log(response); // Optional: Log the data to the console for debugging
+            }
+        });
+    }
+
+    // Refresh the stats every 5 seconds (5000 milliseconds)
+    setInterval(refreshStats, 30000);
 </script>
 </html>

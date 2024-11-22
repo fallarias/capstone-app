@@ -9,6 +9,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <title>Creating New Task</title>
@@ -94,7 +95,7 @@
     </style>
 </head>
 <body>
-    @include('components.app-bar')
+    @include('components.app-bar', ['admin' => $admin])
 
     @if($errors->any())
         <script>
@@ -135,13 +136,26 @@
                         <h3>Step {{ $loop->iteration }}</h3>
                         <input type="hidden" name="data[{{ $loop->index }}][create_id]" value="{{ $item->create_id }}">
                         <label for="office_name_{{ $loop->index }}">Office Name:</label>
-                        <input type="text" id="office_name_{{ $loop->index }}" name="data[{{ $loop->index }}][Office_name]" value="{{ $item->Office_name }}" required>
+                        <select name="data[{{ $loop->index }}][Office_name]" id="office_name_{{ $loop->index }}" required>
+                            @foreach($offices as $office)
+                                <option value="{{ $office->department }}" 
+                                    {{ $item->Office_name == $office->department ? 'selected' : '' }}>
+                                    {{ $office->department }}
+                                </option>
+                            @endforeach
+                        </select>
 
                         <label for="office_task_{{ $loop->index }}">Office Task:</label>
                         <input type="text" id="office_task_{{ $loop->index }}" name="data[{{ $loop->index }}][Office_task]" value="{{ $item->Office_task }}" required>
 
                         <label for="task_time_{{ $loop->index }}">Allotted Time:</label>
-                        <input type="text" id="task_time_{{ $loop->index }}" name="data[{{ $loop->index }}][New_alloted_time]" value="{{ $item->New_alloted_time }}" required>
+                        <select id="task_time_{{ $loop->index }}" name="data[{{ $loop->index }}][New_alloted_time]" value="{{ $item->New_alloted_time }}" required>
+                            @for ($i = 1; $i <= 100; $i++)
+                            <option value="{{ $i }}" {{ $item->New_alloted_time == $i ? 'selected' : '' }}>
+                                {{ $i }} hour{{ $i !== 1 ? 's' : '' }}
+                            </option>
+                            @endfor
+                        </select>
                     </div>
                 @endforeach
             </div>
@@ -160,8 +174,8 @@ function createForm() {
             <i class="minus-icon fas fa-minus-circle" onclick="removeForm(this)"></i>
             <label for="office_name_${formCount}">Office Name:</label>
             <select name="office_name[]" id="office_name_${formCount}" required>
-                @foreach($offices as $office)
-                    <option value="{{ $office->office_name }}">{{ $office->office_name }}</option>
+                 @foreach($offices as $office)
+                    <option value="{{ $office->department }}">{{ $office->department }}</option>
                 @endforeach
             </select><br>
             <label for="office_task_${formCount}">Office Task:</label>
@@ -208,5 +222,21 @@ function createForm() {
             });
         });
     </script>
+<script>
+    // Function to refresh the stats every 5 seconds
+    function refreshStats() {
+        $.ajax({
+            url: '/audit', // The route where you fetch updated stats
+            method: 'GET',
+            success: function(response) {
+                // The data is fetched but not used for updating the page.
+                console.log(response); // Optional: Log the data to the console for debugging
+            }
+        });
+    }
+
+    // Refresh the stats every 5 seconds (5000 milliseconds)
+    setInterval(refreshStats, 30000);
+</script>
 </body>
 </html>

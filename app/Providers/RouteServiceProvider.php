@@ -13,7 +13,7 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * Register services.
      */
-    public const HOME = '/home';
+    public const HOME = '/login';
 
     public function register(): void
     {

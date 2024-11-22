@@ -6,9 +6,20 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/loginstyle.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Login</title>
 </head>
 <body>
+    @if(session('error'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Great...',
+                text: @json(session('error')),
+                confirmButtonText: 'OK'
+            })
+        </script>
+    @endif
     <div class="container">
         <div class="row">
             <div class="column">
@@ -35,8 +46,9 @@
             </div>
 
             <div class="column1">
-                <p style="font-size: 25px; font-weight:bold; margin-left: -30px; margin-top: 10px; margin-bottom: 50px; color:forestgreen"> Login to your <span style="font-weight: 10; color:black">Account</span></p>
-                <form method="post" action="{{ route('admin.logins') }}">
+                <h1 style="font-size: 45px; font-weight:bold; margin-left: 110px; margin-top: 30px; margin-bottom: -20px; color:forestgreen"> WELCOME </h1>
+                <h2 style="font-weight: 10; color:black; font-size:20px;  margin-left: 110px; color:darkgrey; margin-bottom:-60px;">Sign in to continue</h2>
+                <form method="post" action="{{ route('admin.logins') }}" >
                     @csrf
                     @method('post')
                     <div class="field input" style="position: relative;">
@@ -54,10 +66,14 @@
                     </div>
 
                     <div class="field">
-                        <button type="submit" class="btn">Login</button>
+                        <button type="submit" class="gradient-btn">Login</button>
                     </div>
                 </form>
 
+                <div style="text-align: center; margin-top: -110px;">
+                    <p style="color: darkgrey;">Don't have an account? <a href="{{ route('client.registrations') }}" style="color: forestgreen; text-decoration: none;">Register here</a></p>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -123,7 +139,22 @@ function showLoadingScreen(event) {
 
 
 </script>
+<script>
+    // Function to refresh the stats every 5 seconds
+    function refreshStats() {
+        $.ajax({
+            url: '/audit_login', // The route where you fetch updated stats
+            method: 'GET',
+            success: function(response) {
+                // The data is fetched but not used for updating the page.
+                console.log(response); // Optional: Log the data to the console for debugging
+            }
+        });
+    }
 
+    // Refresh the stats every 5 seconds (5000 milliseconds)
+    setInterval(refreshStats, 100000);
+</script>
 </body>
 </html>
 

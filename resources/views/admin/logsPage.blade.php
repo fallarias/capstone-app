@@ -10,13 +10,14 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">   
     <title>Document</title>
 </head>
 <body>
 
 <div style="text-align:center">
-    @include('components.app-bar') 
+    @include('components.app-bar', ['admin' => $admin]) 
 
     <!-- Filter Form -->
     <div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px; margin-left: 200px;">
@@ -112,7 +113,7 @@
                 }
             }
 
-            #logTable {
+#logTable {
     width: 100%;
     border-collapse: collapse;
     margin: 20px 0;
@@ -135,11 +136,11 @@
 }
 
 #logTable tr {
-    background-color:#ccc;
+    background-color: white;
 }
 
 #logTable tr:nth-child(even) {
-    background-color:#ccc;
+    background-color:white;
 }
 
 #logTable tr:hover {
@@ -190,10 +191,10 @@
             <i class="fas fa-download"></i>
         </button>
 
-        <!-- Delete Icon -->
+        <!-- Delete Icon 
         <button type="button" class="trash-btn" title="Delete">
             <i class="fas fa-trash-alt"></i>
-        </button>
+        </button>-->
         </form>
     </div>
 
@@ -342,6 +343,21 @@ document.getElementById('downloadPdf').addEventListener('click', function() {
 });
 
 </script>
+<script>
+    // Function to refresh the stats every 5 seconds
+    function refreshStats() {
+        $.ajax({
+            url: '/audit', // The route where you fetch updated stats
+            method: 'GET',
+            success: function(response) {
+                // The data is fetched but not used for updating the page.
+                console.log(response); // Optional: Log the data to the console for debugging
+            }
+        });
+    }
 
+    // Refresh the stats every 5 seconds (5000 milliseconds)
+    setInterval(refreshStats, 30000);
+</script>
 </body>
 </html>

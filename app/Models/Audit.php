@@ -16,6 +16,8 @@ class Audit extends Model
         'deadline',
         'user_id',
         'task_id',
+        'transaction_id',
+        'email_reminder_sent'
     ];
     
     protected $table = 'audit_trails';

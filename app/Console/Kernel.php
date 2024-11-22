@@ -11,6 +11,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\CheckTransactionDeadlines::class,
         \App\Console\Commands\CheckTransaction::class,
+        \App\Console\Commands\SendAuditReminderEmails::class,  // Add this line
     ];
 
     protected function schedule(Schedule $schedule)
@@ -19,6 +20,7 @@ class Kernel extends ConsoleKernel
         Log::info('Scheduler is running.');
         $schedule->command('check:transaction-deadlines')->everyMinute();
         $schedule->command('check:transaction')->everyMinute();
+        $schedule->command('audit:send-reminders')->everyTenSeconds();
     }
 
     protected function commands()

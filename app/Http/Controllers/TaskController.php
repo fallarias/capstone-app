@@ -79,13 +79,19 @@ class TaskController extends Controller
     
 
     public function edit($id){
-        $offices = NewOffice::all();
+        $offices = User::select('department')
+                        ->where('account_type','office staff')
+                        ->distinct()
+                        ->get();
+                        
         $task = Task::findOrFail($id);
         if($task){
             $data_task = Task::all()->where('task_id', '=', $id)->first();
         }
         $data = Create::all()->where('task_id',$id);
-        return view('admin.editTaskPage', compact('data',"task","data_task","offices"));
+        //app-bar
+        $admin = User::select('firstname','lastname','middlename')->where('account_type','Admin')->first();
+        return view('admin.editTaskPage', compact('data',"task","data_task","offices",'admin'));
 
     }
 

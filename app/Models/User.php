@@ -25,6 +25,7 @@ class User extends Authenticatable
         'department',
         'email',
         'password',
+        'status'
     ];
     protected $table = 'users';
 
@@ -39,6 +40,19 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    //for flutter app to make it Not Accepted the status in users table in database
+
+    protected static function boot() {
+        parent::boot();
+
+        static::creating(function ($user) {
+            // Set default status if not provided
+            if (empty($user->status)) {
+                $user->status = 'Not accepted';
+            }
+        });
+    }
 
     /**
      * Get the attributes that should be cast.

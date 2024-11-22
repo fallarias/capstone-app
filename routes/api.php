@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\ApiController;
+use App\Http\Controllers\StaffApiController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TaskController;
+use App\Http\Controllers\ClientApiController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,19 +15,40 @@ use App\Http\Controllers\TaskController;
 */
 
  
- Route::controller(ApiController::class)->group(function () {
+ Route::controller(StaffApiController::class)->group(function () {
     Route::post('/register', 'register');
     Route::post('/login', 'login');
+    Route::get('vue','vue');
     
     //Authenticated User Only
     Route::group(['middleware'=> ['auth:sanctum']], function(){
+
         Route::post('/logout', 'logout');
-        Route::post('/transaction', 'transaction');
-        Route::post('/scanned_data', 'scanned_data');
-        Route::get('/template_history/{id}', 'template_history');
-        Route::get('/task_document/{userId}', 'task_document');
+        Route::post('/scanned_data/{department}', 'scanned_data');
+        Route::get('/staff_notification', 'staff_notification');
+        Route::post('/lack_requirement/{id}/{department}', 'lack_Requirements');
+        Route::post('/resume_transaction/{id}/{department}', 'resume_transaction');
+        Route::get('/check_resume_transaction/{id}/{department}', 'check_resume_transaction');
+        Route::post('/finish_transaction/{transaction_id}/{department}/{audit_id}', 'finish_transaction');
+
     });
 });
+Route::controller(ClientApiController::class)->group(function () {
 
+    //Authenticated User Only
+    Route::group(['middleware'=> ['auth:sanctum']], function(){
+        //Route::post('/logout', 'logout');
+        Route::post('/transaction', 'transaction');
+        //Route::post('/scanned_data/{department}', 'scanned_data');
+        Route::get('/notifications/{user}', 'notification');
+        Route::get('/template_history/{id}/{user_id}', 'template_history');
+        Route::get('/task_document/{userId}', 'task_document');
+        Route::get('/client_file', 'client_file');
+        //Route::get('/staff_notification', 'staff_notification');
+        //Route::post('/lack_requirement/{id}/{department}', 'lack_Requirements');
+        //Route::post('/resume_transaction/{id}/{department}', 'resume_transaction');
+        Route::get('/client_chart/{userId}', 'client_chart');
+    });
+});
 
 

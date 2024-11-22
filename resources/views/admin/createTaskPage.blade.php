@@ -9,8 +9,229 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <link rel="stylesheet" href="{{ asset('css/createTask.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Creating New Task</title>
+    <style>
+.recent-task-container.loading {
+    position: fixed;
+    right: 60px;
+    top: 200px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    padding: 15px;
+    width: 390px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.loading-item {
+    background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 4px;
+    height: 20px; /* Adjust height */
+    margin: 5px 0;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: 0 0; }
+}
+
+
+
+@keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .main-content:hover {
+            transform: translateY(-5px);
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group label {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            transition: 0.2s ease all;
+            opacity: 0.5;
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+        }
+
+        .form-group input:focus + label,
+        .form-group input:not(:placeholder-shown) + label {
+            top: -10px;
+            left: 10px;
+            font-size: 12px;
+            opacity: 1;
+            color: #007bff;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background: #007bff;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #0056b3;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .close-icon {
+            cursor: pointer;
+            color: red;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .form-group label {
+    position: absolute;
+    left: 15px; /* Adjusted left position */
+    top: 15px; /* You can also adjust the top position if needed */
+    transition: 0.2s ease all;
+    opacity: 0.7;
+    font-size: 14px; /* Font size */
+    color: #333; /* Color */
+    font-weight: bold; /* Bold text */
+    pointer-events: none; /* Prevent label from blocking input */
+}
+
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+    top: -25px; /* Raise the label higher */
+    left: 15px; /* Keep the left position consistent when focused */
+    font-size: 22px; /* Adjust as needed */
+    opacity: 1;
+    color: #005733; /* Color when focused or filled */
+}
+
+    .form-group input {
+    width: 90%;
+    padding: 12px 10px; /* Increased top and bottom padding */
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+    margin-top: 10px; /* Added margin for spacing between the input and label */
+    }
+
+    .form-group {
+        margin-bottom: 40px; /* Increased space between form groups */
+    }
+    .form-content {
+            width: 95%;
+            position: relative;
+            padding: 20px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add this line */
+        }
+
+        .form-content1 {
+    margin-top: 20px;
+    width: 75%;
+    position: relative;
+    padding: 20px;
+    border: 2px solid #ddd;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add this line */
+}
+
+    input[type="text"], input[type="file"] , input[type="password"]{
+        border: 2px solid green; /* Green border */
+        background-color: rgba(0, 128, 0, 0.1); /* Transparent green background */
+        padding: 8px;
+        border-radius: 4px;
+    }
+
+    input[type="text"]:focus, input[type="file"]:focus, input[type="password"]:focus {
+        outline: none;
+        border-color: darkgreen; /* Darker green when focused */
+        background-color: rgba(0, 128, 0, 0.2); /* Slightly more opaque green on focus */
+    }
+
+    select {
+        border: 2px solid green; /* Green border */
+        background-color: rgba(0, 128, 0, 0.1); /* Transparent green background */
+        padding: 8px;
+        border-radius: 4px;
+        appearance: none; /* Optional: Removes the default arrow in some browsers */
+    }
+
+    select:focus {
+        outline: none;
+        border-color: darkgreen; /* Darker green when focused */
+        background-color: rgba(0, 128, 0, 0.2); /* Slightly more opaque green on focus */
+    }
+
+    .plus-icon {
+    font-weight:bold;
+    text-align: center;
+    text-decoration:none;
+    color: #fff;
+    background-color: #28a745;
+    border: 2px solid #000;
+    border-radius: 40px;
+    box-shadow: 5px 5px 0px #000;
+    transition: all 0.3s ease;
+}
+
+
+
+.plus-icon:hover {
+    background-color: #fff;
+    color: green;
+    border: 2px solid #28a745;
+    box-shadow: 5px 5px 0px #28a745;/* Darker green on hover */
+}
+
+.plus-icon:active {
+    color: white;
+    background-color: #28a745;
+    box-shadow: none;
+    transform: traslateY(4px);/* Even darker on click */
+}
+
+
+
+
+
+    </style>
     
 </head>
 <body>
@@ -51,9 +272,9 @@
     @endif
     
 
-    @include('components.app-bar')
+    @include('components.app-bar', ['admin' => $admin])
     <div>
-    <h1 class="title1">Create Task</h1>
+    <h1 class="title3">Create Task</h1>
         <form method="POST" action="{{ route('admin.create') }}" class="main-content" enctype="multipart/form-data">
             @csrf
             @method('post')
@@ -61,7 +282,7 @@
             <input type="text" name="task_name" required value="{{old('task_name')}}">
             <label for="filepath">Upload File (PDF):</label>
             <input type="file" name="filepath" accept=".pdf" required>
-            <div id="form-container" class="form-container">
+            <div id="form-container" >
                 <!-- Plus icon to add more forms -->
                 <i class="plus-icon" id="add-form">+</i>
             </div>
@@ -71,32 +292,115 @@
         </form>
         <!--<button type="button" class="btn2" style="height:40px; padding:auto; margin-top:20px; margin-left:390px" onclick="window.history.back();">Go Back</button> -->
     </div>
+    
+    <h3 style="font-size:35px;position: fixed; right: 240px;top: 100px; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;  background: linear-gradient(90deg, #005733, #0ede3e, #00b029);-webkit-background-clip: text;background-clip: text;-webkit-text-fill-color: transparent;">Recent Tasks</h3>
+    <div class="recent-task-container loading">
+    @forelse($name as $counter)    
+        <p class="task-item loading-item">{{ $counter->name }}</p>
+    @empty
+        <p>No recent task</p>
+    @endforelse
+</div>
 
-    <div>
-        <label for="">Recent Task</label>
-            @forelse($name as $counter)    
-                <p>{{ $counter->name }}</p>
-            @empty
-                <p>no recent task</p>
-            @endforelse
-    </div>
 
-    <div id="inputModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Enter Office Details</h2>
-            <form id="inputForm" method="POST" action="{{ route('admin.addOffice') }}">
-              @csrf
-              <div class="form-group">
-                <label for="inputField1">Office Name:</label>
-                <input type="text" id="inputField1" name="office_name" required>
-              </div>
-              <button type="submit">Save</button>
-            </form>
-        </div>
-    </div>
+
+
+
+<div id="inputModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h1 class="title1" style="margin-left: -80px; font-size:40px">Create New Office</h1>
+        <form id="inputForm" method="POST" action="{{ route('admin.newOfficeAccount') }}">
+        @csrf
+            <div id="modal-form-container" class="form-container">
+                <!-- Forms will be dynamically added here -->
+            </div>
+            <!-- Button to add more forms -->
+            <button type="button" class="submit-btn" style="background-color: #005733;" id="modal-add-form">Add Office</button>
+            <button type="submit" name="btnsave" class="submit-btn" style="margin-top: 10px; background-color: #005733;">Save</button>
+        </form>
+
+    
+    <script>
+    let formCounts = 0; // Counter to give unique IDs to each form element
+    let stepCounts = 0;
+
+    // Function to create a new form and add it to the container
+    function createForms(first = '', middle = '', last = '', email = '', password = '', department = '') {
+        formCounts++;
+        stepCounts++;
+
+        const formContents = `
+          <div class="form-content" id="form_${formCounts}">
+            <button class="close-icon" onclick="removeForm(${formCounts})">&times;</button>
+            <div class="form-group">
+                <input type="text" name="first[]" id="first_${formCounts}" value="${first}" required>
+                <label>Firstname</label>
+            </div>
+            <div class="form-group">
+                <input type="text" name="middle[]" id="middle_${formCounts}" value="${middle}" required>
+                <label>Middlename</label>
+            </div>
+            <div class="form-group">
+                <input type="text" name="last[]" id="last_${formCounts}" value="${last}" required>
+                <label>Lastname</label>
+            </div>
+            <div class="form-group">
+                <input type="text" name="email[]" id="email_${formCounts}" value="${email}" required>
+                <label>Email</label>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password[]" id="password_${formCounts}" value="${password}" required>
+                <label>Password</label>
+            </div>
+            <div class="form-group">
+                <input type="text" name="department[]" id="department_${formCounts}" value="${department}" required>
+                <label>Office Name</label>
+            </div>
+          </div>
+        `;
+
+        // Create a new div and set its inner HTML to the new form content
+        const newFormDiv = document.createElement('div');
+        newFormDiv.innerHTML = formContents;
+
+        // Append the new form to the modal's form container
+        document.getElementById('modal-form-container').appendChild(newFormDiv);
+    }
+
+    // Function to remove a form
+    function removeForm(formId) {
+        const formToRemove = document.getElementById(`form_${formId}`);
+        if (formToRemove) formToRemove.remove();
+        stepCounts--; // Decrement step count
+    }
+
+    // Add the event listener to the modal's add form button
+    document.getElementById('modal-add-form').addEventListener('click', function () {
+        createForms(); // Call createForm without passing any arguments
+    });
     
 
+
+    // Re-populate old values when the page loads
+    document.addEventListener('DOMContentLoaded', function () {
+        const firsts = @json(old('first', []));
+        const middles = @json(old('middle', []));
+        const lasts = @json(old('last', []));
+        const emails = @json(old('email', []));
+        const passwords = @json(old('password', []));
+        const departments = @json(old('department', []));
+        
+        firsts.forEach((first, index) => {
+            const middle = middles[index] || '';
+            const last = lasts[index] || '';
+            const email = emails[index] || '';
+            const password = passwords[index] || '';
+            const department = departments[index] || '';
+            createForms(first, middle, last, email, password, department);
+        });
+    });
+</script>
 
     <script>
         // Get modal and button elements
@@ -123,7 +427,7 @@
     </script>
 
     <script>
-        let formCount = 0; // Counter to give unique IDs to each form element
+        let formCount = 1; // Counter to give unique IDs to each form element
         let stepCount = 0;
 
         // Function to create a new form and add it to the container
@@ -132,7 +436,7 @@
             stepCount++;
 
             const formContent = `
-    <div class="form-content" id="form_${formCount}">
+    <div class="form-content1" id="form_${formCount}">
         <!-- X icon for removing the form -->
         <button class="close-icon" onclick="removeForm(${formCount})">&times;</button>
 
@@ -140,8 +444,8 @@
         <label for="office_name_${formCount}">Name of the Office</label>
         <select name="office_name[]" id="office_name_${formCount}" required>
             @foreach($offices as $office)
-                <option value="{{ $office->office_name }}" ${officeName === '{{ $office->office_name }}' ? 'selected' : ''}>
-                    {{ $office->office_name }}
+                <option value="{{ $office->department }}" ${officeName === '{{ $office->department }}' ? 'selected' : ''}>
+                    {{ $office->department }}
                 </option>
             @endforeach
         </select>
@@ -192,7 +496,7 @@
 
         // Validate form
         function validateForm() {
-            const formContents = document.querySelectorAll('.form-content');
+            const formContents = document.querySelectorAll('.form-content1');
             if (formContents.length === 0) {
                 Swal.fire({ icon: 'error', title: 'Validation Error', text: 'You must add at least one office task.', confirmButtonText: 'OK' });
                 return false;
@@ -240,6 +544,21 @@
             if (!validateForm()) event.preventDefault();
         });
     </script>
+<script>
+    // Function to refresh the stats every 5 seconds
+    function refreshStats() {
+        $.ajax({
+            url: '/audit', // The route where you fetch updated stats
+            method: 'GET',
+            success: function(response) {
+                // The data is fetched but not used for updating the page.
+                console.log(response); // Optional: Log the data to the console for debugging
+            }
+        });
+    }
 
+    // Refresh the stats every 5 seconds (5000 milliseconds)
+    setInterval(refreshStats, 30000);
+</script>
 </body>
 </html>

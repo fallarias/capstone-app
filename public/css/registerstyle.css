@@ -149,6 +149,7 @@ form {
 
 .field input[type="text"],
 .field input[type="password"],
+.field input[type="email"],
 .field select {
     width: 100%;
     padding: 10px;
@@ -270,15 +271,6 @@ p a:hover {
     font-size: 13px;
     text-align: center;
   }
-  form {
-    background:#fff;
-    border-radius: 8px;
-    width: 300px;
-    margin-right: 100px;
-    margin-left: 150px;
-    margin-bottom: 100px;
-    margin-top: -40px;
-  }
 
 }
 
@@ -291,7 +283,7 @@ p a:hover {
 
 
         /* Input field styles */
-        input[type="text"], input[type="password"] {
+        input[type="text"], input[type="password"], input[type="email"]  {
           width: 100%;
           padding: 10px;
           margin: 10px 0;
@@ -303,12 +295,12 @@ p a:hover {
       }
 
       /* Placeholder (hint text) color */
-      input[type="text"]::placeholder, input[type="password"]::placeholder {
+      input[type="text"]::placeholder, input[type="password"]::placeholder, input[type="email"]::placeholder {
           color: #999; /* Change this to the color you want for hint text */
       }
 
       /* Style for the input field when focused */
-      input[type="text"]:focus, input[type="password"]:focus {
+      input[type="text"]:focus, input[type="password"]:focus , input[type="email"]:focus{
           border-color: green; /* Change border color when focused */
           outline: none; /* Remove default outline */
           background-color: #e8f5e9; /* Optional: light green background when focused */
@@ -328,31 +320,6 @@ p a:hover {
           background-color: darkgreen; /* Darker green on hover */
       }
 
-      /* Placeholder (hint text) color */
-      input[type="text"]::placeholder, input[type="password"]::placeholder {
-          color: #999; /* Change this to the color you want for hint text */
-      }
-
-      /* Style for the input field when focused */
-      input[type="text"]:focus, input[type="password"]:focus {
-          border-color: green; /* Change border color when focused */
-          outline: none; /* Remove default outline */
-          background-color: #e8f5e9; /* Optional: light green background when focused */
-      }
-
-      /* Button styles */
-      .btn {
-          background-color: green; /* Button background color */
-          color: white; /* Button text color */
-          padding: 10px 20px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-      }
-
-      .btn:hover {
-          background-color: darkgreen; /* Darker green on hover */
-      }
 
       /* Checkbox styles */
       input[type="checkbox"] {
@@ -449,5 +416,76 @@ p a:hover {
         transform: scale(1.05); /* Slightly scale the button up on hover */
         box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Increase the shadow on hover */
       }
+
+      .img-person{
+        width: 80px; 
+        height: 80px; 
+        border-radius: 50%; 
+        margin-top: 30px; 
+        margin-left: 230px; 
+        margin-bottom: -10px; 
+        border: 4px solid rgb(3, 170, 67);
+      }
+
+      .button-container {
+        display: flex; /* Use flexbox to align items */
+        justify-content: center; /* Center buttons horizontally */
+        gap: 15px; /* Space between buttons */
+        margin-top: 20px; 
+        margin-left: -225px;
+    }
       
+
+      .styled-button{
+        margin-left: 225px;
+        background-color: #4CAF50; /* Green background */
+        color: white; /* White text */
+        border: none; /* Remove border */
+        border-radius: 5px; /* Rounded corners */
+        padding: 10px 20px; /* Padding */
+        font-size: 16px; /* Font size */
+        cursor: pointer; /* Pointer cursor on hover */
+        transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+    }
+    
+    .styled-button1{
+      margin-top:20px;
+      background-color: #4CAF50; /* Green background */
+      color: white; /* White text */
+      border: none; /* Remove border */
+      border-radius: 5px; /* Rounded corners */
+      padding: 10px 20px; /* Padding */
+      font-size: 16px; /* Font size */
+      cursor: pointer; /* Pointer cursor on hover */
+      transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+  }
+
+  .styled-button2{
+    margin-left: 138px;
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Padding */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+}
+    
+    .styled-button:hover,
+    .styled-button1:hover {
+        background-color: #45a049; /* Darker green on hover */
+        transform: scale(1.05); /* Slightly enlarge on hover */
+    }
+    
+    .styled-button:focus,
+    .styled-button1:focus {
+        outline: none; /* Remove outline on focus */
+    }
+    
+    .styled-button:active,
+    .styled-button1:active {
+        transform: scale(0.95); /* Shrink slightly on click */
+    }
+    
       
