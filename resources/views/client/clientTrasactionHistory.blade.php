@@ -157,7 +157,9 @@
             <table class="table mt-4" style="background-color: rgba(128, 128, 128, 0.1); border: 2px solid black; border-radius: 8px; overflow: hidden; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);">
                 <thead style="background-color: rgba(128, 128, 128, 0.2); border-bottom: 2px solid black;">
                     <tr>
-                        <th style="border-right: 1px solid black;">Task Name</th>
+                        <th style="border-right: 1px solid black;">ID</th>
+                        <th style="border-right: 1px solid black;">Transaction ID</th>
+                        <th style="border-right: 1px solid black;">Transaction Name</th>
                         <th>Message</th>
                     </tr>
                 </thead>
@@ -166,6 +168,8 @@
                         <tr style="background-color: white; border-top: 1px solid black; cursor: pointer;"
                             onmouseover="this.style.backgroundColor='black'; this.style.color='limegreen';"
                             onmouseout="this.style.backgroundColor='rgba(128, 128, 128, 0.1)'; this.style.color='';">
+                            <td>{{$loop->iteration}}</td>
+                            <td>{{$list->transaction_id}}</td>
                             <td style="border-right: 1px solid black;">{{ $list->name }}</td>
                             <td>
                                 <form action="{{ route('client.clientTrackDocument', ['task_id' => $list->task_id,'transaction_id'=>$list->transaction_id]) }}" method="get" class="d-inline">

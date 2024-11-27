@@ -128,18 +128,18 @@
 
 <div class="email-container">
     @foreach ($finishedAudits as $finish)
-        <div class="email-row" onclick="showModal('Audit Completed', '{{ $finish->description ?? 'No description available' }}')">
+        <div class="email-row" onclick="showModal('Audit Completed', ' The task {{ $finish->task }} is finished at {{ \Carbon\Carbon::parse($finish->finished)->format('H:i:s') ?? 'No description available' }}')">
             <div class="email-sender">{{ $finish->office_name }}</div>
-            <div class="email-subject">Audit Completed - {{ $finish->description ?? 'No description available' }}</div>
-            <div class="email-date">{{ \Carbon\Carbon::parse($finish->completion_date)->format('M d') }}</div>
+            <div class="email-subject">Audit Completed -  The task {{ $finish->task }} is finished at {{ \Carbon\Carbon::parse($finish->finished)->format('H:i:s')?? 'No description available' }} for transaction number {{$finish->transaction_id}}</div>
+            <div class="email-date">{{ \Carbon\Carbon::parse($finish->finished)->format('M d') }}</div>
         </div>
     @endforeach
 
     @foreach ($requirementMessages as $message)
-        <div class="email-row" onclick="showModal('{{ $message->sender_name }}', '{{ $message->message }}')">
-            <div class="email-sender">{{ $message->sender_name }}</div>
-            <div class="email-subject">{{ $message->message }}</div>
-            <div class="email-date">{{ \Carbon\Carbon::parse($message->sent_at)->format('M d') }}</div>
+        <div class="email-row" onclick="showModal('{{ $message->department }}', '{{ $message->message }} for transaction number {{$message->transaction_id}}')">
+            <div class="email-sender">{{ $message->department }}</div>
+            <div class="email-subject">Lack of Requirement - {{ $message->message }} for transaction number {{$message->transaction_id}}</div>
+            <div class="email-date">{{ \Carbon\Carbon::parse($message->created_at)->format('M d') }}</div>
         </div>
     @endforeach
 </div>

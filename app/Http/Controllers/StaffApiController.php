@@ -235,12 +235,20 @@ class StaffApiController extends Controller
     }
     
     //Returning notification to the office staff
-    public function staff_notification(){
+    public function staff_notification()
+    {
+        // Fetch transactions where 'start' and 'deadline' are not null (first update)
+        // This will include transactions where 'start' and 'deadline' are set after the initial creation
+        $transactions = Audit::whereNotNull('start')
+                            ->whereNotNull('deadline')
+                            ->get();
 
-        $transaction = Audit::whereNotNull('start')->whereNotNull('deadline')->get();
-        return response()->json($transaction);
-
+        // Return both sets of transactions
+        return response()->json([
+            'transactions' => $transactions,       // First update where 'start' and 'deadline' are initially set // Latest updates, sorted by most recent 'updated_at'
+        ]);
     }
+
     //Returning notification to the user/client with lack of requirements
     public function lack_Requirements(Request $request, $transaction_id, $department)
     {
@@ -435,7 +443,12 @@ class StaffApiController extends Controller
                     ->orderBy('create_id')  // Ensure correct order
                     ->skip($transaction->Office_Done)  // Skip to the next entry based on updated Office_Done
                     ->first(); // This fetches the next entry after the increment
-                
+
+                if (!$nextCreateEntry) {
+                    Log::warning('No matching Create entry found for taskId: ' . $transaction->task_id);
+                    return response()->json(['message' => 'No more records to process.'], 404);
+                }
+
                 if ($nextCreateEntry) {
                     // Update the deadline in the transaction
                     $newDeadline = (int) $nextCreateEntry->New_alloted_time; // Get new allotted time from the next entry
@@ -451,6 +464,7 @@ class StaffApiController extends Controller
                         'user_id' =>  $transaction->user_id,
                         'task_id' => $nextCreateEntry->task_id,
                         'transaction_id' => $transaction->transaction_id,
+                        'task' => $nextCreateEntry->Office_task,
                         'office_name' => $nextCreateEntry->Office_name, // Next office name from Create
                     ]);
                     
@@ -465,7 +479,6 @@ class StaffApiController extends Controller
 
     }
     
-
     public function check_resume_transaction($transaction_id, $department)
     {
         // Find the requirement entry based on transaction_id and department

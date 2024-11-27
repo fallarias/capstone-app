@@ -15,6 +15,7 @@ class Transaction extends Model
         'deadline',
         'Office_Done',
         'status',
+        'deadline',
     ];
 
     protected $table = 'tbl_transaction';

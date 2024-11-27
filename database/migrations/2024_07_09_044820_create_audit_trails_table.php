@@ -21,6 +21,7 @@ return new class extends Migration
             $table->timestamp('deadline')->nullable();
             $table->timestamp('finished')->nullable();
             $table->string('office_name');
+            $table->string('task');
             $table->boolean('email_reminder_sent')->default(false);
             $table->timestamps();
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');

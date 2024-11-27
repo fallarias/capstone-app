@@ -309,6 +309,7 @@ class ClientController extends Controller
                 // 'start' => now(),
                 // 'deadline' => now()->addHours($allottedTime),
                 'office_name' => $createRecord->Office_name,
+                'task' => $createRecord->Office_task,
                 'transaction_id' => $transactionId,
             ]);
     

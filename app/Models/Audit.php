@@ -17,7 +17,8 @@ class Audit extends Model
         'user_id',
         'task_id',
         'transaction_id',
-        'email_reminder_sent'
+        'email_reminder_sent',
+        'task'
     ];
     
     protected $table = 'audit_trails';

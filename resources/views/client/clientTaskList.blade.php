@@ -161,8 +161,9 @@
                             <div class="card-body">
                             <div class="progress-container">
                             <div class="progress-text">{{ $list->progress }}%</div>
-                                    <div class="progress-bar" style="width: {{ $list->progress }}%; background-color:white"></div>
+                                <div class="progress-bar" style="width: {{ $list->progress }}%; background-color:white"></div>
                                 </div>
+                                <div class="card-title">Transaction ID : {{ $list->transaction_id }}</div>
                                 <div class="card-title">{{ $list->name }}</div>
                                 <form action="{{ route('client.clientTrackDocument', ['task_id' => $list->task_id,'transaction_id'=>$list->transaction_id]) }}" method="get" style="margin-top: 10px;">
                                     @csrf
