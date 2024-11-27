@@ -497,6 +497,26 @@ class StaffApiController extends Controller
         
     }
 
+        //Returning value of chart in client
+    public function staff_chart($userId)
+    {
+
+        $user = User::where('user_id', $userId)->first();
+        // Fetch data from the database as needed
+        $pending = Audit::whereNull('finished')
+                            ->where('office_name', $user->department)
+                            ->count();
+    
+        $completed = Audit::whereNotNull('finished')
+                            ->where('office_name', $user->department)
+                            ->count();
+    
+        return response()->json([
+            'pending' => $pending,
+            'completed' => $completed,
+        ]);
+    }
+
     public function vue(){
         $user = User::all();
 

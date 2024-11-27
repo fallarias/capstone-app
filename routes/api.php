@@ -30,6 +30,7 @@ use App\Http\Controllers\ClientApiController;
         Route::post('/resume_transaction/{id}/{department}', 'resume_transaction');
         Route::get('/check_resume_transaction/{id}/{department}', 'check_resume_transaction');
         Route::post('/finish_transaction/{transaction_id}/{department}/{audit_id}', 'finish_transaction');
+        Route::get('/staff_chart/{userId}', 'staff_chart');
 
     });
 });
