@@ -161,6 +161,7 @@
                         <th style="border-right: 1px solid black;">Transaction ID</th>
                         <th style="border-right: 1px solid black;">Transaction Name</th>
                         <th>Message</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -177,6 +178,7 @@
                                     <button type="submit" class="btn btn-sm" style="background-color: #00b894; color: black;">View Message</button>
                                 </form>
                             </td>
+                            <td>{{$list->status}}</td>
                         </tr>
                     @endforeach
                 </tbody>

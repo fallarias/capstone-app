@@ -14,7 +14,9 @@ return new class extends Migration
         if (!Schema::hasTable('offices')) {
             Schema::create('offices', function (Blueprint $table) {
                 $table->id();
-                $table->string('office_name');
+                $table->string('department');
+                $table->string('target_department');
+                $table->string('message');
                 $table->timestamps();
             });
         }

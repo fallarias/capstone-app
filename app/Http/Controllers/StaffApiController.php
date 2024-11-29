@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\Task;
+use App\Models\NewOffice;
 use App\Models\Create;
 use App\Models\Transaction;
 use App\Events\UserLoggedOut;
@@ -243,9 +244,12 @@ class StaffApiController extends Controller
                             ->whereNotNull('deadline')
                             ->get();
 
+        $message = NewOffice::all();
+        
         // Return both sets of transactions
         return response()->json([
             'transactions' => $transactions,       // First update where 'start' and 'deadline' are initially set // Latest updates, sorted by most recent 'updated_at'
+            'message' => $message,
         ]);
     }
 
@@ -283,9 +287,10 @@ class StaffApiController extends Controller
         // Find the requirement entry based on transaction_id and department
         $requirement = Requirements::where('transaction_id', $transaction_id)
                                     ->where('department', $department)
+                                    ->whereNull('resume_transaction')
                                     ->firstOrFail();
     
-        $existingTransaction = Requirements::where('user_id',  $requirement->user_id)
+        $existingTransaction = Requirements::where('user_id',  $transaction_id)
                                 ->whereNotNull('resume_transaction')
                                 ->where('department', $department)
                                 ->first();
@@ -348,6 +353,7 @@ class StaffApiController extends Controller
         return response()->json(['message' => 'Transaction not found'], 404);
     }
 
+    //finish the transaction
     public function finish_transaction(Request $request, $transaction_id, $department, $audit_id)
     {
         // Log::info('Received data:', $request->all());
@@ -478,7 +484,8 @@ class StaffApiController extends Controller
             }
 
     }
-    
+
+    //Checking Resume of transaction
     public function check_resume_transaction($transaction_id, $department)
     {
         // Find the requirement entry based on transaction_id and department
@@ -497,7 +504,7 @@ class StaffApiController extends Controller
         
     }
 
-        //Returning value of chart in client
+    //Returning value of chart in client
     public function staff_chart($userId)
     {
 
@@ -517,10 +524,66 @@ class StaffApiController extends Controller
         ]);
     }
 
-    public function vue(){
-        $user = User::all();
+    //Returning value of chart in client
+    public function staff_table($userId)
+    {
 
-        return response()->json($user);
+        $user = User::where('user_id', $userId)->first();
+    
+        $completed = Audit::whereNotNull('finished')
+                            ->where('office_name', $user->department)
+                            ->get();
+    
+        return response()->json($completed);
     }
+
+    //Returning notification to the user/client with lack of requirements
+    public function message_office(Request $request, $department)
+    {
+        $attrs = $request->validate([
+            'message' => 'required|string',
+            'target_department' => 'required|string',
+        ]);
+    
+        // $transactionId = (int) $transaction_id;
+        // Log::info('Incoming request:', $request->all());
+    
+        // Retrieve the transaction
+        // $transaction = Transaction::find($transactionId);
+        // if (!$transaction) {
+        //     return response()->json(['message' => 'Transaction not found.'], 404);
+        // }
+    
+        // Create the message and stop the transaction
+        NewOffice::create([
+            'department' =>  $department,
+            'message' => $attrs['message'],
+            // 'stop_transaction' => now(),
+            // 'transaction_id' => $transactionId,
+            // 'user_id' => $transaction->user_id, // Associate with the user
+            'target_department' =>  $attrs['target_department'],
+        ]);
+    
+        return response()->json(['message' => 'Stop the transaction and sent message to the client']);
+    }
+
+    //Returning all office staff
+    public function all_office($department){
+
+        $allOffice = User::select('department')
+                            ->where('account_type', 'office staff')
+                            ->where('status', 'Accepted')
+                            ->where('department', '<>', $department) 
+                            ->pluck('department');
+                            
+        return response()->json($allOffice);
+
+    }
+
+    // public function vue(){
+    //     $user = User::all();
+
+    //     return response()->json($user);
+    // }
     
 }

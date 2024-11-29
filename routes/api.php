@@ -18,7 +18,7 @@ use App\Http\Controllers\ClientApiController;
  Route::controller(StaffApiController::class)->group(function () {
     Route::post('/register', 'register');
     Route::post('/login', 'login');
-    Route::get('vue','vue');
+    //Route::get('vue','vue');
     
     //Authenticated User Only
     Route::group(['middleware'=> ['auth:sanctum']], function(){
@@ -31,9 +31,11 @@ use App\Http\Controllers\ClientApiController;
         Route::get('/check_resume_transaction/{id}/{department}', 'check_resume_transaction');
         Route::post('/finish_transaction/{transaction_id}/{department}/{audit_id}', 'finish_transaction');
         Route::get('/staff_chart/{userId}', 'staff_chart');
-
+        Route::post('/message_office/{department}', 'message_office');
+        Route::get('/all_office/{department}', 'all_office');
     });
 });
+
 Route::controller(ClientApiController::class)->group(function () {
 
     //Authenticated User Only

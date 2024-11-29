@@ -239,19 +239,19 @@ class ClientController extends Controller
     }
 
 
-    public function transaction_history(){
+        public function transaction_history(){
 
-        $UserId = session('user_id');
-        $tasks = Task::join('tbl_transaction', 'task.task_id', '=', 'tbl_transaction.task_id')
-                        ->where('tbl_transaction.user_id', $UserId)
-                        //->where('tbl_transaction.status', 'ongoing')
-                        //->where('tasks.status', 1)
-                        ->select('task.*', 'tbl_transaction.transaction_id')
-                        ->get();
+            $UserId = session('user_id');
+            $tasks = Task::join('tbl_transaction', 'task.task_id', '=', 'tbl_transaction.task_id')
+                            ->where('tbl_transaction.user_id', $UserId)
+                            //->where('tbl_transaction.status', 'ongoing')
+                            //->where('tasks.status', 1)
+                            ->select('task.*', 'tbl_transaction.transaction_id', 'tbl_transaction.status')
+                            ->get();
 
-        return view('client.clientTrasactionHistory', compact('tasks'));
-        
-    }
+            return view('client.clientTrasactionHistory', compact('tasks'));
+            
+        }
 
     public function transaction($Id)
     {

@@ -9,7 +9,13 @@ class NewOffice extends Model
 {
     use HasFactory;
 
-    protected $fillable = [ 'office_name' ];
+    protected $fillable = [ 
+
+        'target_department',
+        'message',
+        'department'
+
+     ];
     protected $table = 'offices';
 
     protected $primaryKey = 'id';
