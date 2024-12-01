@@ -34,6 +34,7 @@ use App\Http\Controllers\ClientApiController;
         Route::post('/message_office/{department}', 'message_office');
         Route::get('/all_office/{department}', 'all_office');
         Route::get('/staff_scanned_history/{department}', 'staff_scanned_history');
+        Route::get('/line_chart/{department}', 'line_chart');
     });
 });
 
@@ -52,6 +53,7 @@ Route::controller(ClientApiController::class)->group(function () {
         //Route::post('/lack_requirement/{id}/{department}', 'lack_Requirements');
         //Route::post('/resume_transaction/{id}/{department}', 'resume_transaction');
         Route::get('/client_chart/{userId}', 'client_chart');
+        Route::get('/bar_chart/{userId}', 'bar_chart');
     });
 });
 

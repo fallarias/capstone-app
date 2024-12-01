@@ -590,6 +590,43 @@ class StaffApiController extends Controller
         return response()->json($scanned);
 
     }
+    
+
+    //Returning Line Chart
+    public function line_chart($department)
+    {
+        // Initialize an array with the days of the week
+        $days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+        // Initialize counts for each day of the week to zero
+        $counts = array_fill(0, 7, 0);
+
+        // Fetch audits that match the department and are unfinished
+        $audits = Audit::whereNotNull('finished')
+            ->where('office_name', $department)
+            ->get();
+
+        foreach ($audits as $audit) {
+            if ($audit->finished) {
+                // Get the day of the week (0=Sun, 1=Mon, ..., 6=Sat)
+                $dayIndex = Carbon::parse($audit->finished)->dayOfWeek;
+                
+                // Map Sunday (0) to index 6 for consistent array index (Sun at the end)
+                $dayIndex = $dayIndex === 0 ? 6 : $dayIndex - 1;
+
+                // Increment the count for the corresponding day
+                $counts[$dayIndex]++;
+            }
+        }
+
+        $data = [
+            'days' => $days,
+            'values' => $counts,
+        ];
+
+        return response()->json($data);
+    }
+
 
     // public function vue(){
     //     $user = User::all();
