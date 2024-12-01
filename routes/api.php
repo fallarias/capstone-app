@@ -33,6 +33,7 @@ use App\Http\Controllers\ClientApiController;
         Route::get('/staff_chart/{userId}', 'staff_chart');
         Route::post('/message_office/{department}', 'message_office');
         Route::get('/all_office/{department}', 'all_office');
+        Route::get('/staff_scanned_history/{department}', 'staff_scanned_history');
     });
 });
 

@@ -580,6 +580,17 @@ class StaffApiController extends Controller
 
     }
 
+    //Returning all staff scan
+    public function staff_scanned_history($department){
+
+        $scanned = Audit::whereNotNull('finished')
+                            ->where('office_name', $department)
+                            ->get();
+
+        return response()->json($scanned);
+
+    }
+
     // public function vue(){
     //     $user = User::all();
 
