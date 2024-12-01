@@ -22,10 +22,10 @@ class DashboardController extends Controller
         
         // Get distinct user IDs who have logged in
         $loggedInCount = Logs::select('user_id')
-            ->where('action', 'Login')
-            ->whereDate('Date',$date)
-            ->groupBy('user_id')
-            ->count();
+                                ->where('action', 'Login')
+                                ->whereDate('Date',$date)
+                                ->groupBy('user_id')
+                                ->count();
 
         // Count total users
         $totalUsersCount = User::where('status', 'Accepted')->count();
@@ -81,15 +81,18 @@ class DashboardController extends Controller
                         ->whereIn('account_type', ['client', 'office staff', 'supplier'])
                         ->count();
 
-        //$dates = Carbon::today()->toFormattedDateString();
-        $online_users = Logs::where('action', 'Login')
-                                ->where('Date', $date)
-                                ->where(function ($query) {
-                                    $query->where('account_type', 'office staff')
-                                        ->orWhere('account_type', 'client');
-                                        //->whereDate('Date', $dates);
-                                })->get();
-                                
+        $action = 'Login';
+        $current_time = Carbon::today()->toDateString(); // Outputs "2024-12-01"
+        Log::info($current_time);
+        $online_users = Logs::whereDate('Date', $current_time)
+                    ->where('action', $action)
+                    ->where(function ($query) {
+                        $query->where('account_type', 'office staff')
+                            ->orWhere('account_type', 'client');
+                    })->get();
+
+        Log::info('Online Users Without Action Filter', $online_users->toArray());
+        Log::info('Online Users', $online_users->toArray());                        
         $taskIds = $online_users->pluck('user_id');
         $online = User::whereIn('users.user_id', $taskIds)->get();
         //->join('logs', 'users.user_id', '=', 'logs.user_id') // Ensure you're using users.id
@@ -105,13 +108,13 @@ class DashboardController extends Controller
 
         // Group by Date
         $groupedData = $data->groupBy(function ($item) {
-            return Carbon::parse($item->Date)->format('Y-m-d'); // Group by date
+            return Carbon::parse($item->created_at)->format('Y-m-d'); // Group by date
         });
 
         // Define all days of the week
         $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-        // Prepare labels for daily data
+        // Initialize counts for each day
         $dailyLabels = $daysOfWeek;
         $dailyValues = array_fill(0, count($daysOfWeek), 0);
 
@@ -121,7 +124,7 @@ class DashboardController extends Controller
             $index = array_search($dayOfWeek, $daysOfWeek); // Find the index of that day
 
             if ($index !== false) {
-                $dailyValues[$index] += $group->count(); // Sum the counts for that day
+                $dailyValues[$index] += count($group); // Use count() to sum items in the group
             }
         }
 
@@ -156,7 +159,7 @@ class DashboardController extends Controller
         foreach ($label as $department) {
             $count = Audit::where('office_name', $department)
                 ->whereNotNull('finished')
-                ->where('finished', $date)
+                //->where('finished', $date)
                 ->count();
             
             $staffScans[$department] = $count; // Store count in associative array

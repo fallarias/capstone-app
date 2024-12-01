@@ -157,14 +157,14 @@
                 @else
                     @foreach ($tasks as $list)
                         <div class="card">
-                            <img class="random-image" alt="Class Image">
+                            <img src="{{ asset('img/template.png') }}" alt="Class Image">
                             <div class="card-body">
-                            <div class="progress-container">
+                            <!-- <div class="progress-container">
                             <div class="progress-text">{{ $list->progress }}%</div>
                                 <div class="progress-bar" style="width: {{ $list->progress }}%; background-color:white"></div>
-                                </div>
+                                </div> -->
                                 <div class="card-title">Transaction ID : {{ $list->transaction_id }}</div>
-                                <div class="card-title">{{ $list->name }}</div>
+                                <div class="card-title">Name: {{ $list->name }}</div>
                                 <form action="{{ route('client.clientTrackDocument', ['task_id' => $list->task_id,'transaction_id'=>$list->transaction_id]) }}" method="get" style="margin-top: 10px;">
                                     @csrf
                                     <button type="submit" class="btn btn-primary"style="background-color: #00b894; color: black;">View</button>

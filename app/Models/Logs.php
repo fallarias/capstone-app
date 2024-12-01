@@ -14,6 +14,7 @@ class Logs extends Model
     protected $fillable = ['action', 
                             'account_type', 
                             'message',
-                            'user_id'
+                            'user_id',
+                            'Date'
                             ];
 }

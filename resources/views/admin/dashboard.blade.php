@@ -301,7 +301,7 @@
         </div>
       </div>
     @empty
-      <p>No recent task</p>
+      <p>No User Online</p>
     @endforelse
   </div>
 </div>
@@ -392,9 +392,9 @@ const barChart = new Chart(bar, {
 
     const line = document.getElementById('lineChart').getContext('2d');
         const lineChart = new Chart(line, {
-            type: 'line',
+            type: 'bar',
             data: {
-                labels: [...@json($dailyLabels), ...@json($weeklyLabels)], // Combine daily and weekly labels
+                labels: @json($dailyLabels), // Combine daily and weekly labels
                 datasets: [
                     {
                         label: 'Request per Day',
@@ -404,14 +404,14 @@ const barChart = new Chart(bar, {
                         fill: true,
                         spanGaps: true,
                     },
-                    {
-                        label: 'Request per Week',
-                        data: @json($weeklyValues), // Weekly counts
-                        borderColor: '#28a745',
-                        backgroundColor: '#28a745',
-                        fill: true,
-                        spanGaps: true,
-                    }
+                    // {
+                    //     label: 'Request per Week',
+                    //     data: @json($weeklyValues), // Weekly counts
+                    //     borderColor: '#28a745',
+                    //     backgroundColor: '#28a745',
+                    //     fill: true,
+                    //     spanGaps: true,
+                    // }
                 ]
             },
             options: {
@@ -434,7 +434,7 @@ const userPieChart = new Chart(ctx, {
     data: {
         labels: ['online client', 'Offline client'],
         datasets: [{
-            data: [{{ json_encode($loggedInClient) }}, {{ json_encode($offlineCount) }}],
+            data: [{{ json_encode($loggedInClient) }}, {{ json_encode($offlineClient) }}],
             backgroundColor: ['#28a745', '#e0e0e0'],
             hoverBackgroundColor: ['#218838', '#90EE90'],
         }]

@@ -77,19 +77,19 @@ class GetRouteController extends Controller
 
     public function transaction(){
 
-        $transaction = Transaction::all();
+        $transactions = Transaction::with('user')->get();
         //app-bar
         $admin = User::select('firstname','lastname','middlename')->where('account_type','Admin')->first();
-        return view('admin.transactionListPage', compact('transaction','admin'));
+        return view('admin.transactionListPage', compact('transactions','admin'));
 
     }
 
     public function completed_transaction(){
 
-        $transaction = Transaction::where('status', 'finished')->get();
+        $transactions = Transaction::with('user','task')->where('status', 'finished')->get();
         //app-bar
         $admin = User::select('firstname','lastname','middlename')->where('account_type','Admin')->first();
-        return view('admin.completedTaskListPage', compact('transaction','admin'));
+        return view('admin.completedTaskListPage', compact('transactions','admin'));
 
     }
 
@@ -103,7 +103,7 @@ class GetRouteController extends Controller
     public function audit_trails(Request $request)
     {
         // Fetch transactions that are ongoing and have a deadline in the future
-        $audit = Audit::all();
+        $audit = Audit::all()->whereNotNull('start');
         $email = Audit::where('email_reminder_sent', false)
                         ->whereNull('finished')->get();
 

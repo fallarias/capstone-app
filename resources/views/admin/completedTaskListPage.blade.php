@@ -17,32 +17,46 @@
 
 <table border = "1">
 		<thead>
-			<th>#</th>
-			<th>User ID</th>
+            <th>#</th>
+            <th>User ID</th>
+			<th>User Email</th>
+            <th>Task Name</th>
             <th>Task ID</th>
             <th>Total of Office</th>
             <th>Office Done</th>
             <th>Status</th>
+            <th>Time Started</th>
+            <th>Time Completed</th>
 
 		</thead>
 		<tbody>
-            @forelse($transaction as $counter => $row)
+            @forelse($transactions as $transaction)
                 <tr>
-                    <td>{{ $loop->iteration}}</td> 
-                    <td>{{ $row->user_id }}</td>
-                    <td>{{ $row->task_id }}</td>
-                    <td>{{ $row->Total_Office_of_Request }}</td>
-                    <td>{{ $row->Office_Done }}</td>
-                    <td>{{ $row->status }}</td>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $transaction->user_id }}</td>
+                    <td>{{ $transaction->user->email}}</td>
+                    <td>{{ $transaction->task->name}}</td>
+                    <td>{{ $transaction->task_id }}</td>
+                    <td>{{ $transaction->Total_Office_of_Request }}</td>
+                    <td>{{ $transaction->Office_Done }}</td>
+                    <td>{{ $transaction->status }}</td>
+                    <td>{{ $transaction->created_at->format('Y-m-d h:i A') }}</td>
+                    <td>
+                        @if ($transaction->status === 'finished' && $transaction->updated_at)
+                            {{ $transaction->updated_at->format('Y-m-d h:i A') }}
+                        @else
+                            
+                        @endif
+                    </td>
                 </tr>
-                @empty
-                    <tr>
-                        <td colspan="8">No Users Found</td>
-                    </tr>
+            @empty
+                <tr>
+                    <td colspan="6">No Transactions Found</td>
+                </tr>
             @endforelse
 		</tbody>
 	</table><br>
-    <a href="{{url('/dashboard')}}">Back</a>
+
     </div>
 </body>
 <script>

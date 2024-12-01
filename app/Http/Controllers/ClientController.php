@@ -16,6 +16,8 @@ use App\Models\Audit;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Requirements;
+use Jenssegers\Agent\Agent;
+use ZipArchive;
 
 class ClientController extends Controller
 {
@@ -147,6 +149,8 @@ class ClientController extends Controller
         $transaction = Transaction::where('task_id', $task_id)
                                     ->where('transaction_id', $transaction_id)
                                     ->where('user_id', $UserId)->first();
+
+        $name = Task::select('name')->where('task_id', $task_id)->first();
     
         if (!$transaction) {
             return response()->json(['message' => 'Transaction not found'], 404);
@@ -209,7 +213,7 @@ class ClientController extends Controller
             }
         }
     
-        return view('client.clientTrackDocument', compact('task'));
+        return view('client.clientTrackDocument', compact('task', 'name'));
     }
     
     
@@ -239,36 +243,34 @@ class ClientController extends Controller
     }
 
 
-        public function transaction_history(){
+    public function transaction_history(){
 
-            $UserId = session('user_id');
-            $tasks = Task::join('tbl_transaction', 'task.task_id', '=', 'tbl_transaction.task_id')
-                            ->where('tbl_transaction.user_id', $UserId)
-                            //->where('tbl_transaction.status', 'ongoing')
-                            //->where('tasks.status', 1)
-                            ->select('task.*', 'tbl_transaction.transaction_id', 'tbl_transaction.status')
-                            ->get();
+        $UserId = session('user_id');
+        $tasks = Task::join('tbl_transaction', 'task.task_id', '=', 'tbl_transaction.task_id')
+                        ->where('tbl_transaction.user_id', $UserId)
+                        //->where('tbl_transaction.status', 'ongoing')
+                        //->where('tasks.status', 1)
+                        ->select('task.*', 'tbl_transaction.transaction_id', 'tbl_transaction.status')
+                        ->get();
 
-            return view('client.clientTrasactionHistory', compact('tasks'));
+        return view('client.clientTrasactionHistory', compact('tasks'));
             
-        }
+    }
 
     public function transaction($Id)
     {
         $UserId = session('user_id');
         Log::info('User ID from session:', ['user_id' => $UserId]);
+    
         // Retrieve the file path from the Task model
-        $task = Task::select('filepath','filename')->where('task_id', $Id)->first();
-
-        // Check if the task exists and has a filepath
-        if (!$task || !$task->filepath ||!$task->filename) {
+        $task = Task::select('filepath', 'filename')->where('task_id', $Id)->first();
+    
+        if (!$task || !$task->filepath || !$task->filename) {
             return response()->json(['message' => 'PDF file not found'], 404);
         }
-
-        // Construct the full path to the PDF file
-        $pdfFilePath = storage_path('app/' . $task->filepath); // Adjust based on how your file paths are structured
-
-        // Check if the PDF file exists
+    
+        $pdfFilePath = storage_path('app/' . $task->filepath);
+    
         if (!file_exists($pdfFilePath)) {
             return response()->json(['message' => 'PDF file not found'], 404);
         }
@@ -287,52 +289,82 @@ class ClientController extends Controller
         $createRecord = Create::where('task_id', $Id)->first();
     
         try {
-            // Ensure New_alloted_time is cast to an integer (or float if needed)
             $allottedTime = (int) $createRecord->New_alloted_time;
     
-            // Create the Transaction
             $transaction = Transaction::create([
                 'user_id' => $UserId,
                 'task_id' => $Id,
                 'Total_Office_of_Request' => $total,
-                //'deadline' => now()->addHours($allottedTime),
             ]);
+    
             Log::info('Transaction created', ['transaction' => $transaction]);
     
-            // Retrieve the newly created transaction_id
             $transactionId = $transaction->transaction_id;
     
-            // Ensure transaction_id is passed to the Audit record
             $audit = Audit::create([
                 'user_id' => $UserId,
                 'task_id' => $Id,
-                // 'start' => now(),
-                // 'deadline' => now()->addHours($allottedTime),
                 'office_name' => $createRecord->Office_name,
                 'task' => $createRecord->Office_task,
                 'transaction_id' => $transactionId,
             ]);
     
             Log::info('Audit created', ['audit' => $audit]);
-
-            // Generate the QR code with both UserId and TaskId
+    
+            // Generate the QR code
             $qrCodeData = json_encode(['userId' => (string) $UserId, 'taskId' => (string) $Id]);
             $qrCode = QrCode::format('png')->size(300)->generate($qrCodeData);
-            
-            // Save the QR code to a specified path
-            $qrCodePath = 'C:/Users/Fallaria/Downloads/qr_code.png'; // Adjust the path as necessary
-            file_put_contents($qrCodePath, $qrCode);
-            Log::info('QR code generated and saved at:', ['path' => $qrCodePath]);
-            
-            // Return the PDF file as a download response
-            return response()->download($pdfFilePath,$task->filename);
-            
+    
+            $agent = new Agent();
+
+            // Log the User-Agent for debugging purposes
+            Log::info('User-Agent:', ['user_agent' => $agent->getUserAgent()]);
+
+            if ($agent->isMobile()) {
+                // Mobile device: Generate and serve ZIP containing QR code and PDF
+                // Save QR Code to a temporary location
+                $qrCodePath = storage_path("app/public/qr_code_task_{$Id}.png");
+                file_put_contents($qrCodePath, $qrCode);
+                Log::info('QR code saved for mobile at:', ['path' => $qrCodePath]);
+    
+                // Create a ZIP file to bundle both the QR code and the PDF
+                $zipPath = storage_path("app/public/transaction_{$Id}.zip");
+                $zip = new ZipArchive;
+    
+                if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+                    $zip->addFile($pdfFilePath, $task->filename); // Add PDF to ZIP
+                    $zip->addFile($qrCodePath, "qr_code_task_{$Id}.png"); // Add QR Code to ZIP
+                    $zip->close();
+                } else {
+                    return response()->json(['message' => 'Failed to create ZIP archive'], 500);
+                }
+    
+                // Serve the ZIP file for download
+                return response()->download($zipPath)->deleteFileAfterSend(true);
+            } else {
+                // Get the user's Downloads directory dynamically
+                $downloadsDir = getenv('USERPROFILE') . DIRECTORY_SEPARATOR . 'Downloads';
+                $qrCodePath = $downloadsDir . DIRECTORY_SEPARATOR . 'qr_code.png';
+    
+                // Save the QR code to the desktop Downloads folder
+                file_put_contents($qrCodePath, $qrCode);
+                Log::info('QR code saved for desktop at:', ['path' => $qrCodePath]);
+    
+                // Copy the PDF to the Downloads folder
+                $pdfDownloadPath = $downloadsDir . DIRECTORY_SEPARATOR . $task->filename;
+                copy($pdfFilePath, $pdfDownloadPath);
+    
+                Log::info('PDF saved for desktop at:', ['path' => $pdfDownloadPath]);
+    
+                return response()->download($pdfDownloadPath, $task->filename);
+            }
         } catch (\Exception $e) {
-            // Log the error for easier debugging
             Log::error('Transaction creation failed', ['error' => $e->getMessage()]);
             return redirect()->back()->with('error', 'Transaction creation failed.');
         }
     }
+    
+    
     
     public function logout(Request $request): RedirectResponse {
 

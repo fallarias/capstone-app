@@ -1,10 +1,3 @@
-@php
-    $totalTasks = count($task);
-    $completedTasks = $task->where('task_status', 'finished')->count();
-    
-    $completionPercentage = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
-@endphp
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -108,16 +101,10 @@
 <!-- Order Information Section -->
 <div class="order-info">
     <div>
-        <h4>Request: 1</h4>
-        <p>Task: Buy Property</p>
+        <p>Transaction Name: {{$name->name}}</p>
     </div>
     <div class="order-status">
-        <p class="completion">Complete <span style="color:#ff6b6b;">{{ number_format($completionPercentage, 0) }}%</span></p>
-    </div>
-    <div>
-        <p>Expected Completion</p>
-        <p class="expected-completion">Oct 12, 2019</p>
-        <p class="expected-completion">15 Days</p>
+        <p class="completion">Complete <span style="color:#ff6b6b;" id="completion-percentage">0%</span></p>
     </div>
 </div>
 
@@ -141,6 +128,22 @@
         </div>
     @endforeach
 </div>
+
+<!-- JavaScript to calculate the completion percentage -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Pass the task data from Laravel to JavaScript
+        const tasks = @json($task); // Laravel data passed to JavaScript
+        const totalTasks = tasks.length;
+        const completedTasks = tasks.filter(task => task.task_status === 'Completed').length;
+        
+        // Calculate completion percentage
+        const completionPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+
+        // Display the completion percentage in the HTML
+        document.getElementById('completion-percentage').textContent = `${completionPercentage.toFixed(0)}%`;
+    });
+</script>
 
 </body>
 </html>
