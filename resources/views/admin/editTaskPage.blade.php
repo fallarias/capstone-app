@@ -149,13 +149,41 @@
                         <input type="text" id="office_task_{{ $loop->index }}" name="data[{{ $loop->index }}][Office_task]" value="{{ $item->Office_task }}" required>
 
                         <label for="task_time_{{ $loop->index }}">Allotted Time:</label>
-                        <select id="task_time_{{ $loop->index }}" name="data[{{ $loop->index }}][New_alloted_time]" value="{{ $item->New_alloted_time }}" required>
-                            @for ($i = 1; $i <= 100; $i++)
-                            <option value="{{ $i }}" {{ $item->New_alloted_time == $i ? 'selected' : '' }}>
-                                {{ $i }} hour{{ $i !== 1 ? 's' : '' }}
-                            </option>
-                            @endfor
-                        </select>
+                            <select id="task_time_{{ $loop->index }}" name="data[{{ $loop->index }}][New_alloted_time]" required>
+                                <optgroup label="Minutes">
+                                    @for ($i = 1; $i <= 59; $i++)
+                                        <option value="{{ $i }} minute{{ $i !== 1 ? 's' : '' }}" 
+                                            {{ $item->New_alloted_time_display == "$i minutes" ? 'selected' : '' }}>
+                                            {{ $i }} {{ $i !== 1 ? 'minutes' : 'minute' }}
+                                        </option>
+                                    @endfor
+                                </optgroup>
+                                <optgroup label="Hours">
+                                    @for ($i = 1; $i <= 23; $i++)
+                                        <option value="{{ $i }} hour{{ $i !== 1 ? 's' : '' }}" 
+                                            {{ $item->New_alloted_time_display == "$i hours" ? 'selected' : '' }}>
+                                            {{ $i }} {{ $i !== 1 ? 'hours' : 'hour' }}
+                                        </option>
+                                    @endfor
+                                </optgroup>
+                                <optgroup label="Days">
+                                    @for ($i = 1; $i <= 30; $i++)
+                                        <option value="{{ $i }} day{{ $i !== 1 ? 's' : '' }}" 
+                                            {{ $item->New_alloted_time_display == "$i days" ? 'selected' : '' }}>
+                                            {{ $i }} {{ $i !== 1 ? 'days' : 'day' }}
+                                        </option>
+                                    @endfor
+                                </optgroup>
+                                <optgroup label="Weeks">
+                                    @for ($i = 1; $i <= 52; $i++)
+                                        <option value="{{ $i }} week{{ $i !== 1 ? 's' : '' }}" 
+                                            {{ $item->New_alloted_time_display == "$i weeks" ? 'selected' : '' }}>
+                                            {{ $i }} {{ $i !== 1 ? 'weeks' : 'week' }}
+                                        </option>
+                                    @endfor
+                                </optgroup>
+                            </select>
+
                     </div>
                 @endforeach
             </div>
@@ -182,10 +210,28 @@ function createForm() {
             <input type="text" name="task[]" id="office_task_${formCount}" required><br>
             <label for="task_time_${formCount}">Task Allotted Time:</label>
             <select name="time[]" id="task_time_${formCount}" required>
-                @for ($i = 1; $i <= 100; $i++)
-                    <option value="{{ $i }}">{{ $i }} hour{{ $i !== 1 ? 's' : '' }}</option>
-                @endfor
+                <optgroup label="Minutes">
+                    @for ($i = 1; $i <= 60; $i++)
+                        <option value="{{ $i }} minute{{ $i !== 1 ? 's' : '' }}">{{ $i }} minute{{ $i !== 1 ? 's' : '' }}</option>
+                    @endfor
+                </optgroup>
+                <optgroup label="Hours">
+                    @for ($i = 1; $i <= 24; $i++)
+                        <option value="{{ $i }} hour{{ $i !== 1 ? 's' : '' }}">{{ $i }} hour{{ $i !== 1 ? 's' : '' }}</option>
+                    @endfor
+                </optgroup>
+                <optgroup label="Days">
+                    @for ($i = 1; $i <= 30; $i++)
+                        <option value="{{ $i }} day{{ $i !== 1 ? 's' : '' }}">{{ $i }} day{{ $i !== 1 ? 's' : '' }}</option>
+                    @endfor
+                </optgroup>
+                <optgroup label="Weeks">
+                    @for ($i = 1; $i <= 52; $i++)
+                        <option value="{{ $i }} week{{ $i !== 1 ? 's' : '' }}">{{ $i }} week{{ $i !== 1 ? 's' : '' }}</option>
+                    @endfor
+                </optgroup>
             </select>
+
         </div>
     `;
     const newFormDiv = document.createElement('div');

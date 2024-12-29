@@ -5,7 +5,7 @@ namespace App\Listeners;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\Logs;
-use Illuminate\Auth\Events\Registered;
+use App\Events\UserLoggedRegistered;
 
 class LogUserRegistration
 
@@ -24,14 +24,14 @@ class LogUserRegistration
      * @param  \Illuminate\Auth\Events\Registered  $event
      * @return void
      */
-    public function handle(Registered $event)
+    public function handle(UserLoggedRegistered $event)
     {
         // Log user registration
         Logs::create([
             'action' => 'Register',
-            'account_type' => $event->user->account_type,
+            'account_type' => $event->register->account_type,
             'message' => 'Registered Successfully.',
-            'user_id' => $event->user->user_id, // Get the user ID from the event
+            'user_id' => $event->register->user_id, // Get the user ID from the event
         ]);
     }
 }

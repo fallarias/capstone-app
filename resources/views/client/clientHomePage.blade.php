@@ -133,6 +133,7 @@
 
 
     <div class="app-bar">
+        <!--
     <div class="search-container">
         <form class="form-inline" action="/search" method="GET">
             <input type="text" name="query" class="form-control mr-sm-2" placeholder="Search" aria-label="Search" style="margin-left:1100px">
@@ -141,6 +142,7 @@
             </button>
         </form>
         </div>
+    -->
     </div>
 
 
@@ -195,6 +197,10 @@
                     <p>Available Document</p>
                 </div>
                 <div class="dashboard-card">
+                    <h1>{{ $messages}}</h1>
+                    <p>Message</p>
+                </div>
+                <div class="dashboard-card">
                     <h1>{{ $pending }}</h1>
                     <p>Pending</p>
                 </div>
@@ -202,16 +208,17 @@
                     <h1>{{ $complete }}</h1>
                     <p>Completed</p>
                 </div>
+                
             </div>
 
-            <div class="dashboard-card1">
+            <!-- <div class="dashboard-card1">
                 <div style="display: flex; justify-content: center; margin-top: 40px;">
                     <div class="container">
-                        <h2 class="dashboard-title">Weekly Area Chart</h2>
+                        <h2 class="dashboard-title">Weekly request Chart</h2>
                         <canvas id="weeklyAreaChart" width="400" height="100"></canvas>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 

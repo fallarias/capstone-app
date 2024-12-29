@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\Task;
+use App\Models\Holiday;
 use App\Models\NewOffice;
 use App\Models\Create;
 use App\Models\Transaction;
@@ -73,11 +74,8 @@ class StaffApiController extends Controller
             return response()->json(['message' => 'The provided credentials are incorrect.'], 401);
         }
 
-        if ($user->status === 'Not Accepted') {
-            return response()->json(['message' => 'Your account is not accepted. Please contact the administrator.'], 403);
-        }
-
-        $token = $user->createToken($request->email);
+        if ($user->status == 'Accepted') {
+            $token = $user->createToken($request->email);
 
         event(new UserLoggedIn($user));
 
@@ -85,6 +83,11 @@ class StaffApiController extends Controller
             'user' => $user,
             'token' => $token->plainTextToken
         ], 200);
+        }else{
+            return response()->json(['message' => 'Your account is not accepted. Please contact the administrator.'], 403);
+        }
+
+        
     }
 
     public function logout(Request $request)
@@ -159,22 +162,24 @@ class StaffApiController extends Controller
                 // Increment Office_Done count
                 //$transaction->increment('Office_Done');
                 
-                Audit::where('transaction_id',$transaction->transaction_id)
-                        ->where('user_id',$userId)
-                        ->where('task_id', $taskId)
-                        ->where('office_name', $department)
-                        // ->whereNull('start')
-                        // ->whereNull('deadline')
-                        ->update([
-                            'start' => now(),
-                            'deadline' => now()->addHours((int)$currentCreateEntry->New_alloted_time)
-                        ]);
+                $startTime = $this->calculateStartTime();
+                $adjustedDeadline = $this->calculateAdjustedDeadline($startTime, (int)$currentCreateEntry->New_alloted_time * 60); // Convert hours to minutes
 
-                Transaction::where('transaction_id',$transaction->transaction_id)
-                        ->where('task_id', $taskId)
-                        ->update([
-                            'deadline' => now()->addHours((int)$currentCreateEntry->New_alloted_time)
-                ]);
+                Audit::where('transaction_id', $transaction->transaction_id)
+                    ->where('user_id', $userId)
+                    ->where('task_id', $taskId)
+                    ->where('office_name', $department)
+                    ->update([
+                        'start' => $startTime,
+                        'deadline' => $adjustedDeadline,
+                    ]);
+
+                Transaction::where('transaction_id', $transaction->transaction_id)
+                    ->where('task_id', $taskId)
+                    ->update([
+                        'deadline' => $adjustedDeadline,
+                    ]);
+
                 // Fetch the current index audit entry based on the incremented Office_Done
                 // $currentIndex = $transaction->Office_Done - 1; // Adjust for zero-based index
                 // $currentAudit = Audit::where('user_id', $transaction->user_id)
@@ -233,6 +238,78 @@ class StaffApiController extends Controller
         } else {
             return response()->json(['message' => 'Invalid data.'], 400);
         }
+    }
+
+    //getting list of holidays
+    function isHoliday($date)
+    {
+        // Query the holidays table to check if the date exists
+        $isHoliday = Holiday::whereDate('holiday_date', $date->toDateString())
+            ->exists();
+
+        return $isHoliday;
+    }
+
+    //helper for the 5 PM time in the scanned_data
+    function calculateStartTime()
+    {
+        $currentTime = now();
+    
+        // Define the cutoff time as 5:00 PM
+        $cutoffTime = $currentTime->copy()->setTime(17, 0); // 5:00 PM
+        $nextDayStartTime = $currentTime->copy()->addDay()->setTime(8, 30); // 8:30 AM next day
+    
+        // If the current time is after the cutoff, calculate the next valid start time
+        if ($currentTime->greaterThanOrEqualTo($cutoffTime)) {
+            do {
+                // Check if tomorrow is a weekend or holiday
+                if ($nextDayStartTime->isWeekend() || $this->isHoliday($nextDayStartTime)) {
+                    // Move to the next weekday if it's a weekend or holiday
+                    $nextDayStartTime = $nextDayStartTime->addDay();
+                } else {
+                    break; // Valid working day
+                }
+            } while (true);
+    
+            return $nextDayStartTime; // Adjusted start time
+        }
+    
+        // If the current time is before the cutoff, no adjustment needed
+        return $currentTime;
+    }
+       
+
+    function calculateAdjustedDeadline($startTime, $durationInMinutes)
+    {
+        $remainingMinutes = $durationInMinutes;
+        $currentTime = $startTime->copy();
+    
+        while ($remainingMinutes > 0) {
+            // Define workday start and end times
+            $workStart = $currentTime->copy()->setTime(8, 30);
+            $workEnd = $currentTime->copy()->setTime(17, 0); // 5:00 PM
+    
+            if ($currentTime->greaterThanOrEqualTo($workEnd)) {
+                // Move to the next workday start time
+                $currentTime = $currentTime->copy()->addDay()->setTime(8, 30);
+    
+                // Skip weekends and holidays
+                while ($currentTime->isWeekend() || $this->isHoliday($currentTime)) {
+                    $currentTime = $currentTime->copy()->addDay();
+                }
+    
+                continue;
+            }
+    
+            // Calculate available working minutes in the current day
+            $availableMinutes = min($remainingMinutes, $currentTime->diffInMinutes($workEnd));
+    
+            // Deduct available minutes and advance the time
+            $remainingMinutes -= $availableMinutes;
+            $currentTime->addMinutes($availableMinutes);
+        }
+    
+        return $currentTime;
     }
     
     //Returning notification to the office staff

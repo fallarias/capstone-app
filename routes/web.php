@@ -56,6 +56,7 @@ Route::group(['middleware'=> ['auth:sanctum']], function() {
             Route::post('/delete/{id}', 'delete_task')->name('admin.deleteTask');
             Route::post('/activate/{id}', 'task_activate')->name('admin.taskActivate');
             Route::post('/add/Office', 'add_office')->name('admin.addOffice');
+            Route::post('/create/holiday', 'holiday')->name('admin.holidays');
         });
 
         Route::controller(FileController::class)->group(function () {
@@ -73,6 +74,7 @@ Route::group(['middleware'=> ['auth:sanctum']], function() {
             Route::get('/completed/transaction', 'completed_transaction')->name('admin.completedTaskListPage');
             Route::get('/audit', 'audit_trails')->name('admin.auditTrails');
             Route::get('/user/staff', 'new_staff')->name('admin.newOfficeAccount');
+            Route::get('/admin/holiday', 'holiday')->name('admin.holiday');
         });
 
         Route::controller(AuthController::class)->group(function () {

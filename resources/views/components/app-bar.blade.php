@@ -45,6 +45,12 @@
             <span style="margin-left: 10px; color: white;text-align: start;">Logs</span>
         </a>
 
+        <!--Holiday Page Icon -->
+        <a href="{{ url('/admin/holiday') }}" class="icon-container {{ Request::is('admin') ? 'active' : '' }}" style="margin-bottom: 40px; display: flex; align-items: center;margin-left: -70px; text-decoration:none">
+            <i class="fas fa-umbrella-beach " style="font-size: 24px;"></i>
+            <span style="margin-left: 10px; color: white;text-align: start;">Create Holiday</span>
+        </a>
+
     <!-- Line at the Top -->
     <div style="border-top: 2px solid white; margin-bottom: 40px; margin-left: -40px;width:210px"></div>
 

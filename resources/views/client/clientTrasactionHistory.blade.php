@@ -134,6 +134,7 @@
 </head>
 <body>
     <div class="app-bar">
+        <!--
         <div class="search-container">
             <form class="form-inline" action="/search" method="GET">
                 <input type="text" name="query" class="form-control mr-sm-2" placeholder="Search" aria-label="Search" style="margin-left:1100px">
@@ -142,13 +143,14 @@
                 </button>
             </form>
         </div>
+    -->
     </div>
 
     @include('components.clientDrawer')
 
     <div style="display: flex; justify-content: center; margin-top: 40px; width:1000px; margin-left:400px">
     <div class="container">
-        <h2>My Classes</h2>
+        <h2>Document Request</h2>
         @if ($tasks->isEmpty())
             <div class="alert alert-info text-center">
                 No tasks history available.

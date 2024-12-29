@@ -83,6 +83,7 @@
         }
 
         .title2 {
+            color:#00b894;
             margin-top: -100px;
             margin-left: 95px;
             font-size: 74px;

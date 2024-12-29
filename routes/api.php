@@ -47,13 +47,16 @@ Route::controller(ClientApiController::class)->group(function () {
         //Route::post('/scanned_data/{department}', 'scanned_data');
         Route::get('/notifications/{user}', 'notification');
         Route::get('/template_history/{id}/{user_id}', 'template_history');
+        //Route::get('/template_history_all/{id}/{user_id}/{transaction}', 'template_history_all');
         Route::get('/task_document/{userId}', 'task_document');
+        //Route::get('/document_history/{userId}', 'document_history');
         Route::get('/client_file', 'client_file');
         //Route::get('/staff_notification', 'staff_notification');
         //Route::post('/lack_requirement/{id}/{department}', 'lack_Requirements');
         //Route::post('/resume_transaction/{id}/{department}', 'resume_transaction');
         Route::get('/client_chart/{userId}', 'client_chart');
         Route::get('/bar_chart/{userId}', 'bar_chart');
+        Route::get('/client_history/{userId}', 'client_history');
     });
 });
 

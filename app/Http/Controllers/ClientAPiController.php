@@ -18,6 +18,9 @@ use App\Events\UserLoggedIn;
 use App\Models\Audit;
 use Carbon\Carbon;
 use App\Models\Requirements;
+use PhpOffice\PhpWord\IOFactory;
+use PhpOffice\PhpWord\Writer\PDF;
+use Exception;
 
 class ClientAPiController extends Controller
 {
@@ -36,7 +39,7 @@ class ClientAPiController extends Controller
 
 
         return response(['tasks' => $tasks, 'transactions' => $transactions], 200);
-    }
+    }    
 
     //Downloading the pdf file and creating new transaction and audit 
     public function transaction(Request $request)
@@ -171,31 +174,25 @@ class ClientAPiController extends Controller
         return response()->json($task);
     }
 
+
     //Returning notification to the user/client
     public function notification($user)
     {
         $userId = (int) $user;
     
-        $UnfinishedAudits = Audit::where('user_id', $userId)
+        $UnfinishedAudits = Audit::with('user')->where('user_id', $userId)
                         // Uncomment if you only want finished audits
                         //->whereNotNull('finished')
                         ->get();
 
-        $finishedAudits = Audit::where('user_id', $userId)
+        $finishedAudits = Audit::with('user')->where('user_id', $userId)
                         // Uncomment if you only want finished audits
                         ->whereNotNull('finished')
                         ->get();
-
-        if ($UnfinishedAudits->isEmpty()) {
-            return response()->json(['messages' => 'No finished audits found'], 404);
-        }
-
-        if ($finishedAudits->isEmpty()) {
-            return response()->json(['messages' => 'No finished audits found'], 404);
-        }
+                        
 
         // Fetch all requirement messages for the user
-        $requirementMessages = Requirements::where('user_id', $userId)
+        $requirementMessages = Requirements::with('user')->where('user_id', $userId)
                                             ->orderBy('stop_transaction', 'desc')  // Optional: Sort messages by stop_transaction
                                             ->get();  // Get all messages
 
@@ -237,24 +234,73 @@ class ClientAPiController extends Controller
         ]);
     }
 
-    //Returning pdf files
+    
+    //Returning value of chart in client
     public function client_file()
     {
         $files = Task::where('status', 1)->get();
-
+    
         foreach ($files as $file) {
-            if ($file->type == 'application/pdf') {
-                $file->pdfUrl = url(Storage::url($file->filepath));
-                $file->htmlContent = null;
-            } else {
-                $file->htmlContent = null;
+            try {
+                Log::info('Processing file: ' . $file->filepath);
                 $file->pdfUrl = null;
+                $file->wordUrl = null;
+    
+                if ($file->type === 'application/pdf') {
+                    // If the file is already a PDF
+                    $file->pdfUrl = url(Storage::url($file->filepath));
+                } elseif (in_array($file->type, [
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'application/msword',
+                ])) {
+                    // If the file is a Word document
+                    $file->pdfUrl = $this->convertDocxToPdf($file->filepath);
+                }
+            } catch (Exception $e) {
+                Log::error('Error processing file: ' . $e->getMessage());
             }
         }
-
+    
         return response(['files' => $files], 200);
     }
-
+    
+    public function convertDocxToPdf($filePath)
+    {
+        // Normalize the file path
+        $normalizedPath = str_replace('public/', '', $filePath);
+        $fullPath = storage_path('app/public/' . $normalizedPath);
+    
+        if (!file_exists($fullPath)) {
+            throw new Exception("File does not exist at: " . $fullPath);
+        }
+    
+        try {
+            // Load the .docx file
+            $phpWord = \PhpOffice\PhpWord\IOFactory::load($fullPath);
+    
+            // Use DomPDF for PDF generation
+            $domPdfPath = base_path('vendor/dompdf/dompdf');
+            \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+            \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+    
+            // Set the output path for the PDF
+            $pdfFileName = basename($normalizedPath, '.docx') . '.pdf';
+            $pdfPath = storage_path('app/public/' . $pdfFileName);
+    
+            // Create the PDF writer
+            $pdfWriter = IOFactory::createWriter($phpWord, 'PDF');
+            $pdfWriter->save($pdfPath);
+    
+            Log::info('PDF successfully created: ' . $pdfPath);
+    
+            // Return the public URL of the converted PDF
+            return url('storage/' . $pdfFileName);
+        } catch (Exception $e) {
+            Log::error('Error converting .docx to PDF: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+    
     //Returning Bar Chart
     public function bar_chart($userId)
     {
@@ -286,5 +332,14 @@ class ClientAPiController extends Controller
         ];
 
         return response()->json($data);
+    }
+
+        //Returning all staff scan
+    public function client_history($userId){
+
+        $scanned = Transaction::all()->where('user_id', $userId);
+
+        return response()->json($scanned);
+
     }
 }

@@ -281,7 +281,7 @@
             <label for="Name">Name:</label>
             <input type="text" name="task_name" required value="{{old('task_name')}}">
             <label for="filepath">Upload File (PDF):</label>
-            <input type="file" name="filepath" accept=".pdf" required>
+            <input type="file" name="filepath" accept=".doc,.docx" required>
             <div id="form-container" >
                 <!-- Plus icon to add more forms -->
                 <i class="plus-icon" id="add-form">+</i>
@@ -310,7 +310,7 @@
     <div class="modal-content">
         <span class="close">&times;</span>
         <h1 class="title1" style="margin-left: -80px; font-size:40px">Create New Office</h1>
-        <form id="inputForm" method="POST" action="{{ route('admin.newOfficeAccount') }}">
+        <form id="inputForm" method="POST" action="{{ route('admin.newOfficeAccounts') }}">
         @csrf
             <div id="modal-form-container" class="form-container">
                 <!-- Forms will be dynamically added here -->
@@ -455,10 +455,28 @@
 
         <label>Task Allotted Time</label>
         <select name="time[]" id="task_time_${formCount}" required>
-            @for ($i = 1; $i <= 100; $i++)
-                <option value="{{ $i }}">{{ $i }} hour{{ $i !== 1 ? 's' : '' }}</option>
-            @endfor
+            <optgroup label="Minutes">
+                @for ($i = 1; $i <= 60; $i++)
+                    <option value="{{ $i }} minute{{ $i !== 1 ? 's' : '' }}">{{ $i }} minute{{ $i !== 1 ? 's' : '' }}</option>
+                @endfor
+            </optgroup>
+            <optgroup label="Hours">
+                @for ($i = 1; $i <= 24; $i++)
+                    <option value="{{ $i }} hour{{ $i !== 1 ? 's' : '' }}">{{ $i }} hour{{ $i !== 1 ? 's' : '' }}</option>
+                @endfor
+            </optgroup>
+            <optgroup label="Days">
+                @for ($i = 1; $i <= 30; $i++)
+                    <option value="{{ $i }} day{{ $i !== 1 ? 's' : '' }}">{{ $i }} day{{ $i !== 1 ? 's' : '' }}</option>
+                @endfor
+            </optgroup>
+            <optgroup label="Weeks">
+                @for ($i = 1; $i <= 52; $i++)
+                    <option value="{{ $i }} week{{ $i !== 1 ? 's' : '' }}">{{ $i }} week{{ $i !== 1 ? 's' : '' }}</option>
+                @endfor
+            </optgroup>
         </select>
+
     </div>
             `;
 

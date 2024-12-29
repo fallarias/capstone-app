@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Requirements;
 use Jenssegers\Agent\Agent;
 use ZipArchive;
+use Carbon\Carbon;
+
 
 class ClientController extends Controller
 {
@@ -35,7 +37,7 @@ class ClientController extends Controller
             'lastname' => 'required|string|max:255',
             'firstname' => 'required|string|max:255',
             'middlename' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users|ends_with:isu.edu.ph',
             'is_delete' => 'default|active',
             'department' => 'required|string',
             'password' => [
@@ -84,8 +86,12 @@ class ClientController extends Controller
         $audit = Audit::where('user_id', $UserId)
                             ->whereNotNull('finished')
                             ->count();
+        $beyond = Audit::where('user_id', $UserId)
+                            ->whereRaw("TIME(start) >= ?", ['16:00:00'])
+                            ->count();
+
         $requerements = Requirements::where('user_id', $UserId)->count();
-        $messages = $audit + $requerements;
+        $messages = $audit + $requerements + $beyond;
         $ongoing = 'ongoing';
         $pending = Transaction::where('status', $ongoing)
                                         ->where('user_id', $UserId)
@@ -101,44 +107,50 @@ class ClientController extends Controller
     {
         $UserId = session('user_id');
     
-        $finishedAudits = Audit::where('user_id', $UserId)
+        $finishedAudits = Audit::with('user')->where('user_id', $UserId)
                         // Uncomment if you only want finished audits
                         ->whereNotNull('finished')
                         ->get();
 
-
+        $auditEntry = Audit::with('user')->where('user_id', $UserId)
+                        // Uncomment if you only want finished audits
+                        ->whereNotNull('start')
+                        ->whereRaw("TIME(start) >= ?", ['16:00:00'])
+                        ->get();
 
         // Fetch all requirement messages for the user
-        $requirementMessages = Requirements::where('user_id', $UserId)
+        $requirementMessages = Requirements::with('user')->where('user_id', $UserId)
                                             ->orderBy('stop_transaction', 'desc')  // Optional: Sort messages by stop_transaction
                                             ->get();  // Get all messages
 
         if ($finishedAudits->isEmpty()) {
-            return view('client.clientNotfication', compact('finishedAudits','requirementMessages'))->with('null', 'No Notification found');
+            return view('client.clientNotfication', compact('finishedAudits','requirementMessages','auditEntry'))->with('null', 'No Notification found');
         }                                    
         // Prepare messages for response
         //$messages = $requirementMessages->pluck('message')->filter(); // Get only the messages, filter out any null values
-        return view('client.clientNotfication', compact('finishedAudits','requirementMessages'));
+        return view('client.clientNotfication', compact('finishedAudits','requirementMessages','auditEntry'));
 
     }
 
 
-    public function template(){
-
+    public function template()
+    {
         $files = Task::where('status', 1)->get();
-
+    
         foreach ($files as $file) {
             if ($file->type == 'application/pdf') {
                 $file->pdfUrl = url(Storage::url($file->filepath));
-                $file->htmlContent = null;
-            } else {
-                $file->htmlContent = null;
+                $file->wordUrl = null;
+            } elseif ($file->type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || $file->type == 'application/msword') {
+                $file->wordUrl = url(Storage::url($file->filepath));
                 $file->pdfUrl = null;
+            } else {
+                $file->pdfUrl = null;
+                $file->wordUrl = null;
             }
         }
-
+    
         return view('client.clientTemplate', compact('files'));
-        
     }
 
     //Returning the list of step in the transaction
@@ -151,6 +163,10 @@ class ClientController extends Controller
                                     ->where('user_id', $UserId)->first();
 
         $name = Task::select('name')->where('task_id', $task_id)->first();
+
+        $beyondFour = Audit::where('transaction_id', $transaction_id)
+                    ->whereRaw("TIME(start) >= ?", ['16:00:00'])
+                    ->get();
     
         if (!$transaction) {
             return response()->json(['message' => 'Transaction not found'], 404);
@@ -190,7 +206,7 @@ class ClientController extends Controller
                 $auditEntry = Audit::where('transaction_id', $transaction_id)
                     ->where('office_name', $item->Office_name)
                     ->first();
-    
+
                 // Default task status based on officeDone
                 if ($index < $officeDone) {
                     $item['task_status'] = 'Completed';
@@ -199,6 +215,8 @@ class ClientController extends Controller
                 } else {
                     $item['task_status'] = 'Waiting';
                 }
+
+            
     
                 // // Additional check for specific `Audit` entry
                 // Log::info("Audit Check for office: {$item->Office_name}", [
@@ -211,14 +229,12 @@ class ClientController extends Controller
                 //     $item['task_status'] = 'Completed';
                 // }
             }
+            
         }
     
-        return view('client.clientTrackDocument', compact('task', 'name'));
+        return view('client.clientTrackDocument', compact('task', 'name','beyondFour' ));
     }
     
-    
-    
-
     public function task_document()
     {
         $UserId = session('user_id');
@@ -356,15 +372,14 @@ class ClientController extends Controller
     
                 Log::info('PDF saved for desktop at:', ['path' => $pdfDownloadPath]);
     
-                return response()->download($pdfDownloadPath, $task->filename);
+                return redirect()->back()->with('success', 'The template is donwloaded.');
             }
         } catch (\Exception $e) {
             Log::error('Transaction creation failed', ['error' => $e->getMessage()]);
             return redirect()->back()->with('error', 'Transaction creation failed.');
         }
     }
-    
-    
+        
     
     public function logout(Request $request): RedirectResponse {
 

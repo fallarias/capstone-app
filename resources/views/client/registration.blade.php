@@ -59,7 +59,7 @@
                 <div class="image-container">
                     <img src="{{ asset('img/isu.png') }}" alt="First Image" class="image">
                     <img src="{{ asset('img/ict.png') }}" alt="Second Image" class="image1" style="top:9px">
-                    <p class="bottom-text">ISUE CANNER</p>
+                    <p class="bottom-text">ISU-CANNER</p>
                     <p class="bottom-text1">
                         <span style="font-size: 28px;">D</span>ocument 
                         <span style="font-size: 28px;">T</span>racking and 
@@ -67,7 +67,7 @@
                         <span style="font-size: 28px;">S</span>ystem using 
                         <span style="font-size: 28px;margin-left:5px">QR</span> 
                         <span style="font-size: 28px;margin-left:5px">C</span> 
-                        <span style="font-size: 28px;margin-left:5px">ode.</span>
+                        <span style="font-size: 28px;margin-left:-5px">ode.</span>
                     </p>
                 </div>
             </div>

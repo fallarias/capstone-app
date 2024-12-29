@@ -26,5 +26,9 @@ class Task extends Model
     {
         return $this->hasMany(Task::class, 'task_id', 'task_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id'); // Adjust 'user_id' if your column name differs
+    }   
 
 }

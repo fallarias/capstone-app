@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Create;
 use App\Models\Supplier;
+use App\Models\Holiday;
 use App\Models\User;
 use App\Models\Transaction;
 use App\Models\NewOffice;
@@ -26,7 +27,7 @@ class TaskController extends Controller
             'time' => 'required|array|min:1',
             'time.*' => 'required|string',
             'task_name'=> 'required|string|unique:task,name',
-            'filepath' => 'required|file|mimes:pdf|max:10240', // Include doc and docx
+            'filepath' => 'required|file|mimes:docx,doc|max:10240', // Include doc and docx
         ]);
     
         // Handle file upload first
@@ -61,12 +62,36 @@ class TaskController extends Controller
                 // Retrieve corresponding task and time for each office
                 $taskForOffice = $tasks[$index];
                 $timeForOffice = $time[$index];
-    
+                
+                // Process time input
+                $timeInMinutes = 0; // Default to 0 minutes
+                preg_match('/(\d+)\s*(minute|hour|day|week)s?/', $timeForOffice, $matches);
+
+                if (count($matches) === 3) {
+                    $number = (int)$matches[1]; // Get the number
+                    $unit = strtolower($matches[2]); // Get the unit (minute, hour, day, week)
+
+                    // Convert to minutes based on the unit
+                    switch ($unit) {
+                        case 'minute':
+                            $timeInMinutes = $number;
+                            break;
+                        case 'hour':
+                            $timeInMinutes = $number * 60;
+                            break;
+                        case 'day':
+                            $timeInMinutes = $number * 60 * 24;
+                            break;
+                        case 'week':
+                            $timeInMinutes = $number * 60 * 24 * 7;
+                            break;
+                    }
+                }
                 // Save the task details to the 'Create' model
                 Create::create([
                     'Office_name' => $office_name,
                     'Office_task' => $taskForOffice,
-                    'New_alloted_time' => $timeForOffice,
+                    'New_alloted_time' => $timeInMinutes,
                     'user_id' => $user->user_id,
                     'task_id' => $taskId, 
                     'soft_del' => 0,
@@ -89,6 +114,35 @@ class TaskController extends Controller
             $data_task = Task::all()->where('task_id', '=', $id)->first();
         }
         $data = Create::all()->where('task_id',$id);
+
+        foreach ($data as $item) {
+            if (is_string($item->New_alloted_time)) {
+                $newAllotedTimeInMinutes = (int)$item->New_alloted_time;
+        
+                // Check if the time is less than or equal to 59 minutes
+                if ($newAllotedTimeInMinutes <= 59) {
+                    $item->New_alloted_time_display = "{$newAllotedTimeInMinutes} minutes";
+                } 
+                // Check if the time is less than or equal to 1380 minutes (23 hours)
+                else if ($newAllotedTimeInMinutes <= 1380) {
+                    $item->New_alloted_time_display = round($newAllotedTimeInMinutes / 60, 2) . " hours";
+                }// Check if the time is less than or equal to 43200 minutes (30 days)
+                else if ($newAllotedTimeInMinutes <= 43200) {
+                    $item->New_alloted_time_display = round($newAllotedTimeInMinutes / 1440, 2) . " days";
+                }// Check if the time is less than or equal to 524160 minutes (52 weeks)
+                else if ($newAllotedTimeInMinutes <= 524160) {
+                    $item->New_alloted_time_display = round($newAllotedTimeInMinutes / 10080, 2) . " weeks";
+                } else {
+                    // Handle other cases if needed, e.g., days, weeks
+                    $item->New_alloted_time_display = "{$newAllotedTimeInMinutes} minutes";
+                }
+            } else {
+                // Fallback if New_alloted_time is not a string
+                $item->New_alloted_time_display = "Invalid time format";
+            }
+        }
+        
+
         //app-bar
         $admin = User::select('firstname','lastname','middlename')->where('account_type','Admin')->first();
         return view('admin.editTaskPage', compact('data',"task","data_task","offices",'admin'));
@@ -144,11 +198,37 @@ class TaskController extends Controller
         // Check if the 'data' field exists and is an array before looping
         if (!empty($request->data) && is_array($request->data)) {
             foreach ($request->data as $record) {
+
+                // Process time input
+                $timeInMinute = 0; // Default to 0 minutes
+                preg_match('/(\d+)\s*(minute|hour|day|week)s?/', $record['New_alloted_time'], $matches);
+
+                if (count($matches) === 3) {
+                    $number = (int)$matches[1]; // Get the number
+                    $unit = strtolower($matches[2]); // Get the unit (minute, hour, day, week)
+
+                    // Convert to minutes based on the unit
+                    switch ($unit) {
+                        case 'minute':
+                            $timeInMinute = $number;
+                            break;
+                        case 'hour':
+                            $timeInMinute = $number * 60;
+                            break;
+                        case 'day':
+                            $timeInMinute = $number * 60 * 24;
+                            break;
+                        case 'week':
+                            $timeInMinute = $number * 60 * 24 * 7;
+                            break;
+                    }
+                }
+
                 $data = Create::findOrFail($record['create_id']);
                 $data->update([
                     'Office_name' => $record['Office_name'],
                     'Office_task' => $record['Office_task'],
-                    'New_alloted_time' => $record['New_alloted_time'],
+                    'New_alloted_time' => $timeInMinute,
                 ]);
             }
         }
@@ -165,11 +245,36 @@ class TaskController extends Controller
                 $tasks = $task[$index];
                 $times = $time[$index];
 
+                // Process time input
+                $timeInMinutes = 0; // Default to 0 minutes
+                preg_match('/(\d+)\s*(minute|hour|day|week)s?/', $times, $matches);
+
+                if (count($matches) === 3) {
+                    $number = (int)$matches[1]; // Get the number
+                    $unit = strtolower($matches[2]); // Get the unit (minute, hour, day, week)
+
+                    // Convert to minutes based on the unit
+                    switch ($unit) {
+                        case 'minute':
+                            $timeInMinutes = $number;
+                            break;
+                        case 'hour':
+                            $timeInMinutes = $number * 60;
+                            break;
+                        case 'day':
+                            $timeInMinutes = $number * 60 * 24;
+                            break;
+                        case 'week':
+                            $timeInMinutes = $number * 60 * 24 * 7;
+                            break;
+                    }
+                }
+
                 // Group the data and save it to the database
                 Create::create([
                     'Office_name' => $office_name,
                     'Office_task' => $tasks,
-                    'New_alloted_time' => $times,
+                    'New_alloted_time' => $timeInMinutes,
                     'user_id' => $user->user_id,
                     'task_id' => $id,
                     'soft_del' => 0,
@@ -215,6 +320,25 @@ class TaskController extends Controller
         ]);
 
         return redirect()->back()->with('success_office', 'Office is successfully added.');
+    }
+
+
+    public function holiday(Request $request){
+        $attrs = $request->validate([
+            'desc' => 'required', 
+            'date' => 'required', 
+        ]);
+
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $attrs['date'])){
+            return redirect()->back()->with('error', 'Date is not yyyy/dd/mm.');
+        } else{
+            Holiday::create([
+                'description' => $attrs['desc'],
+                'holiday_date' => $attrs['date'],
+            ]);
+
+            return redirect()->back()->with('success', 'Success.');
+        }
     }
 
 }

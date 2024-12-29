@@ -216,6 +216,7 @@
 </head>
 <body>
 <div class="app-bar">
+    <!--
 <div class="search-container">
     <form onsubmit="event.preventDefault(); searchTask();" class="form-inline" action="/search" method="GET">
         <input type="text" id="task_name" name="task_name" class="form-control mr-sm-2" placeholder="Search task name" aria-label="Search by task name" style="margin-left:1100px">
@@ -224,11 +225,22 @@
         </button>
     </form>
     </div>
+-->
 </div>
 
 <div style="text-align:center">
     @include('components.clientDrawer') 
 
+    @if(session('success'))
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Great...',
+                    text: @json(session('success')),
+                    confirmButtonText: 'OK'
+                });
+            </script>
+    @endif
 
 <div style="display: flex; justify-content: center; margin-top: 40px; width:1000px; margin-left:400px">
     <style>
@@ -285,26 +297,21 @@
                     <td style="font-weight: bold;">{{ $loop->iteration }}</td>
                     <td>{{ $task->name }}</td>
                     <td style="padding: 10px;">
-                        @forelse($task->files as $file)
-                            @if($file->thumbnailUrl)
-                                <a href="{{ $file->pdfUrl }}" target="_blank" style="text-decoration: none;">
-                                    <img src="{{ $file->thumbnailUrl }}" alt="PDF Thumbnail" style="width: 100px; height: auto; border: 1px solid #ccc; border-radius: 5px; padding: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); cursor: pointer; transition: transform 0.3s ease;">
-                                </a>
-                            @else
-                                <a href="{{ $file->pdfUrl }}" target="_blank" style="text-decoration: none;">
-                                    <i class="fas fa-file-pdf" style="font-size: 35px; color: #d9534f; cursor: pointer; margin:auto;padding: 5px; transition: transform 0.3s ease; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);"></i>
-                                </a>
-                            @endif  
-                        @empty
-                            <p style="color: #777; font-style: italic;">No files for this task.</p>
-                        @endforelse
-                    </td>
-
-                    <td>
-                        {{$file->filename}}
+                        @if ($task->pdfUrl)
+                            <a href="{{ $task->pdfUrl }}" target="_blank" style="text-decoration: none;">
+                                <i class="fas fa-file-pdf" style="font-size: 35px; color: #d9534f; cursor: pointer; margin:auto;padding: 5px; transition: transform 0.3s ease; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);"></i>
+                            </a>
+                        @elseif ($task->wordUrl)
+                            <a href="{{ $task->wordUrl }}" target="_blank" style="text-decoration: none;">
+                                <i class="fas fa-file-word" style="font-size: 35px; color: #007bff; cursor: pointer; margin:auto;padding: 5px; transition: transform 0.3s ease; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);"></i>
+                            </a>
+                        @endif
                     </td>
                     <td>
-                        <form action="{{route('client.clientTransaction', $file->task_id)}}" method="POST">
+                        {{ pathinfo($task->filename, PATHINFO_FILENAME) }}
+                    </td>
+                    <td>
+                        <form action="{{route('client.clientTransaction', $task->task_id)}}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-download">
                                 Download

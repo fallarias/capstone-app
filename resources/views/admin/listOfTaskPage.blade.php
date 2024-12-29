@@ -184,7 +184,6 @@
             <thead>
                 <th>No.</th>
                 <th>Task</th>
-                <th>Date Created</th>
                 <th>Actions</th>
                 <th>Template</th>
                 <th>Template Name</th>
@@ -195,9 +194,7 @@
                     <tr>
                         <td style="font-weight: bold;">{{ $loop->iteration }}</td>
                         <td>{{ $task->name }}</td>
-                        <td>{{ $task->date }}</td>
-
-                        <td style="display: flex; gap: 20px; justify-content: center; padding: 10px;">
+                        <td style="display: flex; gap: 10px; justify-content: center; padding: 10px;">
                             <form action="{{ route('admin.editTaskPage', $task->task_id) }}" method="GET">
                                 @csrf
                                 <button type="submit" style="background-color: #4CAF50; color: white; border: none; padding: 13px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;width:120px">Edit</button>

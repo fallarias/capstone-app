@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserLoggedRegistered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -38,22 +39,24 @@ class AuthController extends Controller
             $user = Auth::user(); 
             session(['user_id' => $user->user_id]);
     
-            // Check user account type and redirect accordingly
+            // Check user account type and handle authorization
             if ($user->account_type === 'office staff') {
-                Auth::logout(); // Logout if not authorized
+                Auth::logout(); // Immediately log out the unauthorized user
+                $request->session()->invalidate(); // Invalidate the session
+                $request->session()->regenerateToken(); // Regenerate the CSRF token
                 return back()->withErrors(['email' => 'You are not authorized to access this area.'])->withInput();
             } elseif ($user->account_type === 'Admin') {
+                // Admin specific logic
                 event(new UserLoggedIn($user));
                 $token = $user->createToken('secret')->plainTextToken;
     
-                // Fetch counts for data and user
+                // Fetch counts for admin dashboard
                 $supplier = Create::count();
                 $userCount = User::count(); 
                 $users = User::all();
                 $transaction = Transaction::count();
                 $client = Client::count();
     
-                // Redirect to admin dashboard with data
                 return redirect()->route('admin.dashboard')->with([
                     'supplier' => $supplier,
                     'user' => $userCount,
@@ -61,36 +64,38 @@ class AuthController extends Controller
                     'transaction' => $transaction,
                     'users' => $users,
                 ]);
-            } elseif ($user->account_type === 'client') {
-                // Redirect to client home page
+            } elseif ($user->account_type === 'client' && $user->status === 'Accepted') {
+                // Client-specific logic
                 $UserId = session('user_id');
-                // Fetch data from the database as needed
+    
                 $documents = Task::where('status', 1)->count();
-        
                 $audit = Audit::where('user_id', $UserId)
-                                    ->whereNotNull('finished')
-                                    ->count();
-                $requerements = Requirements::where('user_id', $UserId)->count();
-                $messages = $audit + $requerements;
+                              ->whereNotNull('finished')
+                              ->count();
+                $requirements = Requirements::where('user_id', $UserId)->count();
+                $messages = $audit + $requirements;
+    
                 $ongoing = 'ongoing';
                 $pending = Transaction::where('status', $ongoing)
-                                                ->where('user_id', $UserId)
-                                                ->count();
+                                       ->where('user_id', $UserId)
+                                       ->count();
                 $complete = Transaction::where('status', 'finished')
-                                                ->where('user_id', $UserId)
-                                                ->count();
-
-                return redirect()->route('client.clientHomePage', compact('documents','messages','pending','complete')); // Use the named route for clients
+                                       ->where('user_id', $UserId)
+                                       ->count();
+    
+                return redirect()->route('client.clientHomePage', compact('documents', 'messages', 'pending', 'complete'));
             } else {
-                return back()->withErrors(['email' => 'You are not authorized to access this area.'])->withInput();
+                Auth::logout(); // Log out any other unauthorized users
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return back()->with('error', 'You are not authorized to access this area.')->withInput();
             }
         }
     
+        // Handle login failure
         return back()->withErrors(['email' => 'The provided credentials do not match our records.'])->withInput();
     }
     
-
-
     public function logout(Request $request): RedirectResponse {
 
         // Get the authenticated user before logging out
@@ -145,7 +150,7 @@ class AuthController extends Controller
             'first.*' => 'required|string',
             'middle.*' => 'required|string',
             'last.*' => 'required|string',
-            'email.*' => 'required|unique:users,email',
+            'email.*' => 'required|ends_with:isu.edu.ph|unique:users,email',
             'password.*' => 'required|string',
             'department.*' => 'required|string',
         ]);
@@ -174,10 +179,9 @@ class AuthController extends Controller
                 $passwordOffice = $passwords[$index];
                 $departmentOffice = $departments[$index];
 
-        
-    
+
                 // Save the task details to the 'Create' model
-                $user = User::create([
+                $register = User::create([
                     'firstname' => $first,
                     'middlename' => $middleOffice,
                     'lastname' => $lastOffice,
@@ -187,8 +191,10 @@ class AuthController extends Controller
                     'account_type' => 'office staff',
                     'status' => 'Accepted',
                 ]);
+                
+                event(new UserLoggedRegistered($register));
 
-                Log::info('create',[$user]);
+                Log::info('create',[$register]);
             }
             
             return redirect()->back()->with('success', 'Creating of new Office Staff is successfully added.');

@@ -13,48 +13,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">   
     <title>Documents</title>
     <script>
-    function fetchAuditTrails() {
-        $.ajax({
-            url: '{{ route('admin.auditTrails') }}', // Update with your actual route name
-            method: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                const tableBody = $('#logTable tbody');
-                tableBody.empty(); // Clear the existing table data
+function fetchAuditTrails() {
+    $.ajax({
+        url: '{{ route('admin.auditTrails') }}', // Update with your actual route name
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            const tableBody = $('#logTable tbody');
+            tableBody.empty(); // Clear the existing table data
 
-                response.transactions.forEach((task, index) => {
-                    const deadline = new Date(task.deadline);
-                    const now = new Date();
-                    let status = '';
+            response.transactions.forEach((task, index) => {
+                const startDate = formatDateTime(task.start);
+                const deadlineDate = formatDateTime(task.deadline);
+                const now = new Date();
+                const deadline = new Date(task.deadline);
 
-                    if (!task.finished && deadline < now) {
-                        status = 'Overdue'; // Task is overdue
-                    } else if (!task.finished) {
-                        status = 'Pending'; // Task is not finished
-                    } else {
-                        status = task.finished; // Task is finished
-                    }
+                let status = '';
+                if (!task.finished && deadline < now) {
+                    status = 'Overdue'; // Task is overdue
+                } else if (!task.finished) {
+                    status = 'Pending'; // Task is not finished
+                } else {
+                    status = formatDateTime(task.finished); // Task is finished
+                }
 
-                    tableBody.append(`
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${task.user_id}</td>
-                            <td>${task.task_id}</td>
-                            <td>${task.start}</td>
-                            <td>${status}</td> <!-- Display the correct status -->
-                            <td>${task.deadline}</td>
-                            <td>${task.office_name}</td>
-                        </tr>
-                    `);
-                });
-                applyFilter();
-            },
-            error: function(xhr) {
-                console.error('Error fetching audit trails:', xhr);
-            }
-        });
+                tableBody.append(`
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${task.user_id}</td>
+                        <td>${task.task_id}</td>
+                        <td>${startDate}</td>
+                        <td>${status}</td> <!-- Display the correct status -->
+                        <td>${deadlineDate}</td>
+                        <td>${task.office_name}</td>
+                    </tr>
+                `);
+            });
+            applyFilter();
+        },
+        error: function(xhr) {
+            console.error('Error fetching audit trails:', xhr);
+        }
+    });
+}
 
-    }
+// Helper function to format date and time
+function formatDateTime(dateString) {
+    const options = {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+    };
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(new Date(dateString));
+    return formattedDate.replace(/^\w+/, (month) => month + '.');
+}
+
 
     // Set an interval to auto-reload the table every 30 seconds
     setInterval(fetchAuditTrails, 7000);
@@ -318,9 +334,10 @@ input[type="checkbox"]:checked {
                             @elseif (is_null($task->finished))
                                 <p>Pending</p>
                             @else
-                                {{ $task->finished }}
+                                <p>{{$task->finished}}</p>
                             @endif
                         </td>
+
                         <td>{{ $task->deadline }}</td>
                         <td>{{ $task->office_name }}</td>
                     </tr>
