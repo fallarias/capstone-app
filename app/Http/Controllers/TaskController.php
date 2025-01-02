@@ -11,7 +11,7 @@ use App\Models\Transaction;
 use App\Models\NewOffice;
 use App\Models\Task;
 use Illuminate\Support\Facades\Storage;
-
+use App\Events\AdminCreteTask;
 
 class TaskController extends Controller
 {
@@ -97,6 +97,8 @@ class TaskController extends Controller
                     'task_id' => $taskId, 
                     'soft_del' => 0,
                 ]);
+
+                event( new AdminCreteTask($user));
             }
             
             return redirect()->back()->with('success', 'Task is successfully added.');
