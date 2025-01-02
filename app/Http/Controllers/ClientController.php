@@ -165,7 +165,7 @@ class ClientController extends Controller
         $name = Task::select('name')->where('task_id', $task_id)->first();
 
         $beyondFour = Audit::where('transaction_id', $transaction_id)
-                    ->whereRaw("TIME(start) >= ?", ['16:00:00'])
+                    ->whereRaw("TIME(start) >= ?", ['17:00:00'])
                     ->get();
     
         if (!$transaction) {
@@ -181,6 +181,32 @@ class ClientController extends Controller
         // If officeDone is 0, set all tasks to 'Waiting' initially
         if ($officeDone == 0) {
             foreach ($task as &$item) {
+
+                if (is_string($item->New_alloted_time)) {
+                    $newAllotedTimeInMinutes = (int)$item->New_alloted_time;
+            
+                    // Check if the time is less than or equal to 59 minutes
+                    if ($newAllotedTimeInMinutes <= 59) {
+                        $item['New_alloted_time_display'] = "{$newAllotedTimeInMinutes} minutes";
+                    } 
+                    // Check if the time is less than or equal to 1380 minutes (23 hours)
+                    else if ($newAllotedTimeInMinutes <= 1380) {
+                        $item['New_alloted_time_display'] = round($newAllotedTimeInMinutes / 60, 2) . " hours";
+                    }// Check if the time is less than or equal to 43200 minutes (30 days)
+                    else if ($newAllotedTimeInMinutes <= 43200) {
+                        $item['New_alloted_time_display'] = round($newAllotedTimeInMinutes / 1440, 2) . " days";
+                    }// Check if the time is less than or equal to 524160 minutes (52 weeks)
+                    else if ($newAllotedTimeInMinutes <= 524160) {
+                        $item['New_alloted_time_display'] = round($newAllotedTimeInMinutes / 10080, 2) . " weeks";
+                    } else {
+                        // Handle other cases if needed, e.g., days, weeks
+                        $item['New_alloted_time_display'] = "{$newAllotedTimeInMinutes} minutes";
+                    }
+                } else {
+                    // Fallback if New_alloted_time is not a string
+                    $item->New_alloted_time_display = "Invalid time format";
+                }
+
                 // Set default status to 'Waiting'
                 $item['task_status'] = 'Waiting';
     
@@ -203,6 +229,32 @@ class ClientController extends Controller
         } else {
             // Iterate through tasks and update the status based on audit entries and officeDone
             foreach ($task as $index => &$item) {
+
+                if (is_string($item->New_alloted_time)) {
+                    $newAllotedTimeInMinutes = (int)$item->New_alloted_time;
+            
+                    // Check if the time is less than or equal to 59 minutes
+                    if ($newAllotedTimeInMinutes <= 59) {
+                        $item['New_alloted_time_display'] = "{$newAllotedTimeInMinutes} minutes";
+                    } 
+                    // Check if the time is less than or equal to 1380 minutes (23 hours)
+                    else if ($newAllotedTimeInMinutes <= 1380) {
+                        $item['New_alloted_time_display'] = round($newAllotedTimeInMinutes / 60, 2) . " hours";
+                    }// Check if the time is less than or equal to 43200 minutes (30 days)
+                    else if ($newAllotedTimeInMinutes <= 43200) {
+                        $item['New_alloted_time_display'] = round($newAllotedTimeInMinutes / 1440, 2) . " days";
+                    }// Check if the time is less than or equal to 524160 minutes (52 weeks)
+                    else if ($newAllotedTimeInMinutes <= 524160) {
+                        $item['New_alloted_time_display'] = round($newAllotedTimeInMinutes / 10080, 2) . " weeks";
+                    } else {
+                        // Handle other cases if needed, e.g., days, weeks
+                        $item['New_alloted_time_display'] = "{$newAllotedTimeInMinutes} minutes";
+                    }
+                } else {
+                    // Fallback if New_alloted_time is not a string
+                    $item->New_alloted_time_display = "Invalid time format";
+                }
+
                 $auditEntry = Audit::where('transaction_id', $transaction_id)
                     ->where('office_name', $item->Office_name)
                     ->first();
@@ -216,23 +268,11 @@ class ClientController extends Controller
                     $item['task_status'] = 'Waiting';
                 }
 
-            
-    
-                // // Additional check for specific `Audit` entry
-                // Log::info("Audit Check for office: {$item->Office_name}", [
-                //     'start' => $auditEntry->start ?? 'null',
-                //     'deadline' => $auditEntry->deadline ?? 'null'
-                // ]);
-    
-                // // If start and deadline are not null, set status to 'Ongoing'
-                // if ($auditEntry && !is_null($auditEntry->start) && !is_null($auditEntry->deadline) && !is_null($auditEntry->finished)) {
-                //     $item['task_status'] = 'Completed';
-                // }
             }
             
         }
     
-        return view('client.clientTrackDocument', compact('task', 'name','beyondFour' ));
+        return view('client.clientTrackDocument', compact('task', 'name','beyondFour'));
     }
     
     public function task_document()

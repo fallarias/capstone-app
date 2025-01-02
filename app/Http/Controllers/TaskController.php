@@ -43,6 +43,7 @@ class TaskController extends Controller
             'filename' => $file->getClientOriginalName(),
             'filepath' => $filePath,
             'size' => $file->getSize(),
+            'status' => 1,
             'type' => $file->getClientMimeType(),
         ]);
     

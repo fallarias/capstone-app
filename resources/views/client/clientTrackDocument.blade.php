@@ -176,9 +176,9 @@
             <div class="task-details">
                 <strong>{{ $taskItem->Office_name }}</strong><br>
                 Task: {{ $taskItem->Office_task }}<br>
-                Deadline: {{ $taskItem->New_alloted_time }} {{ $taskItem->New_alloted_time == 1 ? 'hour' : 'hours'}}<br>
+                Allotted Time: {{ $taskItem->New_alloted_time_display }}<br>
                 Status: {{ $taskItem->task_status }}<br>
-                {{$taskItem->accepted}}
+                {{ $taskItem->accepted }}
             </div>
         </div>
     @endforeach
