@@ -15,6 +15,9 @@ use App\Models\Audit;
 use App\Models\Requirements;
 use App\Events\UserLoggedIn;
 use App\Events\UserLoggedOut;
+use App\Events\AdminAccept;
+use App\Events\AdminEmail;
+use App\Events\AdminReject;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -128,6 +131,8 @@ class AuthController extends Controller
         $user = User::findOrFail($id);  
 
         $user->where('user_id', $id)->update(['status' => 'Accepted']);
+
+        event (new AdminAccept($user));
         return back()->with(['success'=> 'Status update to User Accepted.']);
     }
     public function user_reject($id){
@@ -135,6 +140,8 @@ class AuthController extends Controller
         $user = User::findOrFail($id);  
 
         $user->where('user_id', $id)->update(['status' => 'Not Accepted']);
+        event (new AdminReject($user));
+
         return back()->with(['success'=> 'Status update to User Not Accepted.']);
     }
 
@@ -258,7 +265,8 @@ class AuthController extends Controller
                     }
                 }
             }
-
+            $admin = User::where('account_type','Admin')->first();
+            event(new AdminEmail($admin));
             // Return the JSON response with transaction count
             return response()->json([
                 'transaction_count' => $audit->count(),

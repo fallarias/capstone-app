@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\StaffFinish;
+use App\Events\StaffGetAUdit;
+use App\Events\StaffGetChart;
+use App\Events\StaffQRScan;
+use App\Events\StaffRequirements;
+use App\Events\StaffResume;
+use App\Events\UserCHart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator; 
 use Illuminate\Support\Facades\Hash;
@@ -17,6 +24,7 @@ use App\Models\Create;
 use App\Models\Transaction;
 use App\Events\UserLoggedOut;
 use App\Events\UserLoggedIn;
+use App\Events\UserNotification;
 use App\Models\Audit;
 use Carbon\Carbon;
 use App\Models\Requirements;
@@ -231,6 +239,8 @@ class StaffApiController extends Controller
                 //     Log::warning('No matching Create entry found for taskId: ' . $taskId);
                 //     return response()->json(['message' => 'No more records to process.'], 404);
                 // }
+                $user = $userId->user_id;
+                event(new StaffQRScan($user));
                 return response()->json(['success' => 'Scanned Completed.'], 200);
             } else {
                 return response()->json(['message' => 'Cannot be scanned.'], 404);
@@ -322,7 +332,7 @@ class StaffApiController extends Controller
                             ->get();
 
         $message = NewOffice::all();
-        
+;
         // Return both sets of transactions
         return response()->json([
             'transactions' => $transactions,       // First update where 'start' and 'deadline' are initially set // Latest updates, sorted by most recent 'updated_at'
@@ -354,6 +364,8 @@ class StaffApiController extends Controller
             'user_id' => $transaction->user_id, // Associate with the user
             'department' => $department,
         ]);
+        $user = $transaction->user_id;
+        event(new StaffRequirements($user));
     
         return response()->json(['message' => 'Stop the transaction and sent message to the client']);
     }
@@ -426,7 +438,9 @@ class StaffApiController extends Controller
     
             return response()->json(['message' => 'Transaction resumed successfully'], 200);
         }
-    
+        $transaction = Transaction::where('transaction_id', $transaction_id)->first();
+        $user = $transaction->user_id;
+        event(new StaffResume($user));
         return response()->json(['message' => 'Transaction not found'], 404);
     }
 
@@ -555,6 +569,9 @@ class StaffApiController extends Controller
                     Log::warning('No matching Create entry found for taskId: ' . $transaction->task_id);
                     return response()->json(['message' => 'No more records to process.'], 404);
                 }
+                $user = $transaction->user_id;
+                event(new StaffFinish($user));
+
                 return response()->json(['success' => 'Task is set to finish.'], 200);
             } else {
                 return response()->json(['message' => 'Cannot be scanned.'], 404);
@@ -594,7 +611,8 @@ class StaffApiController extends Controller
         $completed = Audit::whereNotNull('finished')
                             ->where('office_name', $user->department)
                             ->count();
-    
+
+        event(new StaffGetChart($user));
         return response()->json([
             'pending' => $pending,
             'completed' => $completed,
@@ -610,7 +628,7 @@ class StaffApiController extends Controller
         $completed = Audit::whereNotNull('finished')
                             ->where('office_name', $user->department)
                             ->get();
-    
+        event(new StaffGetChart($user));
         return response()->json($completed);
     }
 
@@ -664,6 +682,9 @@ class StaffApiController extends Controller
                             ->where('office_name', $department)
                             ->get();
 
+        $user = $scanned->user_id;
+        event(new StaffGetAUdit($user));
+
         return response()->json($scanned);
 
     }
@@ -700,7 +721,8 @@ class StaffApiController extends Controller
             'days' => $days,
             'values' => $counts,
         ];
-
+        $user = $audits->user_id;
+        event (new UserCHart($user));
         return response()->json($data);
     }
 

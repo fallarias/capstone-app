@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AdminCreateHoliday;
 use Illuminate\Http\Request;
 use App\Models\Create;
 use App\Models\Supplier;
@@ -12,6 +13,8 @@ use App\Models\NewOffice;
 use App\Models\Task;
 use Illuminate\Support\Facades\Storage;
 use App\Events\AdminCreteTask;
+use App\Events\AdminGetEdit;
+use App\Events\AdminGetEdited;
 
 class TaskController extends Controller
 {
@@ -147,7 +150,10 @@ class TaskController extends Controller
         
 
         //app-bar
-        $admin = User::select('firstname','lastname','middlename')->where('account_type','Admin')->first();
+        $admin = User::select('firstname','lastname','middlename','user_id')->where('account_type','Admin')->first();
+        $UserId = session('user_id');
+        $user = User::find($UserId);
+        event(new AdminGetEdit($user));
         return view('admin.editTaskPage', compact('data',"task","data_task","offices",'admin'));
 
     }
@@ -285,6 +291,9 @@ class TaskController extends Controller
             }
         }
 
+        $UserId = session('user_id');
+        $user = User::find($UserId);
+        event(new AdminGetEdited($user));
         return redirect()->back()->with('success', 'Task is successfully edited.');
 
     }
@@ -339,7 +348,9 @@ class TaskController extends Controller
                 'description' => $attrs['desc'],
                 'holiday_date' => $attrs['date'],
             ]);
-
+            $UserId = session('user_id');
+            $user = User::find($UserId);
+            event (new AdminCreateHoliday($user));
             return redirect()->back()->with('success', 'Success.');
         }
     }

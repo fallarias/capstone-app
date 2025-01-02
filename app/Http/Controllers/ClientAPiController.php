@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\StaffScan;
+use App\Events\UserCHart;
+use App\Events\UserDownload;
+use App\Events\UserFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator; 
 use Illuminate\Support\Facades\Hash;
@@ -15,6 +19,9 @@ use App\Models\Create;
 use App\Models\Transaction;
 use App\Events\UserLoggedOut;
 use App\Events\UserLoggedIn;
+use App\Events\UserNotification;
+use App\Events\UserTaskName;
+use App\Events\UserTaskStep;
 use App\Models\Audit;
 use Carbon\Carbon;
 use App\Models\Requirements;
@@ -34,9 +41,10 @@ class ClientAPiController extends Controller
         $tasks = Task::whereIn('task_id', $taskIds)
                             ->where('status', 1)
                             ->get();
-
+        $user = $transactions->user_id;
         Log::info('Lists: ',['transactions' => $transactions, 'tasks' => $tasks]);
 
+        event(new UserTaskName($user));
 
         return response(['tasks' => $tasks, 'transactions' => $transactions], 200);
     }    
@@ -87,6 +95,8 @@ class ClientAPiController extends Controller
                 'task' => $createRecord->Office_task,
                 'transaction_id' => $transactionId, // <-- Ensure this is included
             ]);
+            $user = $attrs['user_id'];
+            event(new  UserDownload($user));
     
             Log::info('Audit created', ['audit' => $audit]);
     
@@ -109,6 +119,8 @@ class ClientAPiController extends Controller
         $transaction = Transaction::where('task_id', $taskId)
                                     ->where('status', 'ongoing')
                                     ->where('user_id', $userId)->first();
+
+        $user = $transaction->user_id;
 
         if (!$transaction) {
             return response()->json(['message' => 'Transaction not found'], 404);
@@ -214,14 +226,16 @@ class ClientAPiController extends Controller
             
         }
 
+        event(new UserTaskStep($user));
+
         return response()->json($task);
     }
 
 
     //Returning notification to the user/client
-    public function notification($user)
+    public function notification($users)
     {
-        $userId = (int) $user;
+        $userId = (int) $users;
     
         $UnfinishedAudits = Audit::with('user')->where('user_id', $userId)
                         // Uncomment if you only want finished audits
@@ -233,7 +247,7 @@ class ClientAPiController extends Controller
                         ->whereNotNull('finished')
                         ->get();
                         
-
+        $user = $finishedAudits->user_id;
         // Fetch all requirement messages for the user
         $requirementMessages = Requirements::with('user')->where('user_id', $userId)
                                             ->orderBy('stop_transaction', 'desc')  // Optional: Sort messages by stop_transaction
@@ -242,6 +256,7 @@ class ClientAPiController extends Controller
         // Prepare messages for response
         //$messages = $requirementMessages->pluck('message')->filter(); // Get only the messages, filter out any null values
 
+        event(new UserNotification($user));
         return response()->json([
             'UnfinishedAudits' => $UnfinishedAudits,
             'finishedAudits' => $finishedAudits,
@@ -268,7 +283,10 @@ class ClientAPiController extends Controller
         $completeDocuments = Transaction::where('status', 'finished')
                                         ->where('user_id', $id)
                                         ->count();
-    
+        $user = Audit::select('user_id')->where('user_id', $id)
+                        ->whereNotNull('finished')
+                        ->first();
+        event (new UserCHart($user));
         return response()->json([
             'availableDocuments' => $availableDocuments,
             'messages' => $messages,
@@ -303,7 +321,8 @@ class ClientAPiController extends Controller
                 Log::error('Error processing file: ' . $e->getMessage());
             }
         }
-    
+        $user = User::select('user_id')->where('account_type', 'Admin')->first();
+        event(new UserFile($user));
         return response(['files' => $files], 200);
     }
     
@@ -373,7 +392,8 @@ class ClientAPiController extends Controller
             'days' => $days,
             'values' => $counts,
         ];
-
+        $user = $transaction->user_id;
+        event (new UserCHart($user));
         return response()->json($data);
     }
 
@@ -381,7 +401,8 @@ class ClientAPiController extends Controller
     public function client_history($userId){
 
         $scanned = Transaction::all()->where('user_id', $userId);
-
+        $user = $userId;
+        event(new StaffScan($user));
         return response()->json($scanned);
 
     }

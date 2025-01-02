@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AdminGetCreate;
+use App\Events\AdminGetList;
+use App\Events\AdminGetTransaction;
+use App\Events\AdminGetComplted;
+use App\Events\AdminGetHoliday;
+use App\Events\AdminGetTrails;
 use App\Models\Audit;
 use Illuminate\Http\Request;
 use App\Models\Supplier;
@@ -26,8 +32,10 @@ class GetRouteController extends Controller
                         ->get();
         $name = Task::all();
          //app-bar
-         $admin = User::select('firstname','lastname','middlename')->where('account_type','Admin')->first();
-
+        $admin = User::select('firstname','lastname','middlename','user_id')->where('account_type','Admin')->first();
+        $UserId = session('user_id');
+        $user = User::find($UserId);
+        event(new AdminGetCreate($user));
         return view('admin.createTaskPage', compact('offices', 'name','admin'));
 
     }
@@ -51,7 +59,10 @@ class GetRouteController extends Controller
             }
         }
         //app-bar
-        $admin = User::select('firstname','lastname','middlename')->where('account_type','Admin')->first();
+        $admin = User::select('firstname','lastname','middlename','user_id')->where('account_type','Admin')->first();
+        $UserId = session('user_id');
+        $user = User::find($UserId);
+        event(new AdminGetList($user));
 
         return view('admin.listOfTaskPage', compact('data','admin'));
     }
@@ -81,7 +92,10 @@ class GetRouteController extends Controller
 
         $transactions = Transaction::with('user')->get();
         //app-bar
-        $admin = User::select('firstname','lastname','middlename')->where('account_type','Admin')->first();
+        $admin = User::select('firstname','lastname','middlename','user_id')->where('account_type','Admin')->first();
+        $UserId = session('user_id');
+        $user = User::find($UserId);
+        event(new AdminGetTransaction($user));
         return view('admin.transactionListPage', compact('transactions','admin'));
 
     }
@@ -90,7 +104,10 @@ class GetRouteController extends Controller
 
         $transactions = Transaction::with('user','task')->where('status', 'finished')->get();
         //app-bar
-        $admin = User::select('firstname','lastname','middlename')->where('account_type','Admin')->first();
+        $admin = User::select('firstname','lastname','middlename','user_id')->where('account_type','Admin')->first();
+        $UserId = session('user_id');
+        $user = User::find($UserId);
+        event(new AdminGetComplted($user));
         return view('admin.completedTaskListPage', compact('transactions','admin'));
 
     }
@@ -103,7 +120,11 @@ class GetRouteController extends Controller
         $holidays = Holiday::whereYear('holiday_date', $currentYear)->get();
         $this->populateHolidays(2024, 2030);
         //app-bar
-        $admin = User::select('firstname','lastname','middlename')->where('account_type','Admin')->first();
+        
+        $admin = User::select('firstname','lastname','middlename','user_id')->where('account_type','Admin')->first();
+        $UserId = session('user_id');
+        $user = User::find($UserId);
+        event(new AdminGetHoliday($user));
         return view('admin.createHoliday', compact('admin','holidays'));
 
     }
@@ -253,15 +274,17 @@ class GetRouteController extends Controller
         }
 
         //app-bar
-        $admin = User::select('firstname','lastname','middlename')->where('account_type','Admin')->first();
-
+        $admin = User::select('firstname','lastname','middlename','user_id')->where('account_type','Admin')->first();
+        $UserId = session('user_id');
+        $user = User::find($UserId);
+        event(new AdminGetTrails($user));
         // Return the view with the transaction data for a regular request
         return view('admin.auditTrails', ['transaction' => $audit,'admin'=>$admin]);
     }
 
     public function new_staff(){
     //app-bar
-    $admin = User::select('firstname','lastname','middlename')->where('account_type','Admin')->first();
+        $admin = User::select('firstname','lastname','middlename')->where('account_type','Admin')->first();
         return view('admin.newOfficeAccount','admin');
     }
 }    
