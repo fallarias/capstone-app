@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\StaffScan;
+use App\Events\UserDownload;
+use App\Events\UserFile;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Storage;
@@ -12,6 +15,9 @@ use App\Models\Task;
 use App\Models\Create;
 use App\Models\Transaction;
 use App\Events\UserLoggedOut;
+use App\Events\UserNotification;
+use App\Events\UserTaskName;
+use App\Events\UserTaskStep;
 use App\Models\Audit;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -77,6 +83,7 @@ class ClientController extends Controller
 
     }
 
+    //client homepage
     public function homepage(){
 
         $UserId = session('user_id');
@@ -103,23 +110,24 @@ class ClientController extends Controller
         
     }
     
+    //client notification
     public function notification()
     {
         $UserId = session('user_id');
     
-        $finishedAudits = Audit::with('user')->where('user_id', $UserId)
+        $finishedAudits = Audit::with(['user','staff'])->where('user_id', $UserId)
                         // Uncomment if you only want finished audits
-                        ->whereNotNull('finished')
+                        //->whereNotNull('finished')
                         ->get();
 
-        $auditEntry = Audit::with('user')->where('user_id', $UserId)
+        $auditEntry = Audit::with(['user','staff'])->where('user_id', $UserId)
                         // Uncomment if you only want finished audits
                         ->whereNotNull('start')
                         ->whereRaw("TIME(start) >= ?", ['16:00:00'])
                         ->get();
 
         // Fetch all requirement messages for the user
-        $requirementMessages = Requirements::with('user')->where('user_id', $UserId)
+        $requirementMessages = Requirements::with(['user','staff'])->where('user_id', $UserId)
                                             ->orderBy('stop_transaction', 'desc')  // Optional: Sort messages by stop_transaction
                                             ->get();  // Get all messages
 
@@ -128,11 +136,13 @@ class ClientController extends Controller
         }                                    
         // Prepare messages for response
         //$messages = $requirementMessages->pluck('message')->filter(); // Get only the messages, filter out any null values
+        $user = $user = User::find($UserId);
+        event(new UserNotification($user));
         return view('client.clientNotfication', compact('finishedAudits','requirementMessages','auditEntry'));
 
     }
 
-
+    //returning the name of the task
     public function template()
     {
         $files = Task::where('status', 1)->get();
@@ -149,7 +159,8 @@ class ClientController extends Controller
                 $file->wordUrl = null;
             }
         }
-    
+        $user = User::where('account_type', 'Admin')->first();
+        event(new UserFile($user));
         return view('client.clientTemplate', compact('files'));
     }
 
@@ -168,6 +179,8 @@ class ClientController extends Controller
                     ->whereRaw("TIME(start) >= ?", ['17:00:00'])
                     ->get();
     
+        $user = User::find($UserId);
+        
         if (!$transaction) {
             return response()->json(['message' => 'Transaction not found'], 404);
         }
@@ -271,10 +284,11 @@ class ClientController extends Controller
             }
             
         }
-    
+        event(new UserTaskStep($user));
         return view('client.clientTrackDocument', compact('task', 'name','beyondFour'));
     }
     
+    //returning transaction with status of ongoing only
     public function task_document()
     {
         $UserId = session('user_id');
@@ -294,11 +308,13 @@ class ClientController extends Controller
 
         Log::info($tasks);
 
+        $user = User::find($UserId);
 
+        event(new UserTaskName($user));
         return view('client.clientTaskList',compact('tasks'));
     }
 
-
+    //returning all transactions ongoing and finished
     public function transaction_history(){
 
         $UserId = session('user_id');
@@ -309,10 +325,13 @@ class ClientController extends Controller
                         ->select('task.*', 'tbl_transaction.transaction_id', 'tbl_transaction.status')
                         ->get();
 
+        $user = User::find($UserId);
+        event(new StaffScan($user));
         return view('client.clientTrasactionHistory', compact('tasks'));
             
     }
 
+    //donwloading the word or docx to mobile or laptop web browser
     public function transaction($Id)
     {
         $UserId = session('user_id');
@@ -366,7 +385,10 @@ class ClientController extends Controller
             ]);
     
             Log::info('Audit created', ['audit' => $audit]);
-    
+
+            $user = User::find($UserId);
+            event(new  UserDownload($user));
+
             // Generate the QR code
             $qrCodeData = json_encode(['userId' => (string) $UserId, 'taskId' => (string) $Id]);
             $qrCode = QrCode::format('png')->size(300)->generate($qrCodeData);
@@ -420,7 +442,7 @@ class ClientController extends Controller
         }
     }
         
-    
+    //logout logic
     public function logout(Request $request): RedirectResponse {
 
         // Get the authenticated user before logging out

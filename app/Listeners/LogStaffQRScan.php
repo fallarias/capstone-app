@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\StaffScan;
+use App\Events\StaffQRScan;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Models\Logs;
@@ -19,7 +19,7 @@ class LogStaffQRScan
     /**
      * Handle the event.
      */
-    public function handle(StaffScan $event)
+    public function handle(StaffQRScan $event)
     {
         Logs::create([
             'action' => 'Scan QR CODE',

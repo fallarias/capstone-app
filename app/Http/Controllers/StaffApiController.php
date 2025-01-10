@@ -36,6 +36,7 @@ class StaffApiController extends Controller
         return User::all();
     }
 
+    //staff registration in mobile
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -68,7 +69,7 @@ class StaffApiController extends Controller
             'token' => $token->plainTextToken,
         ]);
     }
-
+    //staff login logic
     public function login(Request $request)
     {
         $fields = $request->validate([
@@ -97,7 +98,7 @@ class StaffApiController extends Controller
 
         
     }
-
+    //staff logout logic    
     public function logout(Request $request)
     {
         $user = $request->user();
@@ -110,10 +111,10 @@ class StaffApiController extends Controller
     }
 
     //scanning the qr code
-    public function scanned_data(Request $request, $department)
+    public function scanned_data(Request $request, $department, $user_id)
     {
         Log::info('Received data:', $request->all());
-    
+        
         $request->validate([
             'scanned_data' => 'required|array',
             'scanned_data.*.userId' => 'required|string',
@@ -173,11 +174,18 @@ class StaffApiController extends Controller
                 $startTime = $this->calculateStartTime();
                 $adjustedDeadline = $this->calculateAdjustedDeadline($startTime, (int)$currentCreateEntry->New_alloted_time * 60); // Convert hours to minutes
 
+                $user = User::find($user_id);
+
+                Log::info($user);
+
+                event (new StaffQRScan($user));
+
                 Audit::where('transaction_id', $transaction->transaction_id)
                     ->where('user_id', $userId)
                     ->where('task_id', $taskId)
                     ->where('office_name', $department)
                     ->update([
+                        'staff_id' => $user_id,
                         'start' => $startTime,
                         'deadline' => $adjustedDeadline,
                     ]);
@@ -239,8 +247,7 @@ class StaffApiController extends Controller
                 //     Log::warning('No matching Create entry found for taskId: ' . $taskId);
                 //     return response()->json(['message' => 'No more records to process.'], 404);
                 // }
-                $user = $userId->user_id;
-                event(new StaffQRScan($user));
+                
                 return response()->json(['success' => 'Scanned Completed.'], 200);
             } else {
                 return response()->json(['message' => 'Cannot be scanned.'], 404);
@@ -331,8 +338,8 @@ class StaffApiController extends Controller
                             ->whereNotNull('deadline')
                             ->get();
 
-        $message = NewOffice::all();
-;
+        $message = NewOffice::with('user')->get();
+
         // Return both sets of transactions
         return response()->json([
             'transactions' => $transactions,       // First update where 'start' and 'deadline' are initially set // Latest updates, sorted by most recent 'updated_at'
@@ -341,7 +348,7 @@ class StaffApiController extends Controller
     }
 
     //Returning notification to the user/client with lack of requirements
-    public function lack_Requirements(Request $request, $transaction_id, $department)
+    public function lack_Requirements(Request $request, $transaction_id, $department, $user_id)
     {
         $attrs = $request->validate([
             'message' => 'required|string',
@@ -364,14 +371,14 @@ class StaffApiController extends Controller
             'user_id' => $transaction->user_id, // Associate with the user
             'department' => $department,
         ]);
-        $user = $transaction->user_id;
+        $user = User::find($user_id);
         event(new StaffRequirements($user));
     
         return response()->json(['message' => 'Stop the transaction and sent message to the client']);
     }
     
     //Resuming the transaction
-    public function resume_transaction($transaction_id, $department)
+    public function resume_transaction($transaction_id, $department, $user_id)
     {
         // Find the requirement entry based on transaction_id and department
         $requirement = Requirements::where('transaction_id', $transaction_id)
@@ -431,21 +438,22 @@ class StaffApiController extends Controller
                 'start' => $newAuditStart,
                 'deadline' => $newAuditDeadline,
             ]);
-    
+
+            $user = User::find($user_id);
+            event(new StaffResume($user));
+
             // Debug: Log the updated deadlines
             Log::info('Updated Transaction Deadline:', ['deadline' => $newTransactionDeadline]);
             Log::info('Updated Audit Deadline:', ['deadline' => $newAuditDeadline]);
     
             return response()->json(['message' => 'Transaction resumed successfully'], 200);
         }
-        $transaction = Transaction::where('transaction_id', $transaction_id)->first();
-        $user = $transaction->user_id;
-        event(new StaffResume($user));
+        //$transaction = Transaction::where('transaction_id', $transaction_id)->first();
         return response()->json(['message' => 'Transaction not found'], 404);
     }
 
     //finish the transaction
-    public function finish_transaction(Request $request, $transaction_id, $department, $audit_id)
+    public function finish_transaction(Request $request, $transaction_id, $department, $audit_id, $user_id)
     {
         // Log::info('Received data:', $request->all());
     
@@ -569,7 +577,7 @@ class StaffApiController extends Controller
                     Log::warning('No matching Create entry found for taskId: ' . $transaction->task_id);
                     return response()->json(['message' => 'No more records to process.'], 404);
                 }
-                $user = $transaction->user_id;
+                $user = User::find($user_id);
                 event(new StaffFinish($user));
 
                 return response()->json(['success' => 'Task is set to finish.'], 200);
@@ -602,14 +610,16 @@ class StaffApiController extends Controller
     public function staff_chart($userId)
     {
 
-        $user = User::where('user_id', $userId)->first();
+        $user = User::find($userId);
         // Fetch data from the database as needed
         $pending = Audit::whereNull('finished')
                             ->where('office_name', $user->department)
+                            ->where('staff_id', $user->user_id)
                             ->count();
     
         $completed = Audit::whereNotNull('finished')
                             ->where('office_name', $user->department)
+                            ->where('staff_id', $user->user_id)
                             ->count();
 
         event(new StaffGetChart($user));
@@ -623,7 +633,7 @@ class StaffApiController extends Controller
     public function staff_table($userId)
     {
 
-        $user = User::where('user_id', $userId)->first();
+        $user = User::find($userId);
     
         $completed = Audit::whereNotNull('finished')
                             ->where('office_name', $user->department)
@@ -632,8 +642,8 @@ class StaffApiController extends Controller
         return response()->json($completed);
     }
 
-    //Returning notification to the user/client with lack of requirements
-    public function message_office(Request $request, $department)
+    //messaging another office
+    public function message_office(Request $request, $department, $user_id)
     {
         $attrs = $request->validate([
             'message' => 'required|string',
@@ -651,6 +661,7 @@ class StaffApiController extends Controller
     
         // Create the message and stop the transaction
         NewOffice::create([
+            'user_id' => $user_id,
             'department' =>  $department,
             'message' => $attrs['message'],
             // 'stop_transaction' => now(),
@@ -682,8 +693,11 @@ class StaffApiController extends Controller
                             ->where('office_name', $department)
                             ->get();
 
-        $user = $scanned->user_id;
-        event(new StaffGetAUdit($user));
+        $user = User::where('account_type', 'Admin')->first();
+
+        if ($user) {
+            event(new UserChart($user));
+        }
 
         return response()->json($scanned);
 
@@ -717,12 +731,18 @@ class StaffApiController extends Controller
             }
         }
 
+        
+        $user = User::where('account_type', 'Admin')->first();
+
+        if ($user) {
+            event(new UserChart($user));
+        }
+        
         $data = [
             'days' => $days,
             'values' => $counts,
         ];
-        $user = $audits->user_id;
-        event (new UserCHart($user));
+        
         return response()->json($data);
     }
 

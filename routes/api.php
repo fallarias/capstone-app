@@ -24,14 +24,14 @@ use App\Http\Controllers\ClientApiController;
     Route::group(['middleware'=> ['auth:sanctum']], function(){
 
         Route::post('/logout', 'logout');
-        Route::post('/scanned_data/{department}', 'scanned_data');
+        Route::post('/scanned_data/{department}/{user_id}', 'scanned_data');
         Route::get('/staff_notification', 'staff_notification');
-        Route::post('/lack_requirement/{id}/{department}', 'lack_Requirements');
-        Route::post('/resume_transaction/{id}/{department}', 'resume_transaction');
+        Route::post('/lack_requirement/{id}/{department}/{userId}', 'lack_Requirements');
+        Route::post('/resume_transaction/{id}/{department}/{userId}', 'resume_transaction');
         Route::get('/check_resume_transaction/{id}/{department}', 'check_resume_transaction');
-        Route::post('/finish_transaction/{transaction_id}/{department}/{audit_id}', 'finish_transaction');
+        Route::post('/finish_transaction/{transaction_id}/{department}/{audit_id}/{userId}', 'finish_transaction');
         Route::get('/staff_chart/{userId}', 'staff_chart');
-        Route::post('/message_office/{department}', 'message_office');
+        Route::post('/message_office/{department}/{userId}', 'message_office');
         Route::get('/all_office/{department}', 'all_office');
         Route::get('/staff_scanned_history/{department}', 'staff_scanned_history');
         Route::get('/line_chart/{department}', 'line_chart');

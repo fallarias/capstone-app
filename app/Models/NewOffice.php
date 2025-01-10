@@ -13,7 +13,8 @@ class NewOffice extends Model
 
         'target_department',
         'message',
-        'department'
+        'department',
+        'user_id',
 
      ];
     protected $table = 'offices';

@@ -16,6 +16,7 @@ class Audit extends Model
         'deadline',
         'user_id',
         'task_id',
+        'staff_id',
         'transaction_id',
         'email_reminder_sent',
         'task'
@@ -26,5 +27,9 @@ class Audit extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id'); // Adjust 'user_id' if your column name differs
+    }
+    public function staff()
+    {
+        return $this->belongsTo(User::class, 'staff_id', 'user_id'); // User linked to staff_id
     }
 }
