@@ -57,6 +57,8 @@ Route::controller(ClientApiController::class)->group(function () {
         Route::get('/client_chart/{userId}', 'client_chart');
         Route::get('/bar_chart/{userId}', 'bar_chart');
         Route::get('/client_history/{userId}', 'client_history');
+        Route::get('/rate_staff/{transacId}', 'rate_staff');
+        Route::post('/update_staff_rating', 'update_staff_rate');
     });
 });
 

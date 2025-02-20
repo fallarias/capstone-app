@@ -25,6 +25,7 @@ use App\Events\UserTaskStep;
 use App\Models\Audit;
 use Carbon\Carbon;
 use App\Models\Requirements;
+use App\Models\Rate;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\Writer\PDF;
 use Exception;
@@ -393,7 +394,7 @@ class ClientAPiController extends Controller
         return response()->json($data);
     }
 
-        //Returning all staff scan
+    //Returning all staff scan
     public function client_history($userId){
 
         $scanned = Transaction::all()->where('user_id', $userId);
@@ -402,4 +403,34 @@ class ClientAPiController extends Controller
         return response()->json($scanned);
 
     }
+
+    //returning all staf for rating
+    public function rate_staff($transacId){
+
+        $rate = Rate::with('user')->where('transaction_id', $transacId)->get();
+        Log::info($rate);
+        return response()->json($rate);
+    }
+
+    //updating the rating of the staff per scan
+    public function update_staff_rate(Request $request){
+        $attrs = $request->validate([
+            'ratings' => 'required|array|min:1',
+            'ratings.*.user_id' => 'required|integer|exists:users,user_id',
+            'ratings.*.score' => 'required|integer|min:1|max:5',
+        ]);
+    
+        try {
+            foreach ($request->ratings as $ratingData) {
+                Rate::updateOrCreate(
+                    ['user_id' => $ratingData['user_id']],
+                    ['score' => $ratingData['score']]
+                );
+            }
+            return response()->json(['message' => 'Ratings updated successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    
 }

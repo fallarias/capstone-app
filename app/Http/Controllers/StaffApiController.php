@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\Task;
+use App\Models\Rate;
 use App\Models\Holiday;
 use App\Models\NewOffice;
 use App\Models\Create;
@@ -189,6 +190,11 @@ class StaffApiController extends Controller
                         'start' => $startTime,
                         'deadline' => $adjustedDeadline,
                     ]);
+                
+                Rate::create([
+                    'user_id' => $user_id,
+                    'transaction_id' => $transaction->transaction_id,
+                ]);
 
                 Transaction::where('transaction_id', $transaction->transaction_id)
                     ->where('task_id', $taskId)
@@ -196,6 +202,7 @@ class StaffApiController extends Controller
                         'deadline' => $adjustedDeadline,
                     ]);
 
+                
                 // Fetch the current index audit entry based on the incremented Office_Done
                 // $currentIndex = $transaction->Office_Done - 1; // Adjust for zero-based index
                 // $currentAudit = Audit::where('user_id', $transaction->user_id)
