@@ -173,7 +173,7 @@ class StaffApiController extends Controller
                 //$transaction->increment('Office_Done');
                 
                 $startTime = $this->calculateStartTime();
-                $adjustedDeadline = $this->calculateAdjustedDeadline($startTime, (int)$currentCreateEntry->New_alloted_time * 60); // Convert hours to minutes
+                $adjustedDeadline = $this->calculateAdjustedDeadline($startTime, (int)$currentCreateEntry->New_alloted_time); // Convert hours to minutes
 
                 $user = User::find($user_id);
 
