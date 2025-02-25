@@ -19,6 +19,7 @@ use App\Events\UserNotification;
 use App\Events\UserTaskName;
 use App\Events\UserTaskStep;
 use App\Models\Audit;
+use App\Models\Rate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Requirements;
@@ -94,7 +95,8 @@ class ClientController extends Controller
                             ->whereNotNull('finished')
                             ->count();
         $beyond = Audit::where('user_id', $UserId)
-                            ->whereRaw("TIME(start) >= ?", ['16:00:00'])
+                            //->whereRaw("TIME(start) >= ?", ['16:00:00'])
+                            ->whereNull('finished')
                             ->count();
 
         $requerements = Requirements::where('user_id', $UserId)->count();
@@ -458,6 +460,53 @@ class ClientController extends Controller
         $request->session()->regenerateToken();
     
         return redirect('/');
+    }
+
+    //rate page
+    public function rate($transaction_id){
+        
+        $transaction = Audit::with(['user','staff'])->where('transaction_id', $transaction_id)->get(); 
+        return view('client.clientRatingPage', compact('transaction'));
+    }
+
+    //save client review
+    public function review(Request $request)
+    {
+        $request->validate([
+            'ratings' => 'required|array',
+            'ratings.*' => 'required|integer|min:1|max:5', // Each rating must be an integer between 1 and 5
+            'staff_ids' => 'required|array',
+            'staff_ids.*' => 'required|exists:users,user_id', // Ensure each staff_id exists in the users table
+            'trans_ids' => 'required|array',
+            'trans_ids.*' => 'required|integer', 
+        ], [
+            'ratings.required' => 'Ratings are required.',
+            'ratings.*.required' => 'Each rating is required.',
+            'ratings.*.integer' => 'Each rating must be a number.',
+            'ratings.*.min' => 'Rating must be at least 1.',
+            'ratings.*.max' => 'Rating cannot be more than 5.',
+            'staff_ids.required' => 'Staff IDs are required.',
+            'staff_ids.*.exists' => 'Selected staff member does not exist.',
+        ]);
+
+        $ratings = $request->input('ratings');
+        $staffIds = $request->input('staff_ids');
+        $trans_id = $request->input('trans_ids');
+
+        foreach ($staffIds as $index => $staffId) {
+            $rating = $ratings[$staffId] ?? null; // Get rating at the same index
+            $transactionId = $trans_id[$index] ?? null; // Get transaction ID at the same index
+
+            if ($rating !== null && $transactionId !== null) {
+                // Store the review in the database
+                Rate::updateOrCreate(
+                    ['user_id' => $staffId, 'transaction_id' => $transactionId], // Search criteria
+                    ['score' => $rating] // Data to update/insert
+                );
+            }
+        }
+
+        return back()->with('success', 'Review submitted successfully.');
     }
 
 }

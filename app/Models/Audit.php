@@ -32,4 +32,6 @@ class Audit extends Model
     {
         return $this->belongsTo(User::class, 'staff_id', 'user_id'); // User linked to staff_id
     }
+    
+
 }

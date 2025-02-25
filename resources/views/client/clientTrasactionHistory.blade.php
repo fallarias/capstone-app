@@ -129,94 +129,166 @@
             flex-wrap: wrap;
             justify-content: center;
         }
+        .filter-dropdown{
+            width: 300px;
+            margin-left: 820px;
+            margin-top: 80px;
+            margin-bottom: -130px;
+        }
 
     </style>
 </head>
 <body>
     <div class="app-bar">
-        <!--
-        <div class="search-container">
-            <form class="form-inline" action="/search" method="GET">
-                <input type="text" name="query" class="form-control mr-sm-2" placeholder="Search" aria-label="Search" style="margin-left:1100px">
-                <button class="btn custom-search-button" type="submit">
-                    <i class="fas fa-search" style="font-size: 20px;"></i> Search
-                </button>
-            </form>
-        </div>
-    -->
+
     </div>
+    
 
     @include('components.clientDrawer')
 
-    <div style="display: flex; justify-content: center; margin-top: 40px; width:1000px; margin-left:400px">
+    <div class="filter-dropdown">
+        <select id="filterStatus" class="form-control">
+            <option value="all">All</option>
+            <option value="complete">Complete</option>
+            <option value="ongoing">Ongoing</option>
+            <option value="failed">Failed</option>
+        </select>
+    </div>
+
+
+    <h2 style="margin-left: 300px;margin-top: 20px">Document Request</h2>
+
+
+    <div style="display: flex; justify-content: center; gap: 30px; align-items: center; margin-top: 40px;">
+    <!-- Start Date Filter -->
+    <div style="display: flex; flex-direction: column; align-items: center; margin-left:-350px">
+        <label for="startDate" style="font-weight: bold;">From:</label>
+        <input type="date" id="startDate" class="form-control" style="width: 180px; margin-top:-40px ">
+    </div>
+
+    <!-- End Date Filter -->
+    <div style="display: flex; flex-direction: column; align-items: center; margin-left:-180px">
+        <label for="endDate" style="font-weight: bold;">To:</label>
+        <input type="date" id="endDate" class="form-control" style="width: 180px; margin-top:-40px">
+    </div>
+</div>
+
+
+    <div style="display: flex; justify-content: center; margin-top: -20px; width:1000px; margin-left:400px">
     <div class="container">
-        <h2>Document Request</h2>
         @if ($tasks->isEmpty())
             <div class="alert alert-info text-center">
                 No tasks history available.
             </div>
         @else
             <table class="table mt-4" style="background-color: rgba(128, 128, 128, 0.1); border: 2px solid black; border-radius: 8px; overflow: hidden; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);">
-                <thead style="background-color: rgba(128, 128, 128, 0.2); border-bottom: 2px solid black;">
-                    <tr>
-                        <th style="border-right: 1px solid black;">ID</th>
-                        <th style="border-right: 1px solid black;">Transaction ID</th>
-                        <th style="border-right: 1px solid black;">Transaction Name</th>
-                        <th>Message</th>
-                        <th>Status</th>
+            <thead style="background-color: rgba(128, 128, 128, 0.2); border-bottom: 2px solid black;">
+                <tr>
+                    <th style="border-right: 1px solid black;">Date</th>
+                    <th style="border-right: 1px solid black;">Time</th>
+                    <th style="border-right: 1px solid black;">Type</th>
+                    <th>Status</th>
+                    <th id="ratingsHeader" style="display: none;">Ratings</th> <!-- Hidden by default -->
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach ($tasks as $list)
+                    <tr style="background-color: white; border-top: 1px solid black; cursor: pointer;"
+                        onmouseover="this.style.backgroundColor='black'; this.style.color='limegreen';"
+                        onmouseout="this.style.backgroundColor='rgba(128, 128, 128, 0.1)'; this.style.color='';">
+                        <td>{{$loop->iteration}}</td>
+                        <td>{{$list->transaction_id}}</td>
+                        <td style="border-right: 1px solid black;">{{ $list->name }}</td>
+                        <td>{{$list->status}}</td>
+                        <td class="ratingsCell" style="display: none;">
+                            <form action="{{ route('client.clientRatingPage', ['transaction_id' => $list->transaction_id]) }}" method="get" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-sm" style="background-color: #00b894; border-radius:4px;cursor: pointer; font-size: 16px; color: black;">Rate us</button>
+                            </form>
+                        </td> <!-- Hidden by default -->
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach ($tasks as $list)
-                        <tr style="background-color: white; border-top: 1px solid black; cursor: pointer;"
-                            onmouseover="this.style.backgroundColor='black'; this.style.color='limegreen';"
-                            onmouseout="this.style.backgroundColor='rgba(128, 128, 128, 0.1)'; this.style.color='';">
-                            <td>{{$loop->iteration}}</td>
-                            <td>{{$list->transaction_id}}</td>
-                            <td style="border-right: 1px solid black;">{{ $list->name }}</td>
-                            <td>
-                                <form action="{{ route('client.clientTrackDocument', ['task_id' => $list->task_id,'transaction_id'=>$list->transaction_id]) }}" method="get" class="d-inline">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm" style="background-color: #00b894; color: black;">View Message</button>
-                                </form>
-                            </td>
-                            <td>{{$list->status}}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
+                @endforeach
+            </tbody>
+
             </table>
         @endif
     </div>
 </div>
 
 
+<script>
+    document.getElementById("filterStatus").addEventListener("change", function () {
+        let filterValue = this.value.toLowerCase();
+        let rows = document.querySelectorAll("tbody tr");
+        let ratingsHeader = document.getElementById("ratingsHeader");
+        let ratingsCells = document.querySelectorAll(".ratingsCell");
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const images = [
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcSUmrliao3jjDaQdeMjX5_ezS6F6eBqZP0A&s',
-                'https://i.ebayimg.com/images/g/fj0AAOSwxZJkLddI/s-l1200.jpg',
-                'https://hentaiheart.com/wp-content/uploads/2023/08/comedy-hentai-anime-joshi-luck.jpg',
-                'https://ih1.redbubble.net/image.4517307491.9725/raf,360x360,075,t,fafafa:ca443f4786.jpg',
-                'https://rukminim2.flixcart.com/image/850/1000/xif0q/elder-halloween-costume/r/y/u/l-realistic-scary-human-face-mask-funny-costume-party-mask-for-original-imaghj5xxwd9mhmh.jpeg?q=90&crop=false',
-                'https://meme-dev-v2.s3.eu-west-1.amazonaws.com/uploads/2022/11/25/1669338080865-3607461/IMG_20201123_025741.jpg.jpg',
-                'https://image.winudf.com/v2/image1/Y29tLmthbmZvLmZ1bm55cHJvZmlsZXBpY3R1cmVfc2NyZWVuXzJfMTY3NzM3MzY0Nl8wMDg/screen-2.jpg?fakeurl=1&type=.jpg',
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRj1hsbdFpX-_53EQpzkMTozDpQjXStMkeo6JeAcTZYVNadFbpUw9Dua7ocyJS4O2RPwm0&usqp=CAU',
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1ouWskod9W33FF_u766j5z-NxJKTJFnz5bcZJ1yst3XOgMOprsEek2j5bNg07vNpxhHw&usqp=CAU',
-                'https://mrwallpaper.com/images/hd/funny-anime-goku-meme-face-ty7gabr1q0lvytpd.jpg',
-                'https://cdn.myanimelist.net/s/common/uploaded_files/1482966849-4adc013b44561dbfd625e8d81364963c.jpeg',
-                'https://pbs.twimg.com/media/EW3PoI1WoAIc0Rd.jpg',
-                'https://ih1.redbubble.net/image.4517307491.9725/raf,360x360,075,t,fafafa:ca443f4786.jpg',
-                'https://media.tenor.com/AzD2jWG_vVwAAAAM/confused-barakamon.gif',
-            ];
+        if (filterValue === "all") {
+            ratingsHeader.style.display = "";
+            ratingsCells.forEach(cell => cell.style.display = "");
+        } else {
+            ratingsHeader.style.display = "none";
+            ratingsCells.forEach(cell => cell.style.display = "none");
+        }
 
-            const cardImages = document.querySelectorAll('.random-image');
+        rows.forEach(row => {
+            let statusCell = row.querySelector("td:last-child");
+            let status = statusCell.textContent.trim().toLowerCase();
 
-            cardImages.forEach(image => {
-                const randomIndex = Math.floor(Math.random() * images.length);
-                image.src = images[randomIndex];
-            });
+            if (filterValue === "all" || status === filterValue) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
         });
-    </script>
+    });
+</script>
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const statusFilter = document.getElementById("statusFilter");
+        const startDateFilter = document.getElementById("startDate");
+        const endDateFilter = document.getElementById("endDate");
+        const rows = document.querySelectorAll(".task-row");
+
+        function filterTable() {
+            const selectedStatus = statusFilter.value;
+            const startDate = startDateFilter.value ? new Date(startDateFilter.value) : null;
+            const endDate = endDateFilter.value ? new Date(endDateFilter.value) : null;
+
+            rows.forEach(row => {
+                const rowStatus = row.getAttribute("data-status");
+                const rowDate = new Date(row.getAttribute("data-date"));
+                let showRow = true;
+
+                // Filter by status
+                if (selectedStatus !== "all" && rowStatus !== selectedStatus) {
+                    showRow = false;
+                }
+
+                // Filter by date range
+                if (startDate && rowDate < startDate) {
+                    showRow = false;
+                }
+                if (endDate && rowDate > endDate) {
+                    showRow = false;
+                }
+
+                row.style.display = showRow ? "" : "none";
+            });
+        }
+
+        statusFilter.addEventListener("change", filterTable);
+        startDateFilter.addEventListener("input", filterTable);
+        endDateFilter.addEventListener("input", filterTable);
+    });
+</script>
+
+
 </body>
 </html>
+
