@@ -313,6 +313,13 @@ class ClientAPiController extends Controller
                 ])) {
                     // If the file is a Word document
                     $file->pdfUrl = $this->convertDocxToPdf($file->filepath);
+                } elseif (in_array($file->type, [
+                    'application/vnd.ms-excel', // .xls (older Excel format)
+                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx (newer Excel format)
+                ])) {
+                    // If the file is an Excel document
+                    // Convert to PDF if needed or handle it differently
+                    $file->pdfUrl = url(Storage::url($file->filepath));
                 }
             } catch (Exception $e) {
                 Log::error('Error processing file: ' . $e->getMessage());
