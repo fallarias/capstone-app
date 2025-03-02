@@ -397,7 +397,7 @@ class ClientAPiController extends Controller
     //Returning all staff scan
     public function client_history($userId){
 
-        $scanned = Transaction::all()->where('user_id', $userId);
+        $scanned = Transaction::with('task')->where('user_id', $userId)->get();
         $user = User::find($userId);
         event(new StaffScan($user));
         return response()->json($scanned);

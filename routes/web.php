@@ -103,6 +103,7 @@ Route::group(['middleware'=> ['auth:sanctum']], function() {
             Route::get('/client/track/{task_id}/{transaction_id}', 'track_document')->name('client.clientTrackDocument');
             Route::get('/client/transaction/', 'transaction_history')->name('client.clientTrasactionHistory');
             Route::post('/client/download/{id}', 'transaction')->name('client.clientTransaction');
+            Route::get('/client/task/list/', 'task_document')->name('client.clientTaskList');
             Route::get('/client/rate_staff/{transaction_id}', 'rate')->name('client.clientRatingPage');
             Route::post('/client/review', 'review')->name('client.clientReview');
         });
