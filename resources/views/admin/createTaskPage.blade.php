@@ -281,7 +281,7 @@
             <label for="Name">Name:</label>
             <input type="text" name="task_name" required value="{{old('task_name')}}">
             <label for="filepath">Upload File (PDF):</label>
-            <input type="file" name="filepath" accept=".doc,.docx" required>
+            <input type="file" name="filepath" accept=".doc,.docx,.xlsx" required>
             <div id="form-container" >
                 <!-- Plus icon to add more forms -->
                 <i class="plus-icon" id="add-form">+</i>

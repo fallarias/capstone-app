@@ -26,6 +26,8 @@ use App\Models\Requirements;
 use Jenssegers\Agent\Agent;
 use ZipArchive;
 use Carbon\Carbon;
+use App\Exports\TaskExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class ClientController extends Controller
@@ -346,9 +348,9 @@ class ClientController extends Controller
             return response()->json(['message' => 'PDF file not found'], 404);
         }
     
-        $pdfFilePath = storage_path('app/' . $task->filepath);
+        $FilePath = storage_path('app/' . $task->filepath);
     
-        if (!file_exists($pdfFilePath)) {
+        if (!file_exists($FilePath)) {
             return response()->json(['message' => 'PDF file not found'], 404);
         }
     
@@ -403,24 +405,52 @@ class ClientController extends Controller
             if ($agent->isMobile()) {
                 // Mobile device: Generate and serve ZIP containing QR code and PDF
                 // Save QR Code to a temporary location
+
+                //word download
+                // $qrCodePath = storage_path("app/public/qr_code_task_{$Id}.png");
+                // file_put_contents($qrCodePath, $qrCode);
+                // Log::info('QR code saved for mobile at:', ['path' => $qrCodePath]);
+    
+                // // Create a ZIP file to bundle both the QR code and the PDF
+                // $zipPath = storage_path("app/public/transaction_{$Id}.zip");
+                // $zip = new ZipArchive;
+    
+                // if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+                //     $zip->addFile($FilePath, $task->filename); // Add PDF to ZIP
+                //     $zip->addFile($qrCodePath, "qr_code_task_{$Id}.png"); // Add QR Code to ZIP
+                //     $zip->close();
+                // } else {
+                //     return response()->json(['message' => 'Failed to create ZIP archive'], 500);
+                // }
+    
+                // // Serve the ZIP file for download
+                // return response()->download($zipPath)->deleteFileAfterSend(true);
+
+                //EXCEL download
+                // Save QR Code to temporary file
                 $qrCodePath = storage_path("app/public/qr_code_task_{$Id}.png");
                 file_put_contents($qrCodePath, $qrCode);
                 Log::info('QR code saved for mobile at:', ['path' => $qrCodePath]);
-    
-                // Create a ZIP file to bundle both the QR code and the PDF
+
+                // Generate Excel file and save to temporary file
+                $excelFilePath = storage_path("app/public/task_data_{$Id}.xlsx");
+                Excel::store(new TaskExport($Id), "public/task_data_{$Id}.xlsx");
+                Log::info('Excel file generated at:', ['path' => $excelFilePath]);
+
+                // Create ZIP file
                 $zipPath = storage_path("app/public/transaction_{$Id}.zip");
                 $zip = new ZipArchive;
-    
+
                 if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
-                    $zip->addFile($pdfFilePath, $task->filename); // Add PDF to ZIP
-                    $zip->addFile($qrCodePath, "qr_code_task_{$Id}.png"); // Add QR Code to ZIP
+                    $zip->addFile($qrCodePath, "qr_code_task_{$Id}.png");
+                    $zip->addFile($excelFilePath, "task_data_{$Id}.xlsx");
                     $zip->close();
                 } else {
                     return response()->json(['message' => 'Failed to create ZIP archive'], 500);
                 }
-    
-                // Serve the ZIP file for download
+
                 return response()->download($zipPath)->deleteFileAfterSend(true);
+
             } else {
                 // Get the user's Downloads directory dynamically
                 $downloadsDir = getenv('USERPROFILE') . DIRECTORY_SEPARATOR . 'Downloads';
@@ -431,12 +461,14 @@ class ClientController extends Controller
                 Log::info('QR code saved for desktop at:', ['path' => $qrCodePath]);
     
                 // Copy the PDF to the Downloads folder
-                $pdfDownloadPath = $downloadsDir . DIRECTORY_SEPARATOR . $task->filename;
-                copy($pdfFilePath, $pdfDownloadPath);
+                // $pdfDownloadPath = $downloadsDir . DIRECTORY_SEPARATOR . $task->filename;
+                // copy($FilePath, $pdfDownloadPath);
     
-                Log::info('PDF saved for desktop at:', ['path' => $pdfDownloadPath]);
+                //Log::info('PDF saved for desktop at:', ['path' => $pdfDownloadPath]);
     
-                return redirect()->back()->with('success', 'The template is donwloaded.');
+                //return redirect()->back()->with('success', 'The template is donwloaded.');
+                //for excel download
+                return Excel::download(new TaskExport($Id), "task_data_{$Id}.xlsx");
             }
         } catch (\Exception $e) {
             Log::error('Transaction creation failed', ['error' => $e->getMessage()]);

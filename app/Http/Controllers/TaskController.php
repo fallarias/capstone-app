@@ -30,7 +30,7 @@ class TaskController extends Controller
             'time' => 'required|array|min:1',
             'time.*' => 'required|string',
             'task_name'=> 'required|string|unique:task,name',
-            'filepath' => 'required|file|mimes:docx,doc|max:10240', // Include doc and docx
+            'filepath' => 'required|file|mimes:docx,doc,xlsx|max:10240', // Include doc and docx
         ]);
     
         // Handle file upload first
