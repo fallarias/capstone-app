@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Transaction;
 use App\Models\Task;
 use App\Models\Logs;
+use App\Models\Rate;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
@@ -172,14 +173,25 @@ class DashboardController extends Controller
         $data = array_values($staffScans);
         Log::info('Total staff scans', ['count' => $data]);
 
-    
+        //For staff star
+        $votes = Rate::with('user')->get()
+                    ->groupBy(function ($rate) {
+                        return $rate->user->department;
+                    });
+
+        $scores = $votes->map(function ($rates, $department) {
+            return $rates->sum('score');  
+        });
+
+        $departments = $scores->keys(); // ["IT", "HR", "Finance"]
+        $stars = $scores->values();
 
         // Return the admin dashboard view with the data and user count
         return view('admin.dashboard', compact('user', 'activate','transaction', 'online',
                     'users','loggedInCount', 'offlineCount','loggedInStaff', 'offlineStaff',
                     'loggedInClient', 'offlineClient', 'admin','staff','client', 'completed'
                     ,'dailyLabels', 'dailyValues', 'weeklyLabels', 'weeklyValues','label',
-                    'data','admins'));
+                    'data','admins','stars','departments'));
     }
 
     public function logs(){

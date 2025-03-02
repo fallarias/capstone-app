@@ -30,6 +30,10 @@
         .chart-container2{
             margin-top: -10px;
         }
+        .chart-container3{
+            margin-top: -130px;
+            width: 40%;
+        }
 
         .animated-box {
             animation: popUp 0.5s ease-in-out;
@@ -211,6 +215,31 @@
 }
 
 
+.chart-container {
+            width: 300px;
+            margin: auto;
+            text-align: center;
+        }
+        .legend {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+        .legend li {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .legend span {
+            width: 12px;
+            height: 12px;
+            display: inline-block;
+            margin-right: 8px;
+            border-radius: 50%;
+        }
+
+
 
 
 
@@ -242,28 +271,29 @@
 
         @include('admin.autoReload')
         <div class="stat-container" style="margin-left: 0px;">
-            <div class="chart-container1">
+            <div class="chart-container1" style="margin-top:-10px">
                 <canvas id="lineChart" width="700" height="200"></canvas>
             </div>
         </div>
 
-
-        <!-- Second Doughnut Chart (Online and Offline Staff) -->
-        <div class="stat-container1" style="margin-left: 990px; margin-top: -485px;">
-            <div class="chart-container1">
-                <canvas id="staffPieChart" width="190" height="100"></canvas>
-            </div>
-        </div>
-
-        <!-- Pie Chart Section -->
-<!-- Pie Chart Section -->
-<div class="stat-container1" style=" display: flex; align-items: center; margin-left:770px;margin-top: -240px;">
-    <div class="chart-container1">
-        <canvas id="userPieChart" width="190" height="200"></canvas> <!-- New Canvas for Pie Chart -->
+        <div class="stat-container3" >
+    <div class="chart-container3">
+        <canvas id="reviewChart" style="margin-bottom:-20px; margin-top: 60px;"></canvas>
     </div>
-</div>
+    <div class="legend-container" style=" ">
 
-<div class="stat-container1" style=" display: flex; align-items: center; margin-left:770px;margin-top: 10px;">
+        <ul style="list-style: none; margin-left: -220px;margin-top: -20px;">
+            @foreach($departments as $department)
+                <li style="color: #36A2EB;">{{ $department }}</li>
+            @endforeach
+        </ul>
+
+        </div>
+    </div>
+
+
+
+<div class="stat-container1" style=" display: flex; align-items: center; margin-left:770px;margin-top: -550px;">
     <div class="chart-container1" style="margin-left:62px;margin-right:62px;margin-top:-62px;margin-bottom:-10px;">
         <canvas id="userAllPieChart" width="285" height="190"></canvas> <!-- New Canvas for Pie Chart -->
     </div>
@@ -314,8 +344,64 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
+
+<script>
+// Check if the chart has been initialized to prevent multiple initializations
+let chartInitialized = false;
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeCharts();
+});
+
+function initializeCharts() {
+    // Only initialize the chart if it hasn't been initialized yet
+    if (chartInitialized) return;
+
+    var ctx = document.getElementById("reviewChart").getContext("2d");
+
+    // Check if the context is valid before initializing the chart
+    if (!ctx) {
+        console.error("Failed to get canvas context");
+        return;
+    }
+
+    // Define the chart data
+    const data = {
+        labels: {!! json_encode($departments) !!},
+        datasets: [{
+            data: {!! json_encode($stars) !!}, // Count of ratings
+            backgroundColor: ["#36A2EB", "#FFCE56", "#FF6384", "#4BC0C0", "#9966FF"]
+        }]
+    };
+
+    // Initialize the chart
+    const reviewChart = new Chart(ctx, {
+        type: "doughnut",
+        data: data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false  // Hide default legend
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ": " + tooltipItem.raw + " votes"; // Display count in tooltip
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Set the flag to true after the chart is initialized
+    chartInitialized = true;
+}
+</script>
 
 
 <script>
@@ -428,63 +514,6 @@ const barChart = new Chart(bar, {
 </script>
 
 <script>
-const ctx = document.getElementById('userPieChart').getContext('2d');
-const userPieChart = new Chart(ctx, {
-    type: 'doughnut', // Change 'pie' to 'doughnut'
-    data: {
-        labels: ['online client', 'Offline client'],
-        datasets: [{
-            data: [{{ json_encode($loggedInClient) }}, {{ json_encode($offlineClient) }}],
-            backgroundColor: ['#28a745', '#e0e0e0'],
-            hoverBackgroundColor: ['#218838', '#90EE90'],
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top',
-            },
-            tooltip: {
-                    callbacks: {
-                        label: function(tooltipItem) {
-                            return tooltipItem.label + ': ' + tooltipItem.raw;
-                        }
-                    }
-                }
-        }
-    }
-});
-
-
-
-    const staff = document.getElementById('staffPieChart').getContext('2d');
-    const staffPieChart = new Chart(staff, {
-        type: 'doughnut',
-        data: {
-            labels: ['Staff Online', 'Staff Offline'],
-            datasets: [{
-                data: [{{ json_encode($loggedInStaff) }}, {{ json_encode($offlineStaff) }}],
-                backgroundColor: ['#18392B', '#e0e0e0'],
-                hoverBackgroundColor: ['#218838', '#90EE90'],
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(tooltipItem) {
-                            return tooltipItem.label + ': ' + tooltipItem.raw ;
-                        }
-                    }
-                }
-            }
-        }
-    });
 
 
     const allUser = document.getElementById('userAllPieChart').getContext('2d');
