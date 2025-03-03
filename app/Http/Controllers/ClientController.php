@@ -122,6 +122,7 @@ class ClientController extends Controller
         $finishedAudits = Audit::with(['user','staff'])->where('user_id', $UserId)
                         // Uncomment if you only want finished audits
                         //->whereNotNull('finished')
+                        ->whereNotNull('start')
                         ->get();
 
         $auditEntry = Audit::with(['user','staff'])->where('user_id', $UserId)

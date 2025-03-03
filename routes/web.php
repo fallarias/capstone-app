@@ -38,7 +38,7 @@ Route::group(['middleware'=> ['auth:sanctum']], function() {
 
     Route::group(['middleware' => function ($request, $next) {
         if (Auth::check() && Auth::user()->account_type !== 'Admin') {
-            abort(403, 'Unauthorized access.');
+            return redirect()->route('client.clientHomePage');
         }
         return $next($request);
     }], function() {
