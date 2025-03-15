@@ -152,6 +152,15 @@
             background-color: #f1f1f1;
             border-bottom: 2px solid #ccc;
         }
+        .notification-header{
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            font-weight: bold;
+            background-color: #f1f1f1;
+            border-bottom: 2px solid #ccc;
+            margin-left: 250px;
+        }
     </style>
 </head>
 <body>
@@ -170,28 +179,34 @@
 
 @include('components.clientDrawer')
 
-<div class="email-container">
 
-<div class="email-header">
-        <div class="email-sender1">From</div>
+<div class="notification-header">
+    <h2>All Notifications ({{ $totalNotifications }})</h2>
+</div>
+
+<div class="email-container">
+    <div class="email-header">
+        <div class="email-sender1">All</div>
         <div class="email-owner">Name</div>
         <div class="email-time">Time</div>
         <div class="email-date">Date</div>
     </div>
+
     @foreach ($auditEntry as $time)
-        <div class="email-row" onclick="showModal('Accepted Beyond 5 PM', 'The task  will be continue at 8:30 AM for Transaction ID Number {{$time->transaction_id}}.')">
-            <div class="email-sender">{{ $time->staff->lastname }}, {{ $time->staff->firstname }} </div>
-            <div class="email-subject">{{ $time->office_name }} - The Transaction ID Number {{$time->transaction_id}} is accepted at {{ \Carbon\Carbon::parse($time->start)->format('g:i A') ?? 'No description available' }}</div>
+        <div class="email-row" onclick="showModal('Accepted Beyond 5 PM', 'The task will be continued at 8:30 AM for Transaction ID Number {{$time->transaction_id}}.')">
+            <div class="email-sender">{{ $time->staff->lastname }}, {{ $time->staff->firstname }}</div>
+            <div class="email-subject">{{ $time->office_name }} </div>
+            <div class="email-subject1">{{ $time->office_name }} - The Transaction ID Number {{$time->transaction_id}} is accepted at {{ \Carbon\Carbon::parse($time->start)->format('g:i A') ?? 'No description available' }}</div>
             <div class="email-date1">{{ \Carbon\Carbon::parse($time->created_at)->format('M d') }}</div>
         </div>
     @endforeach
 
     @foreach ($finishedAudits as $overtime)
         @if(($overtime->finished > $overtime->deadline) || (empty($overtime->finished) && now() > $overtime->deadline))
-            <div class="email-row" onclick="showModal('New Message', 'The task {{ $overtime->task }} is exceeded the deadline at {{ \Carbon\Carbon::parse($overtime->finished)->format('g:i A') ?? 'No description available' }} for transaction number {{$overtime->transaction_id}}.')">
+            <div class="email-row" onclick="showModal('New Message', 'The task {{ $overtime->task }} is finished at {{ \Carbon\Carbon::parse($overtime->finished)->format('g:i A') ?? 'No description available' }} exceeding the deadline at {{ \Carbon\Carbon::parse($overtime->deadline)->format('g:i A') ?? 'No description available' }} for transaction number {{$overtime->transaction_id}}.')">
                 <div class="email-sender">{{ $overtime->staff->lastname }}, {{ $overtime->staff->firstname }}</div>
                 <div class="email-subject">{{ $overtime->office_name }} </div>
-                <div class="email-subject1">The task {{ $overtime->task }} is exceeded the deadline at {{ \Carbon\Carbon::parse($overtime->finished)->format('g:i A') ?? 'No description available' }} deadline at {{ \Carbon\Carbon::parse($overtime->deadline)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$overtime->transaction_id}}</div>
+                <div class="email-subject1">The task {{ $overtime->task }} is finished at {{ \Carbon\Carbon::parse($overtime->finished)->format('g:i A') ?? 'No description available' }} exceeding the deadline at {{ \Carbon\Carbon::parse($overtime->deadline)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$overtime->transaction_id}}</div>
                 <div class="email-date1">{{ \Carbon\Carbon::parse($overtime->finished)->format('M d') }}</div>
             </div>
         @endif
@@ -201,17 +216,16 @@
         @if($finish->finished === null)
             <div class="email-row" onclick="showModal('New Message', 'The task {{ $finish->task }} is started at {{ \Carbon\Carbon::parse($finish->start)->format('g:i A') ?? 'No description available' }} for transaction number {{$finish->transaction_id}}.')">
                 <div class="email-sender">{{ $finish->staff->lastname }}, {{ $finish->staff->firstname }}</div>
-                <div class="email-subject">{{ $finish->office_name }} </div>
+                <div class="email-subject">{{ $finish->office_name }}</div>
                 <div class="email-subject1">The task {{ $finish->task }} is started at {{ \Carbon\Carbon::parse($finish->start)->format('g:i A') ?? 'No description available' }} deadline at {{ \Carbon\Carbon::parse($finish->deadline)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$finish->transaction_id}}</div>
                 <div class="email-date1">{{ \Carbon\Carbon::parse($finish->finished)->format('M d') }}</div>
             </div>
         @else
-            <div class="email-row" onclick="showModal('Task Completed', 'The task {{ $finish->task }} is finished at {{ \Carbon\Carbon::parse($finish->finished)->format('g:i A') ?? 'No description available' }}  for Transaction ID Number {{$finish->transaction_id}}.')">
+            <div class="email-row" onclick="showModal('Task Completed', 'The task {{ $finish->task }} is finished at {{ \Carbon\Carbon::parse($finish->finished)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$finish->transaction_id}}.')">
                 <div class="email-sender">{{ $finish->staff->lastname }}, {{ $finish->staff->firstname }}</div>
-                <div class="email-subject">{{ $finish->office_name }} </div>
+                <div class="email-subject">{{ $finish->office_name }}</div>
                 <div class="email-subject1">Task Completed - The task {{ $finish->task }} is finished at {{ \Carbon\Carbon::parse($finish->finished)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$finish->transaction_id}}</div>
                 <div class="email-date1">{{ \Carbon\Carbon::parse($finish->finished)->format('M d') }}</div>
-                
             </div>
         @endif
     @endforeach
@@ -219,14 +233,12 @@
     @foreach ($requirementMessages as $message)
         <div class="email-row" onclick="showModal('{{ $message->department }}', '{{ $message->message }}.')">
             <div class="email-sender">{{ $message->staff->lastname }}, {{ $message->staff->firstname }}</div>
-            <div class="email-subject">{{ $message->office_name }}</div>
-            <div class="email-subject1">Lack of Requirement - For Transaction ID Number {{$message->transaction_id}}</div>
+            <div class="email-subject">Lack of Requirement - For Transaction ID Number {{$message->transaction_id}}</div>
             <div class="email-date">{{ \Carbon\Carbon::parse($message->created_at)->format('M d') }}</div>
         </div>
     @endforeach
-
-
 </div>
+
 
 
 <!-- Bootstrap Modal -->
@@ -254,3 +266,6 @@
         $('#messageModal').modal('show');
     }
 </script>
+
+</body>
+</html>
