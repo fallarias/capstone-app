@@ -281,8 +281,8 @@ class ClientAPiController extends Controller
                             ->whereNull('finished')
                             ->count();
                             
-        $requerementss = Requirements::where('user_id', $id)->count();
-        $messages = $audit + $requerementss + $audits;
+        $requerements = Requirements::where('user_id', $id)->count();
+        $messages = $audit + $requerements + $audits;
         $ongoing = 'ongoing';
         $pendingDocuments = Transaction::where('status', $ongoing)
                                         ->where('user_id', $id)
