@@ -34,6 +34,10 @@
             margin-top: -130px;
             width: 40%;
         }
+        .chart-container4{
+            margin-top: 20px;
+            width: 100%;
+        }
 
         .animated-box {
             animation: popUp 0.5s ease-in-out;
@@ -68,36 +72,31 @@
         .labels div {
             margin: 5px 0; /* Space between labels */
         }
-        .user-container {
-  width: 100%;
-  max-width: 800px;
-  margin: auto;
-  font-family: Arial, sans-serif;
-}
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-}
+
+        .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        }
 
 
 
 .user-container {
-  width: 72%;
-  height: 10%;
+  width: 55%;
+  max-height: 500px; /* Limits height */
+  overflow-y: auto; /* Enables scrolling if content exceeds max height */
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); /* Adds a shadow */
-  margin-left: 0px;
-  margin-top: -250px;
-  margin-bottom: 200px;
+  margin-left: 770px;
+  margin-top: -552px;
   border-radius: 10px;
   background-color: #f9f9f9;
 
 }
 
 .header {
-    margin-top: -15px;
+  margin-top: -15px;
   animation: zoomIn 0.5s ease forwards;
   text-align: center;
   padding: 20px;
@@ -280,7 +279,7 @@
     <div class="chart-container3">
         <canvas id="reviewChart" style="margin-bottom:-20px; margin-top: 60px;"></canvas>
     </div>
-    <div class="legend-container" style=" ">
+    <div class="legend-container" >
 
         <ul style="list-style: none; margin-left: -220px;margin-top: -20px;">
             @foreach($departments as $department)
@@ -292,18 +291,6 @@
     </div>
 
 
-
-<div class="stat-container1" style=" display: flex; align-items: center; margin-left:770px;margin-top: -550px;">
-    <div class="chart-container1" style="margin-left:62px;margin-right:62px;margin-top:-62px;margin-bottom:-10px;">
-        <canvas id="userAllPieChart" width="285" height="190"></canvas> <!-- New Canvas for Pie Chart -->
-    </div>
-</div>
-
-<div class="stat-container2" style="margin-left:580px; margin-top: 15px;">
-    <div class="chart-container1">
-        <canvas id="barChart" width="600" height="200"></canvas>
-    </div>
-</div>
 
 <div class="user-container">
   <div class="header">
@@ -331,9 +318,15 @@
         </div>
       </div>
     @empty
-      <p>No User Online</p>
+      <p style="text-align: center;">No User Online</p>
     @endforelse
   </div>
+</div>
+
+<div class="stat-container2" style="margin-left:0px; margin-top: 100px;">
+    <div class="chart-container4">
+        <canvas id="barChart" width="600" height="200"></canvas>
+    </div>
 </div>
 
 </div>
@@ -356,41 +349,55 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializeCharts() {
-    // Only initialize the chart if it hasn't been initialized yet
     if (chartInitialized) return;
 
     var ctx = document.getElementById("reviewChart").getContext("2d");
-
-    // Check if the context is valid before initializing the chart
     if (!ctx) {
         console.error("Failed to get canvas context");
         return;
     }
 
-    // Define the chart data
-    const data = {
-        labels: {!! json_encode($departments) !!},
-        datasets: [{
-            data: {!! json_encode($stars) !!}, // Count of ratings
-            backgroundColor: ["#36A2EB", "#FFCE56", "#FF6384", "#4BC0C0", "#9966FF"]
-        }]
-    };
+    // Get data from Laravel blade
+    const departments = {!! json_encode($departments) !!};
+    const stars = {!! json_encode($stars) !!};
+
+    // Check if all values in `stars` are zero or the array is empty
+    const isEmptyData = stars.length === 0 || stars.every(value => value === 0);
+
+    // Set default empty data when there are no votes
+    const chartData = isEmptyData
+        ? {
+            labels: ["No Data"],
+            datasets: [{
+                data: [1], // Placeholder value
+                backgroundColor: ["#E0E0E0"], // Light gray color to indicate no data
+            }]
+        }
+        : {
+            labels: departments,
+            datasets: [{
+                data: stars,
+                backgroundColor: ["#36A2EB", "#FFCE56", "#FF6384", "#4BC0C0", "#9966FF"]
+            }]
+        };
 
     // Initialize the chart
     const reviewChart = new Chart(ctx, {
         type: "doughnut",
-        data: data,
+        data: chartData,
         options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    display: false  // Hide default legend
+                    display: false
                 },
                 tooltip: {
                     callbacks: {
-                        label: function(tooltipItem) {
-                            return tooltipItem.label + ": " + tooltipItem.raw + " votes"; // Display count in tooltip
+                        label: function (tooltipItem) {
+                            // Hide tooltip for empty data case
+                            if (isEmptyData) return "";
+                            return tooltipItem.label + ": " + tooltipItem.raw + " votes";
                         }
                     }
                 }
@@ -398,9 +405,9 @@ function initializeCharts() {
         }
     });
 
-    // Set the flag to true after the chart is initialized
     chartInitialized = true;
 }
+
 </script>
 
 
@@ -513,48 +520,7 @@ const barChart = new Chart(bar, {
 
 </script>
 
-<script>
 
-
-    const allUser = document.getElementById('userAllPieChart').getContext('2d');
-    const userAllPieChart = new Chart(allUser, {
-    type: 'pie',
-    data: {
-        labels: ['All Client', 'All Staff', 'All Admin'],
-        datasets: [{
-            data: [{{ json_encode($client) }}, {{ json_encode($staff) }}, {{ json_encode($admins) }}],
-            backgroundColor: ['#28a745', '#18392B', '#9BC53A'],
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'left',
-                labels: {
-                    top: 600,
-                    padding: 20, // Increase space between the chart and legend labels
-                    boxWidth: 15, // Width of the colored box next to labels
-                }
-
-            },
-            title: {
-                display: true,
-                text: 'Total Number of Users',
-                position: 'top', // You can use 'top', 'left', 'bottom', 'right'
-                padding: {
-                    top: 60, // Adjust top padding
-                    bottom: 0 // Adjust bottom padding
-                }
-            }
-        }
-    }
-});
-
-
-
-
-</script>
 
 <script>
     // Function to refresh the stats every 5 seconds

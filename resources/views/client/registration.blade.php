@@ -72,15 +72,15 @@
                 </div>
             </div>
             <div class="column1">
-            <h1 style="font-size: 45px; font-weight:bold; margin-left: 70px; margin-top: -10px; margin-bottom: -20px; color:forestgreen"> CREATE ACCOUNT </h1>
+            <h1 class="text-signup"> CREATE ACCOUNT </h1>
             <div class="img-container">
                 <img id="formImage" src="https://th.bing.com/th/id/OIP.z3EGpAMJvI4OCDI-caSNLgHaHa?w=1200&h=1200&rs=1&pid=ImgDetMain" alt="Profile" class="img-person">
                 <div id="formText" style="text-align: center; margin-bottom: -60px; margin-left: 15px; margin-top: 15px;">
-                    <p style="color: darkgrey;">Already have an account? <a href="{{ url('/login') }}" style="color: forestgreen; text-decoration: none;">Login here</a></p>
+                    <p class="link-login" style="color: darkgrey;">Already have an account? <a href="{{ url('/login') }}" style="color: forestgreen; text-decoration: none;">Login here</a></p>
                 </div>
             </div>
 
-                <form id="registrationForm" action="{{ route('client.registrations') }}" method="POST">
+                <form class="form-all" id="registrationForm" action="{{ route('client.registrations') }}" method="POST">
                     @csrf
                     
                     <!-- First Section -->
@@ -104,7 +104,19 @@
                     <div class="form-section" id="section2">
                         <div class="field input">
                             <label for="department" style="color:forestgreen; font-size:22px">Department:</label>
-                            <input type="text" id="department" name="department" required>
+                            <select id="department" name="department" required>
+                                <option value="" disabled selected>Select Department</option>
+                                <option value="Administrative and Finance Services Office">Administrative and Finance Services Office</option>
+                                <option value="Budget Office">Budget Office</option>
+                                <option value="Accounting Office">Accounting Office</option>
+                                <option value="University Vice President Office">University Vice President Office</option>
+                                <option value="University President Office">University President Office</option>
+                                <option value="Executive Office">Executive Office</option>
+                                <option value="ICT Infrastracture Office">ICT Infrastracture Office</option>
+                                <option value="Procurement Office">Procurement Office</option>
+                                <option value="Bids and Awards Committee Office">Bids and Awards Committee Office</option>
+                                <option value="Supply Office">Supply Office</option>
+                            </select>
                         </div>
                         <div class="field input">
                             <label for="email" style="color:forestgreen; font-size:22px">Email:</label>
@@ -146,15 +158,15 @@ function updateFormContent(section) {
     switch(section) {
         case 1:
             imageElement.src = "https://th.bing.com/th/id/OIP.z3EGpAMJvI4OCDI-caSNLgHaHa?w=1200&h=1200&rs=1&pid=ImgDetMain";
-            textElement.innerHTML = `<p style="color: darkgrey;">Already have an account? <a href="{{ url('/login') }}" style="color: forestgreen; text-decoration: none;">Login here</a></p>`;
+            textElement.innerHTML = `<p class="link-login" style="color: darkgrey;">Already have an account? <a href="{{ url('/login') }}" style="color: forestgreen; text-decoration: none;">Login here</a></p>`;
             break;
         case 2:
             imageElement.src = "https://th.bing.com/th/id/OIP.3nWmjUyww_WxePikG4CxnAHaHa?rs=1&pid=ImgDetMain";
-            textElement.innerHTML = `<p style="color: darkgrey; font-size:20px">Join with your email address</p>`;
+            textElement.innerHTML = `<p class="link-login" style="color: darkgrey; font-size:20px">Join with your email address</p>`;
             break;
         case 3:
             imageElement.src = "https://cdn-icons-png.flaticon.com/512/7080/7080679.png";
-            textElement.innerHTML = `<p style="color: darkgrey;">Finally, set your password!</p>`;
+            textElement.innerHTML = `<p class="link-login" style="color: darkgrey;">Finally, set your password!</p>`;
             break;
     }
 }

@@ -136,6 +136,27 @@
             margin-bottom: -130px;
         }
 
+
+        .rateButton {
+            background-color: #00b894;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .rateButton:hover {
+            background-color: #009374; /* Darker green */
+            transform: scale(1.1); /* Slightly enlarges the button */
+        }
+
+
+        .nextprev{
+            margin-left: -10px;
+        }
+
     </style>
 </head>
 <body>
@@ -149,7 +170,7 @@
     <div class="filter-dropdown">
         <select id="filterStatus" class="form-control">
             <option value="all">All</option>
-            <option value="complete">Complete</option>
+            <option value="finished">Finished</option>
             <option value="ongoing">Ongoing</option>
             <option value="failed">Failed</option>
         </select>
@@ -161,13 +182,13 @@
 
     <div style="display: flex; justify-content: center; gap: 30px; align-items: center; margin-top: 40px;">
     <!-- Start Date Filter -->
-    <div style="display: flex; flex-direction: column; align-items: center; margin-left:-350px">
+    <div style="display: flex; flex-direction: column; align-items: center; margin-left:-340px">
         <label for="startDate" style="font-weight: bold;">From:</label>
         <input type="date" id="startDate" class="form-control" style="width: 180px; margin-top:-40px ">
     </div>
 
     <!-- End Date Filter -->
-    <div style="display: flex; flex-direction: column; align-items: center; margin-left:-180px">
+    <div style="display: flex; flex-direction: column; align-items: center; margin-left:-150px;margin-right:-10px">
         <label for="endDate" style="font-weight: bold;">To:</label>
         <input type="date" id="endDate" class="form-control" style="width: 180px; margin-top:-40px">
     </div>
@@ -181,11 +202,11 @@
                 No tasks history available.
             </div>
         @else
-            <table class="table mt-4" style="background-color: rgba(128, 128, 128, 0.1); border: 2px solid black; border-radius: 8px; overflow: hidden; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);">
+            <table id="logTable" class="table mt-4" style="background-color: rgba(128, 128, 128, 0.1); border: 2px solid black; border-radius: 8px; overflow: hidden; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);">
             <thead style="background-color: rgba(128, 128, 128, 0.2); border-bottom: 2px solid black;">
                 <tr>
-                    <th style="border-right: 1px solid black;">Date</th>
-                    <th style="border-right: 1px solid black;">Time</th>
+                    <th style="border-right: 1px solid black;">Transaction</th>
+                    <th style="border-right: 1px solid black;">Date/Time</th>
                     <th style="border-right: 1px solid black;">Type</th>
                     <th>Status</th>
                     <th id="ratingsHeader" style="display: none;">Ratings</th> <!-- Hidden by default -->
@@ -198,20 +219,31 @@
                         onmouseover="this.style.backgroundColor='black'; this.style.color='limegreen';"
                         onmouseout="this.style.backgroundColor='rgba(128, 128, 128, 0.1)'; this.style.color='';">
                         <td>{{$loop->iteration}}</td>
-                        <td>{{$list->transaction_id}}</td>
+                        <td>{{$list->created_at}}</td>
                         <td style="border-right: 1px solid black;">{{ $list->name }}</td>
                         <td>{{$list->status}}</td>
                         <td class="ratingsCell" style="display: none;">
                             <form action="{{ route('client.clientRatingPage', ['transaction_id' => $list->transaction_id]) }}" method="get" class="d-inline">
                                 @csrf
-                                <button type="submit" class="btn btn-sm" style="background-color: #00b894; border-radius:4px;cursor: pointer; font-size: 16px; color: black;">Rate us</button>
+                                <button type="submit" class="rateButton" >Rate us</button>
                             </form>
                         </td> <!-- Hidden by default -->
                     </tr>
                 @endforeach
+                
             </tbody>
 
             </table>
+            <div id="pagination" class="nextprev">
+                <button onclick="prevPage()" class="elastic-btn">
+                    <i class="fas fa-caret-left"></i>
+                </button>
+                <span class="pages" id="pageNumbers" style="margin: 0 20px;"></span>
+                <button onclick="nextPage()" class="elastic-btn">
+                        <i class="fas fa-caret-right"></i>
+                </button>
+
+            </div>
         @endif
     </div>
 </div>
@@ -224,25 +256,55 @@
         let ratingsHeader = document.getElementById("ratingsHeader");
         let ratingsCells = document.querySelectorAll(".ratingsCell");
 
-        if (filterValue === "all") {
-            ratingsHeader.style.display = "";
-            ratingsCells.forEach(cell => cell.style.display = "");
-        } else {
-            ratingsHeader.style.display = "none";
-            ratingsCells.forEach(cell => cell.style.display = "none");
-        }
+        let showRatings = filterValue === "finished";
+
+        // Show or hide the "Ratings" header
+        ratingsHeader.style.display = showRatings ? "" : "none";
 
         rows.forEach(row => {
-            let statusCell = row.querySelector("td:last-child");
+            let statusCell = row.querySelector("td:nth-child(4)"); // Ensure this is the correct status column
+            let ratingsCell = row.querySelector(".ratingsCell");
             let status = statusCell.textContent.trim().toLowerCase();
 
-            if (filterValue === "all" || status === filterValue) {
+            // Show row if it matches filter or if 'all' is selected
+            row.style.display = (filterValue === "all" || status === filterValue) ? "" : "none";
+
+            // Show or hide the ratings cell based on "Finished" status
+            if (showRatings && status === "finished") {
+                ratingsCell.style.display = "";
+            } else {
+                ratingsCell.style.display = "none";
+            }
+        });
+    });
+</script>
+
+<script>
+    document.getElementById("startDate").addEventListener("change", filterByDate);
+    document.getElementById("endDate").addEventListener("change", filterByDate);
+
+    function filterByDate() {
+        let startDate = document.getElementById("startDate").value;
+        let endDate = document.getElementById("endDate").value;
+        let rows = document.querySelectorAll("tbody tr");
+
+        rows.forEach(row => {
+            let dateCell = row.querySelector("td:nth-child(2)"); // Assuming Date/Time is in the 2nd column
+            let rowDate = new Date(dateCell.textContent.trim()); // Convert text to Date object
+
+            let startDateObj = startDate ? new Date(startDate) : null;
+            let endDateObj = endDate ? new Date(endDate) : null;
+
+            if (
+                (!startDateObj || rowDate >= startDateObj) &&
+                (!endDateObj || rowDate <= endDateObj)
+            ) {
                 row.style.display = "";
             } else {
                 row.style.display = "none";
             }
         });
-    });
+    }
 </script>
 
 
@@ -285,6 +347,97 @@
         statusFilter.addEventListener("change", filterTable);
         startDateFilter.addEventListener("input", filterTable);
         endDateFilter.addEventListener("input", filterTable);
+    });
+</script>
+
+<script>
+
+document.getElementById("filterStatus").addEventListener("change", function () {
+    let filterValue = this.value.toLowerCase();
+    let rows = document.querySelectorAll("tbody tr");
+
+    rows.forEach(row => {
+        let statusCell = row.querySelector("td:nth-child(4)"); // Adjust index if needed
+        let status = statusCell.textContent.trim().toLowerCase();
+
+        if (filterValue === "all" || status === filterValue) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+});
+
+</script>
+
+<script>
+    const rowsPerPage = 5;
+    let currentPage = 1;
+
+    function searchTask() {
+        const searchValue = document.getElementById('task_name').value.toLowerCase(); 
+        const rows = document.querySelectorAll('#logTable tbody tr'); 
+
+        let found = false;
+
+        rows.forEach((row) => {
+            const action = row.cells[2].innerText.toLowerCase();
+            if (action.includes(searchValue)) {
+                row.style.display = '';
+                found = true;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        if (!found) {
+            Swal.fire({
+                title: 'No Match',
+                text: `No tasks found matching "${searchValue}"`,
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+        }
+
+        return false;
+    }
+
+    function paginateTable() {
+        const rows = document.querySelectorAll('#logTable tbody tr');
+        const totalRows = rows.length;
+        const totalPages = Math.ceil(totalRows / rowsPerPage);
+
+        rows.forEach((row, index) => {
+            row.style.display = (index >= (currentPage - 1) * rowsPerPage && index < currentPage * rowsPerPage) ? '' : 'none';
+        });
+
+        updatePagination(totalPages);
+    }
+
+    function updatePagination(totalPages) {
+        const pageNumbers = document.getElementById('pageNumbers');
+        pageNumbers.textContent = `Page ${currentPage} of ${totalPages}`;
+    }
+
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            paginateTable();
+        }
+    }
+
+    function nextPage() {
+        const totalRows = document.querySelectorAll('#logTable tbody tr').length;
+        const totalPages = Math.ceil(totalRows / rowsPerPage);
+
+        if (currentPage < totalPages) {
+            currentPage++;
+            paginateTable();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        paginateTable();
     });
 </script>
 

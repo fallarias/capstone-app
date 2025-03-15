@@ -12,6 +12,47 @@
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">   
     <title>Documents</title>
+
+
+
+<script>
+document.addEventListener('mousedown', function(event) {
+    if (!event.target.closest('input[type="checkbox"]')) {
+        event.preventDefault(); // Prevents the checkbox from changing state
+    }
+}, true);
+
+
+    function filterTable() {
+        const notFinishedCheckbox = document.getElementById('not-finished');
+        const finishedCheckbox = document.getElementById('finished');
+        const overdueCheckbox = document.getElementById('overdue');
+
+        const checkboxes = [notFinishedCheckbox, finishedCheckbox, overdueCheckbox];
+
+        checkboxes.forEach(checkbox => {
+            checkbox.onchange = function(event) {
+                // Uncheck all other checkboxes
+                checkboxes.forEach(otherCheckbox => {
+                    if (otherCheckbox !== this) {
+                        otherCheckbox.checked = false;
+                    }
+                });
+                // Call filter logic
+                applyFilter();
+                event.stopPropagation(); // Prevents interference
+            };
+        });
+
+        applyFilter(); // Initial call
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        filterTable();
+    });
+</script>
+
+
     <script>
 function fetchAuditTrails() {
     $.ajax({
@@ -115,31 +156,7 @@ function formatDateTime(dateString) {
     }
 
         
-    function filterTable() {
-        const notFinishedCheckbox = document.getElementById('not-finished');
-        const finishedCheckbox = document.getElementById('finished');
-        const overdueCheckbox = document.getElementById('overdue');
 
-        const rows = document.querySelectorAll('#logTable tbody tr');
-        
-        // Handle the behavior of only one checkbox being checked at a time
-        const checkboxes = [notFinishedCheckbox, finishedCheckbox, overdueCheckbox];
-
-        checkboxes.forEach(checkbox => {
-            checkbox.onchange = function() {
-                // Uncheck all other checkboxes
-                checkboxes.forEach(otherCheckbox => {
-                    if (otherCheckbox !== this) {
-                        otherCheckbox.checked = false;
-                    }
-                });
-                // Call the filter logic after changing the state of checkboxes
-                applyFilter();
-            };
-        });
-
-        applyFilter(); // Call it initially to apply the filter based on selected checkbox
-    }
 
     function applyFilter() {
         const notFinishedCheckbox = document.getElementById('not-finished');
@@ -242,23 +259,7 @@ function formatDateTime(dateString) {
 }
 
 
-.btn-pulse {
-        background: linear-gradient(90deg, #0f965e,#00f83a, #00f83a, #0f965e); /* Gradient background */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Optional shadow */
-        transition: background 0.3s ease, transform 0.3s ease;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: transform 0.2s;
-    }
 
-    .btn-pulse:hover {
-        transform: scale(1.05);
-        animation: pulse 0.6s infinite;
-    }
 
     @keyframes pulse {
         0% {
@@ -281,7 +282,7 @@ input[type="checkbox"]:checked {
 </head>
 <body>
     @include('components.app-bar') 
-    <div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px; margin-left: 200px;">
+    <div style="display: flex; justify-content: center; margin-top: 40px; margin-bottom: 20px; margin-left: 200px;">
         
         @if(session('success'))
             <script>
@@ -295,35 +296,48 @@ input[type="checkbox"]:checked {
         @endif
 
         <!-- Filter Checkboxes -->
-        <div >
-            <label style="margin-left: -150px;"><input type="checkbox" id="not-finished" onchange="filterTable()"> <span style="margin-left:-170px">Pending</span></label>
-            <label style="margin-left: -90px;"><input type="checkbox" id="finished" onchange="filterTable()"> <span style="margin-left:-170px"> Finished</span></label>
-            <label style="margin-left: -90px;"><input type="checkbox" id="overdue" onchange="filterTable()"> <span style="margin-left:-170px">Overdue</span></label>
+        <div class="checkbox-container">
+            <label class="check-pending">
+                <input type="checkbox" id="not-finished" onchange="filterTable()">
+                <span class="text-pending">Pending</span>
+            </label>
+            <label class="check-finished">
+                <input type="checkbox" id="finished" onchange="filterTable()">
+                <span class="text-finished">Finished</span>
+            </label>
+            <label class="check-overdue">
+                <input type="checkbox" id="overdue" onchange="filterTable()">
+                <span class="text-overdue">Overdue</span>
+            </label>
         </div>
 
+
         <!-- Print and Download Buttons -->
-        <div style="margin-bottom: 20px; margin-left: 120px;">
+        <div class="printbtn1">
             <button onclick="printTable()" class="btn-pulse">Print / Download Table</button>
         </div>
         </div>
 
+        
+
         <!-- Table Container -->
-        <div style="display: flex; justify-content: center; margin-top: -20px; width:1000px; margin-left:400px">
-            <table id="logTable">
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>User ID</th>
-                        <th>Task ID</th>
-                        <th>Start</th>
-                        <th>Status</th>
-                        <th>Deadline</th>
-                        <th>Office Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($transaction as $task)
-                        <tr data-deadline="{{ $task->deadline }}" data-finished="{{ $task->finished }}">
+        <div class="logtable-container">
+    <div class="logtable">
+        <table id="logTable">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>User ID</th>
+                    <th>Task ID</th>
+                    <th>Start</th>
+                    <th>Status</th>
+                    <th>Deadline</th>
+                    <th>Office Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($transaction as $task)
+                    <tr data-deadline="{{ $task->deadline }}" data-finished="{{ $task->finished }}">
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $task->user_id }}</td>
                         <td>{{ $task->task_id }}</td>
@@ -337,19 +351,22 @@ input[type="checkbox"]:checked {
                                 <p>{{$task->finished}}</p>
                             @endif
                         </td>
-
                         <td>{{ $task->deadline }}</td>
                         <td>{{ $task->office_name }}</td>
                     </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7">No tasks found</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                @empty
+                    <tr>
+                        <td colspan="7">No tasks found</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+
 
     <a href="{{ url('/dashboard') }}">Back</a>
+
+    
 </body>
 </html>

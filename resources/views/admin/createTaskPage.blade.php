@@ -12,226 +12,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Creating New Task</title>
-    <style>
-.recent-task-container.loading {
-    position: fixed;
-    right: 60px;
-    top: 200px;
-    background: #f0f0f0;
-    border-radius: 8px;
-    padding: 15px;
-    width: 390px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
 
-.loading-item {
-    background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
-    background-size: 200% 100%;
-    animation: loading 1.5s infinite;
-    border-radius: 4px;
-    height: 20px; /* Adjust height */
-    margin: 5px 0;
-}
-
-@keyframes loading {
-    0% { background-position: 200% 0; }
-    100% { background-position: 0 0; }
-}
-
-
-
-@keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .main-content:hover {
-            transform: translateY(-5px);
-        }
-
-        .form-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            transition: border-color 0.3s;
-        }
-
-        .form-group label {
-            position: absolute;
-            left: 10px;
-            top: 10px;
-            transition: 0.2s ease all;
-            opacity: 0.5;
-        }
-
-        .form-group input:focus {
-            border-color: #007bff;
-        }
-
-        .form-group input:focus + label,
-        .form-group input:not(:placeholder-shown) + label {
-            top: -10px;
-            left: 10px;
-            font-size: 12px;
-            opacity: 1;
-            color: #007bff;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            background: #007bff;
-            color: #fff;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .submit-btn:hover {
-            background: #0056b3;
-        }
-
-        .submit-btn:active {
-            transform: scale(0.98);
-        }
-
-        @keyframes slideIn {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .close-icon {
-            cursor: pointer;
-            color: red;
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-        .form-group label {
-    position: absolute;
-    left: 15px; /* Adjusted left position */
-    top: 15px; /* You can also adjust the top position if needed */
-    transition: 0.2s ease all;
-    opacity: 0.7;
-    font-size: 14px; /* Font size */
-    color: #333; /* Color */
-    font-weight: bold; /* Bold text */
-    pointer-events: none; /* Prevent label from blocking input */
-}
-
-.form-group input:focus + label,
-.form-group input:not(:placeholder-shown) + label {
-    top: -25px; /* Raise the label higher */
-    left: 15px; /* Keep the left position consistent when focused */
-    font-size: 22px; /* Adjust as needed */
-    opacity: 1;
-    color: #005733; /* Color when focused or filled */
-}
-
-    .form-group input {
-    width: 90%;
-    padding: 12px 10px; /* Increased top and bottom padding */
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    transition: border-color 0.3s;
-    margin-top: 10px; /* Added margin for spacing between the input and label */
-    }
-
-    .form-group {
-        margin-bottom: 40px; /* Increased space between form groups */
-    }
-    .form-content {
-            width: 95%;
-            position: relative;
-            padding: 20px;
-            border: 1px solid #ddd;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add this line */
-        }
-
-        .form-content1 {
-    margin-top: 20px;
-    width: 75%;
-    position: relative;
-    padding: 20px;
-    border: 2px solid #ddd;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add this line */
-}
-
-    input[type="text"], input[type="file"] , input[type="password"]{
-        border: 2px solid green; /* Green border */
-        background-color: rgba(0, 128, 0, 0.1); /* Transparent green background */
-        padding: 8px;
-        border-radius: 4px;
-    }
-
-    input[type="text"]:focus, input[type="file"]:focus, input[type="password"]:focus {
-        outline: none;
-        border-color: darkgreen; /* Darker green when focused */
-        background-color: rgba(0, 128, 0, 0.2); /* Slightly more opaque green on focus */
-    }
-
-    select {
-        border: 2px solid green; /* Green border */
-        background-color: rgba(0, 128, 0, 0.1); /* Transparent green background */
-        padding: 8px;
-        border-radius: 4px;
-        appearance: none; /* Optional: Removes the default arrow in some browsers */
-    }
-
-    select:focus {
-        outline: none;
-        border-color: darkgreen; /* Darker green when focused */
-        background-color: rgba(0, 128, 0, 0.2); /* Slightly more opaque green on focus */
-    }
-
-    .plus-icon {
-    font-weight:bold;
-    text-align: center;
-    text-decoration:none;
-    color: #fff;
-    background-color: #28a745;
-    border: 2px solid #000;
-    border-radius: 40px;
-    box-shadow: 5px 5px 0px #000;
-    transition: all 0.3s ease;
-}
-
-
-
-.plus-icon:hover {
-    background-color: #fff;
-    color: green;
-    border: 2px solid #28a745;
-    box-shadow: 5px 5px 0px #28a745;/* Darker green on hover */
-}
-
-.plus-icon:active {
-    color: white;
-    background-color: #28a745;
-    box-shadow: none;
-    transform: traslateY(4px);/* Even darker on click */
-}
-
-
-
-
-
-    </style>
     
 </head>
 <body>
@@ -271,36 +52,41 @@
         </script>
     @endif
     
-
+<div class="container">
     @include('components.app-bar', ['admin' => $admin])
-    <div>
-    <h1 class="title3">Create Task</h1>
-        <form method="POST" action="{{ route('admin.create') }}" class="main-content" enctype="multipart/form-data">
-            @csrf
-            @method('post')
-            <label for="Name">Name:</label>
-            <input type="text" name="task_name" required value="{{old('task_name')}}">
-            <label for="filepath">Upload File (PDF):</label>
-            <input type="file" name="filepath" accept=".doc,.docx,.xlsx" required>
-            <div id="form-container" >
-                <!-- Plus icon to add more forms -->
-                <i class="plus-icon" id="add-form">+</i>
+
+<div class="task-container">
+        <div class="form-section">
+            <h1 class="title3">Create Task</h1>
+                <form method="POST" action="{{ route('admin.create') }}" class="main-content" enctype="multipart/form-data">
+                @csrf
+                @method('post')
+                <label for="Name">Name:</label>
+                <input type="text" name="task_name" required value="{{old('task_name')}}">
+                <label for="filepath">Upload File (PDF):</label>
+                <input type="file" name="filepath" accept=".doc,.docx,.xlsx,.xls" required class="file">
+                <div id="form-container" >
+                    <!-- Plus icon to add more forms -->
+                    <i class="plus-icon" id="add-form">+</i>
+                </div>
+                <button type="reset" class="btn-clear">Clear All</button>
+                <button class="btn3 addUser" id="openModalButton" >Add User</button>
+                <button class="btn4" style="margin-top: 5px;">CREATE</button>
+            </form>
+            <!--<button type="button" class="btn2" style="height:40px; padding:auto; margin-top:20px; margin-left:390px" onclick="window.history.back();">Go Back</button> -->
+        </div>
+
+            <div class="recent-tasks">
+            <h3 class="recentTask-text">Recent Tasks</h3>
+                    <div class="recent-task-container loading">
+                @forelse($name as $counter)    
+                    <p class="task-item loading-item">{{ $counter->name }}</p>
+                @empty
+                    <p>No recent task</p>
+                @endforelse
+                    </div>
             </div>
-            <button type="reset" class="btn-clear">Clear All</button>
-            <button type="button" class="btn3" id="openModalButton" style="margin-left: 310px;margin-top: -36px;">Add Office</button>
-            <button type="submit" class="btn4" style="margin-top: 5px;">CREATE</button>
-        </form>
-        <!--<button type="button" class="btn2" style="height:40px; padding:auto; margin-top:20px; margin-left:390px" onclick="window.history.back();">Go Back</button> -->
     </div>
-    
-    <h3 style="font-size:35px;position: fixed; right: 240px;top: 100px; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;  background: linear-gradient(90deg, #005733, #0ede3e, #00b029);-webkit-background-clip: text;background-clip: text;-webkit-text-fill-color: transparent;">Recent Tasks</h3>
-    <div class="recent-task-container loading">
-    @forelse($name as $counter)    
-        <p class="task-item loading-item">{{ $counter->name }}</p>
-    @empty
-        <p>No recent task</p>
-    @endforelse
-</div>
 
 
 
@@ -309,16 +95,23 @@
 <div id="inputModal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
-        <h1 class="title1" style="margin-left: -80px; font-size:40px">Create New Office</h1>
+        <h1 class="title1" style="margin-left: -10px; font-size:28px">Create New Office</h1>
         <form id="inputForm" method="POST" action="{{ route('admin.newOfficeAccounts') }}">
         @csrf
             <div id="modal-form-container" class="form-container">
                 <!-- Forms will be dynamically added here -->
             </div>
             <!-- Button to add more forms -->
-            <button type="button" class="submit-btn" style="background-color: #005733;" id="modal-add-form">Add Office</button>
+            <button type="button" class="submit-btn" style="background-color: #005733;" id="modal-add-form">Add User</button>
             <button type="submit" name="btnsave" class="submit-btn" style="margin-top: 10px; background-color: #005733;">Save</button>
         </form>
+
+        </div>
+        </div>
+
+        </div>
+
+    
 
     
     <script>
@@ -335,27 +128,27 @@
             <button class="close-icon" onclick="removeForm(${formCounts})">&times;</button>
             <div class="form-group">
                 <input type="text" name="first[]" id="first_${formCounts}" value="${first}" required>
-                <label>Firstname</label>
+                <label class="labelForm2">Firstname</label>
             </div>
             <div class="form-group">
                 <input type="text" name="middle[]" id="middle_${formCounts}" value="${middle}" required>
-                <label>Middlename</label>
+                <label class="labelForm2">Middlename</label>
             </div>
             <div class="form-group">
                 <input type="text" name="last[]" id="last_${formCounts}" value="${last}" required>
-                <label>Lastname</label>
+                <label class="labelForm2">Lastname</label>
             </div>
             <div class="form-group">
                 <input type="text" name="email[]" id="email_${formCounts}" value="${email}" required>
-                <label>Email</label>
+                <label class="labelForm2">Email</label>
             </div>
             <div class="form-group">
                 <input type="password" name="password[]" id="password_${formCounts}" value="${password}" required>
-                <label>Password</label>
+                <label class="labelForm2">Password</label>
             </div>
             <div class="form-group">
                 <input type="text" name="department[]" id="department_${formCounts}" value="${department}" required>
-                <label>Office Name</label>
+                <label class="labelForm2">Office Name</label>
             </div>
           </div>
         `;
@@ -440,7 +233,7 @@
         <!-- X icon for removing the form -->
         <button class="close-icon" onclick="removeForm(${formCount})">&times;</button>
 
-        <label style="font-size: 30px; font-weight:bold; margin-left:-10px;margin-bottom:20px">Step ${stepCount}</label>
+        <label class="design-step">Step ${stepCount}</label>
         <label for="office_name_${formCount}">Name of the Office</label>
         <select name="office_name[]" id="office_name_${formCount}" required>
             @foreach($offices as $office)
@@ -451,7 +244,7 @@
         </select>
 
         <label>Office Task</label>
-        <input type="text" name="task[]" id="office_task_${formCount}" value="${task}" required>
+        <input  class="officeTask" name="task[]" id="office_task_${formCount}" value="${task}" required>
 
         <label>Task Allotted Time</label>
         <select name="time[]" id="task_time_${formCount}" required>

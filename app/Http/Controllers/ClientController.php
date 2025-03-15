@@ -99,10 +99,21 @@ class ClientController extends Controller
         $beyond = Audit::where('user_id', $UserId)
                             //->whereRaw("TIME(start) >= ?", ['16:00:00'])
                             ->whereNull('finished')
+                            ->whereNotNull('start')
+                            ->count();
+        $overtime = Audit::where('user_id', $UserId)
+                            ->whereColumn('finished', '>', 'deadline')
+                            ->whereNotNull('finished')
+                            ->whereNotNull('start')
                             ->count();
 
         $requerements = Requirements::where('user_id', $UserId)->count();
-        $messages = $audit + $requerements + $beyond;
+        $messages = $audit + $requerements + $beyond + $overtime;
+        Log::info('Audit: ' . $audit);
+        Log::info('Requirements: ' . $requerements);
+        Log::info('Beyond: ' . $beyond);
+        Log::info('Overtime: ' . $overtime);
+        Log::info('Total Messages: ' . $messages);
         $ongoing = 'ongoing';
         $pending = Transaction::where('status', $ongoing)
                                         ->where('user_id', $UserId)
@@ -110,7 +121,10 @@ class ClientController extends Controller
         $complete = Transaction::where('status', 'finished')
                                         ->where('user_id', $UserId)
                                         ->count();
-        return view('client.clientHomePage', compact('documents','messages','pending','complete'));
+        //client drawer
+        $client = User::select('firstname','lastname','middlename')->where('account_type','client')->first();
+
+        return view('client.clientHomePage', compact('documents','messages','pending','complete', 'client'));
         
     }
     
@@ -157,6 +171,9 @@ class ClientController extends Controller
                 $file->pdfUrl = url(Storage::url($file->filepath));
                 $file->wordUrl = null;
             } elseif ($file->type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || $file->type == 'application/msword') {
+                $file->wordUrl = url(Storage::url($file->filepath));
+                $file->pdfUrl = null;
+            } elseif ($file->type == 'application/vnd.ms-excel' || $file->type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
                 $file->wordUrl = url(Storage::url($file->filepath));
                 $file->pdfUrl = null;
             } else {

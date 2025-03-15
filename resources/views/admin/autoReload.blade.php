@@ -23,14 +23,7 @@
             
         </a>
     </div>
-    <div class="stat-item" style="display: flex; align-items: center; height: 115px;">
-        <a href="{{url('/activated/task')}}">
-            <h4 style="width: 130px;">Activated Task</h4>
-            <span id="activated-dot" class="green-dot" style="display: none;"></span>
-            <p id="activated-task-count">{{ $activate }}</p>
-            
-        </a>
-    </div>
+
 </div>
 
 <style>
@@ -87,7 +80,6 @@
                 $('#user-count').text(data.user);
                 $('#completed-count').text(data.completed);
                 $('#transaction-count').text(data.transaction);
-                $('#activated-task-count').text(data.activate);
 
                 // Update previous counts
                 previousCounts = {

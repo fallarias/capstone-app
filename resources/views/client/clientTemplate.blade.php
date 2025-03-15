@@ -303,7 +303,7 @@
                             </a>
                         @elseif ($task->wordUrl)
                             <a href="{{ $task->wordUrl }}" target="_blank" style="text-decoration: none;">
-                                <i class="fas fa-file-word" style="font-size: 35px; color: #007bff; cursor: pointer; margin:auto;padding: 5px; transition: transform 0.3s ease; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);"></i>
+                                <i class="fas fa-file-excel" style="font-size: 35px; color:rgba(13, 125, 21, 0.94); cursor: pointer; margin:auto;padding: 5px; transition: transform 0.3s ease; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);"></i>
                             </a>
                         @endif
                     </td>
@@ -333,7 +333,7 @@
         <button onclick="prevPage()" class="elastic-btn">
             <i class="fas fa-caret-left"></i>
         </button>
-        <span id="pageNumbers" style="margin: 0 20px;"></span>
+        <span id="pageNumbers" style="margin: 0 20px;color:black"></span>
         <button onclick="nextPage()" class="elastic-btn">
             <i class="fas fa-caret-right"></i>
         </button>

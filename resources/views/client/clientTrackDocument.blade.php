@@ -15,9 +15,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 100%;
-            max-width: 800px;
+            width: 200%;
+            max-width: 1200px;
             margin: 20px auto;
+            margin-left: 300px;
             padding-bottom: 10px;
             border-bottom: 1px solid #ccc;
         }
@@ -39,8 +40,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 800px;
+            max-width: 1300px;
             margin: 20px auto;
+            margin-left:270px;
             position: relative;
         }
 
@@ -52,7 +54,7 @@
             left: 75px;
             right: 75px;
             height: 8px;
-            background-color: #3DED97;
+            background-color:rgb(181, 188, 185);
             z-index: 0;
         }
 
@@ -133,6 +135,25 @@
 
 
 
+/* Green progress bar when step 1 is completed and step 2 is ongoing */
+.progress-container .progress-between-steps {
+    position: absolute;
+    top: 18px;
+    left: 75px;
+    height: 8px;
+    background-color: #28a745; /* Default is green */
+    z-index: 0;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.truncate-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px; /* Adjust width as needed */
+    display: inline-block;
+}
+
 
 
 
@@ -163,8 +184,7 @@
 <!-- Progress Bar Section -->
 <div class="progress-container">
     @foreach ($task as $index => $taskItem)
-        <div class="progress-step 
-            {{ $taskItem->task_status == 'Completed' ? 'Completed' : ($taskItem->task_status == 'Ongoing' ? 'Ongoing' : '') }}">
+        <div class="progress-step {{ $taskItem->task_status == 'Completed' ? 'Completed' : ($taskItem->task_status == 'Ongoing' ? 'Ongoing' : '') }}">
             <div class="{{ $taskItem->task_status == 'Completed' ? 'circle ' : ($taskItem->task_status == 'Ongoing' ? 'circle' : 'circle1') }}">
                 @if($taskItem->task_status == 'Completed')
                     <i class="fas fa-check"></i>
@@ -172,17 +192,293 @@
                     {{ $index + 1 }}
                 @endif
             </div>
-            <div class="progress-bar {{ $taskItem->task_status == 'Completed' ? 'green-bar' : ($taskItem->task_status == 'Ongoing' ? 'gray-bar' : '') }}"></div><br>
             <div class="task-details">
-                <strong>{{ $taskItem->Office_name }}</strong><br>
+                <strong class="truncate-text">{{ $taskItem->Office_name }}</strong><br>
                 Task: {{ $taskItem->Office_task }}<br>
                 Allotted Time: {{ $taskItem->New_alloted_time_display }}<br>
                 Status: {{ $taskItem->task_status }}<br>
                 {{ $taskItem->accepted }}
             </div>
+
         </div>
+
+        <!-- Dynamically Add Progress Bar Between Steps -->
+        @if($index < count($task) - 1)
+            <div class="progress-between-steps" id="progressBetween-{{ $index }}"></div>
+        @endif
     @endforeach
 </div>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const tasks = @json($task); // Get Laravel task data
+
+    // Loop through each task step except the last one
+    for (let i = 0; i < tasks.length - 1; i++) {
+        const step1 = tasks[i];
+        const step2 = tasks[i + 1];
+        const step3 = tasks[i + 2];
+        const step4 = tasks[i + 3];
+        const step5 = tasks[i + 4];
+        const step6 = tasks[i + 5];
+        const step7 = tasks[i + 6];
+        const step8 = tasks[i + 7];
+        const step9 = tasks[i + 8];
+        const progressBetween = document.getElementById(`progressBetween-${i}`);
+
+        if (!progressBetween) continue; // Skip if the element is not found
+
+        // Reset progress bar color to default (gray) before applying conditions
+        progressBetween.style.backgroundColor = '#BBBCB6'; // Default gray
+        progressBetween.style.width = '10px'; // Default width
+
+        // Handle the logic based on the task status combination for different lengths
+        if (tasks.length >= 2) {
+            // Handle for 2 steps
+            if (step1.task_status === 'Ongoing' && step2.task_status === 'Waiting') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '550px';
+            } else if (step1.task_status === 'Completed' && step2.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '1150px';
+            } else if (step1.task_status === 'Completed' && step2.task_status === 'Completed') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '1150px';
+            }
+        }
+
+        if (tasks.length >= 3) {
+            // Handle for 3 steps
+            if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '650px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '490px';
+            } else if (step1.task_status === 'Completed' && step2.task_status === 'Completed') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '650px';
+            } else if (step1.task_status === 'Ongoing' && step2.task_status === 'Waiting') {
+                progressBetween.style.backgroundColor = '#28a745'; // Yellow
+                progressBetween.style.width = '160px';
+            }
+        }
+
+        if (tasks.length >= 4) {
+            // Handle for 4 steps
+            if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '650px'; // four complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '650px'; // Triple complete condition
+            }
+            
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '540px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '325px';
+
+            } else if (step1.task_status === 'Ongoing' && step2.task_status === 'Waiting') {
+                progressBetween.style.backgroundColor = '#28a745'; // Yellow
+                progressBetween.style.width = '110px';
+            }
+        }
+
+        if (tasks.length >= 5) {
+            // Handle for 5 steps
+            if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '1150px'; // four complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed' && step5.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '1150px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '1000px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '718px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '430px';
+
+            } else if (step1.task_status === 'Ongoing' && step2.task_status === 'Waiting') {
+                progressBetween.style.backgroundColor = '#28a745'; // Yellow
+                progressBetween.style.width = '140px';
+            }
+        }
+
+        if (tasks.length === 6) {
+            // Handle for 6 steps
+            if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '650px'; // four complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '650px'; // four complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed' && step5.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '590px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '460px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '325px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '190px';
+
+            } else if (step1.task_status === 'Ongoing' && step2.task_status === 'Waiting') {
+                progressBetween.style.backgroundColor = '#28a745'; // Yellow
+                progressBetween.style.width = '60px';
+            }
+        }
+
+        if (tasks.length === 7) {
+            if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Complete') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '650px'; // four complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '650px'; // four complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '650px'; // four complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed' && step5.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '590px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '460px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '325px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '190px';
+
+            } else if (step1.task_status === 'Ongoing' && step2.task_status === 'Waiting') {
+                progressBetween.style.backgroundColor = '#28a745'; // Yellow
+                progressBetween.style.width = '60px';
+            }
+        }
+
+
+        if (tasks.length === 8) {
+            // Handle for 6 steps
+            if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Complete'&& step8.task_status === 'Completed') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '650px'; // four complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Complete'&& step8.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '650px'; // four complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '650px'; // four complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '650px'; // four complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed' && step5.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '590px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '460px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '325px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '190px';
+
+            } else if (step1.task_status === 'Ongoing' && step2.task_status === 'Waiting') {
+                progressBetween.style.backgroundColor = '#28a745'; // Yellow
+                progressBetween.style.width = '60px';
+            }
+        }
+
+
+        if (tasks.length === 9) {
+            // Handle for 6 steps
+            if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Complete'&& step8.task_status === 'Completed'&& step9.task_status === 'Completed') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '650px'; // four complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Complete'&& step8.task_status === 'Completed'&& step9.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '650px'; // four complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Complete'&& step8.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '990px'; // four complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '940px'; // four complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '795px'; // four complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed' && step5.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '650px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '505px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '360px'; // Triple complete condition
+            }
+              else if (step1.task_status === 'Completed' && step2.task_status === 'Ongoing') {
+                progressBetween.style.backgroundColor = '#28a745'; // Green
+                progressBetween.style.width = '215px';
+
+            } else if (step1.task_status === 'Ongoing' && step2.task_status === 'Waiting') {
+                progressBetween.style.backgroundColor = '#28a745'; // Yellow
+                progressBetween.style.width = '70px';
+            }
+        }
+
+        // Continue adding similar conditions for 6 steps if needed.
+    }
+});
+</script>
+
+
 
 
 
@@ -228,3 +524,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+

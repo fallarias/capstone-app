@@ -46,8 +46,8 @@
             </div>
 
             <div class="column1">
-                <h1 style="font-size: 45px; font-weight:bold; margin-left: 110px; margin-top: 30px; margin-bottom: -20px; color:forestgreen"> WELCOME </h1>
-                <h2 style="font-weight: 10; color:black; font-size:20px;  margin-left: 110px; color:darkgrey; margin-bottom:-60px;">Sign in to continue</h2>
+                <h1 class="text-welcome1"> WELCOME </h1>
+                <h2 class="text-welcome2">Sign in to continue</h2>
                 <form method="post" action="{{ route('admin.logins') }}" >
                     @csrf
                     @method('post')
@@ -60,7 +60,7 @@
                     <div class="field input" style="position: relative;"> 
                         <label for="password" style="margin-bottom: -10px; margin-top: 25px;color:forestgreen;font-size:22px">Password</label><br>
                         <input type="password" id="password" name="password" required placeholder="Enter your password" style="padding-right: 30px;">
-                        <i class="fas fa-eye" id="togglePassword" style="position: absolute; right: 10px; top: 50px; cursor: pointer; color: forestgreen;font-size:22px"></i>
+                        <i class="fas fa-eye-slash" id="togglePassword" style="position: absolute; right: 10px; top: 50px; cursor: pointer; color: forestgreen;font-size:22px"></i>
                         <br>
                         <input type="checkbox" id="showPassword" style="margin-top: 20px;cursor:pointer"><span style="color: forestgreen;">Show Password</span>
                     </div>
@@ -71,7 +71,7 @@
                 </form>
 
                 <div style="text-align: center; margin-top: -110px;">
-                    <p style="color: darkgrey;">Don't have an account? <a href="{{ route('client.registrations') }}" style="color: forestgreen; text-decoration: none;">Register here</a></p>
+                    <p class="link-signup" style="color: darkgrey;">Don't have an account? <a href="{{ route('client.registrations') }}" style="color: forestgreen; text-decoration: none;">Register here</a></p>
                 </div>
                 
             </div>
@@ -79,45 +79,28 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Handle password visibility toggle
-            document.getElementById('showPassword').addEventListener('change', function() {
-                var passwordField = document.getElementById('password');
-                if (this.checked) {
-                    passwordField.type = 'text';
-                } else {
-                    passwordField.type = 'password';
-                }
-            });
-
-            // Display SweetAlert2 error if there are any
-            @if($errors->any())
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: '{{ $errors->first() }}',
-                    confirmButtonText: 'OK'
-                });
-            @endif
-        });
-    </script>
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordField = document.getElementById('password');
+    const showPasswordCheckbox = document.getElementById('showPassword');
 
 
-<script>
-document.getElementById('togglePassword').addEventListener('click', function (e) {
-    const password = document.getElementById('password');
-    if (password.type === 'password') {
-        password.type = 'text';
-        this.classList.remove('fa-eye');
-        this.classList.add('fa-eye-slash');
-    } else {
-        password.type = 'password';
-        this.classList.remove('fa-eye-slash');
-        this.classList.add('fa-eye');
-    }
+
+    // Toggle password visibility with checkbox
+    showPasswordCheckbox.addEventListener('change', function() {
+        passwordField.type = this.checked ? 'text' : 'password';
+        
+        // Sync with the eye icon
+        if (this.checked) {
+            togglePassword.classList.remove('fa-eye-slash');
+            togglePassword.classList.add('fa-eye');
+        } else {
+            togglePassword.classList.remove('fa-eye');
+            togglePassword.classList.add('fa-eye-slash');
+        }
+    });
 });
-
 </script>
+
 
 <script>
 function showLoadingScreen(event) {
@@ -158,6 +141,10 @@ function showLoadingScreen(event) {
 </body>
 </html>
 
+<style>
+    #togglePassword {
+    pointer-events: none; /* Disables clicking */
+    color: grey; /* Optional: Change color to indicate it's disabled */
+}
 
-
-
+</style>

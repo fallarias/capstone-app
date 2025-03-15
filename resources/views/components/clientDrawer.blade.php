@@ -89,6 +89,9 @@
             font-size: 74px;
             font-weight: bold;
         }
+        .clientDrawer{
+            color:black;
+        }
 
     </style>
 </head>
@@ -101,27 +104,27 @@
         </div>
         <a href="{{ url('/client/home') }}" class="icon-container">
             <i class="fas fa-home"></i>
-            <span>Home</span>
+            <span class="clientDrawer">Home</span>
         </a>
         <a href="{{ url('/client/notification') }}" class="icon-container">
             <i class="fas fa-bell"></i>
-            <span>Notification</span>
+            <span class="clientDrawer">Notification</span>
         </a>
         <a href="{{ url('/client/template') }}" class="icon-container">
             <i class="fas fa-file-alt"></i>
-            <span>Template</span>
+            <span class="clientDrawer">Template</span>
         </a>
         <a href="{{ url('/client/task/list') }}" class="icon-container">
             <i class="fas fa-file-upload"></i>
-            <span>Track Document</span>
+            <span class="clientDrawer">Track Document</span>
         </a>
         <a href="{{ url('/client/transaction') }}" class="icon-container">
             <i class="fas fa-history"></i>
-            <span>Transaction History</span>
+            <span class="clientDrawer">Transaction History</span>
         </a>
         <a href="{{ url('/logout/client') }}" class="icon-container" style="background-color: white; color: green;">
             <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
+            <span class="clientDrawer">Logout</span>
         </a>
     </div>
 

@@ -187,7 +187,51 @@
 
         /* Yellow stars when selected */
         .star-rating i.active {
-            color: #f5c518;
+            color:rgb(55, 242, 96);
+        }
+
+
+        .svrateButton {
+            background-color: #00b894;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-top: 280px;
+            height: 50px;
+        }
+
+        .svrateButton:hover {
+            background-color:rgb(58, 194, 83); /* Darker green */
+            transform: scale(1.1); /* Slightly enlarges the button */
+        }
+
+
+        .ccrateButton {
+            background-color: #00b894;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-left: 780px;
+            width: 150px;
+            margin-top: 280px;
+        }
+
+        .ccrateButton:hover {
+            background-color:rgb(158, 44, 44); /* Darker green */
+            transform: scale(1.1); /* Slightly enlarges the button */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center; /* Aligns buttons horizontally in the center */
+            gap: 20px; /* Adds space between buttons */
+            margin-top: 20px; /* Adjust top spacing */
         }
 
     </style>
@@ -244,7 +288,7 @@
 
     <!-- Main Content -->
     <!-- Main Content -->
-    <div style="display: flex; justify-content: center; margin-top: 40px; max-width:1400px;">
+    <div style="display: flex; justify-content: center; margin-top: 40px;margin-left: 150px; max-width:1400px;">
     <div class="container">
         <form action="{{ route('client.clientReview') }}" method="POST">
             @csrf
@@ -271,7 +315,10 @@
                     </div>
                 @endforeach
             </div>
-            <button type="submit" class="save-rating btn btn-success mt-2">Save All Ratings</button>
+            <div class="button-container">
+                <button type="button" class="ccrateButton" onclick="goBack()">Cancel</button>
+                <button type="submit" class="svrateButton">Save All Ratings</button>
+            </div>
         </form>
     </div>
 </div>
@@ -306,7 +353,11 @@
     });
 </script>
 
-
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 
 
 

@@ -22,174 +22,22 @@
     <!-- Filter Form -->
     <div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px; margin-left: 200px;">
         <form id="searchForm" onsubmit="return searchTask()" style="display: flex; gap: 15px; align-items: center; margin-bottom: 20px;">
-            <style>
-                .form-control {
-                    width: 250px;
-                    padding: 5px;
-                    border-radius: 5px;
-                    border: 1px solid #ccc;
-                    transition: all 0.3s ease-in-out;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                }
 
-                .form-control:focus {
-                    outline: none;
-                    border-color: #007bff;
-                    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.2);
-                }
-
-                select.form-control {
-                    width: 200px;
-                    height: 40px;
-                }
-
-                button.btn-primary {
-                    background-color: #007bff;
-                    margin-top: -20px;
-                    color: white;
-                    border: none;
-                    border-radius: 5px;
-                    padding: 10px 20px;
-                    cursor: pointer;
-                    transition: background-color 0.3s ease, transform 0.2s ease;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                }
-
-                button.btn-primary:hover {
-                    background-color: #0056b3;
-                    transform: scale(1.05);
-                }
-
-                input.form-control:hover, select.form-control:hover {
-                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-                }
-
-                input.form-control {
-                    width: 580px; /* Adjusting width for a larger search bar */
-                }
-
-                .elastic-btn {
-                width: 50px;          /* Width of the button */
-                height: 50px;         /* Height of the button */
-                display: flex;        /* Align icon within button */
-                justify-content: center;
-                align-items: center;
-                background-color: #18392B;
-                border: none;
-                border-radius: 50%;   /* Makes the button circular */
-                cursor: pointer;
-                transition: all 0.3s ease-in-out;
-            }
-
-            .elastic-btn i {
-                font-size: 24px;      /* Resize the icon */
-                color: white;         /* Icon color */
-            }
-
-            .elastic-btn i:hover {
-                color: yellow;
-                transform: scale(1.1); /* Elastic hover effect */
-                background-color:darkgreen;
-            }
-
-
-            .elastic-btn:hover {
-                transform: scale(1.1);
-            }
-
-            .elastic-btn:active {
-                animation: elastic 0.2s ease;
-            }
-
-            @keyframes elastic {
-                0% {
-                    transform: scale(1.1);
-                }
-                50% {
-                    transform: scale(1.2);
-                }
-                100% {
-                    transform: scale(1);
-                }
-            }
-
-#logTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 1em;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-#logTable thead {
-    background-color: #222;
-    color: #fff;
-    text-align: center;
-}
-
-#logTable th, #logTable td {
-    padding: 12px 15px;
-    border: 1px solid #444;
-    text-align: center;
-}
-
-#logTable tr {
-    background-color: white;
-}
-
-#logTable tr:nth-child(even) {
-    background-color:white;
-}
-
-#logTable tr:hover {
-    background-color: #3a3a3a;
-    color: #00ff99;
-    cursor: pointer;
-}
-
-#logTable th {
-    background: linear-gradient(90deg, #18392B, #18392B);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-        .dl-btn {
-            font-size: 10px; /* Adjust this value to change the size */
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            margin-top: -20px;
-            color: gray;
-        }
-
-        .trash-btn {
-            font-size: 30px; /* Adjust this value to change the size */
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            margin-top: -20px;
-            color: red;
-        }
-
-        .icon-btn:hover {
-            color: #0056b3;
-        }
-        .dl-btn i, .trash-btn i {
-            font-size: 30px; /* Adjust this to your preferred size */
-        }
-            </style>
 
             <!-- Search Task Name -->
-            <input type="text" id="task_name" class="form-control" placeholder="Search" title="Search by task name">
+            <input type="text" id="task_name" class="form-control1" placeholder="Search" title="Search by task name">
             <!-- Filter Button -->
-            <button type="submit" class="btn btn-primary">search</button>
+            <button type="button" class="btn btn-primary1" onclick="searchTask()">Search</button>
+
 
                     <!-- Download Icon -->
         <!-- Download Icon -->
         <button type="button" class="dl-btn" title="Download" id="downloadPdf">
             <i class="fas fa-download"></i>
         </button>
+
+        </form>
+        </div>
 
         <!-- Delete Icon 
         <button type="button" class="trash-btn" title="Delete">
@@ -199,7 +47,8 @@
     </div>
 
     <div style="display: flex; justify-content: center; margin-top: -20px; width:1000px; margin-left:400px">
-        <table id="logTable" border="1">
+    <div class="table-responsive">
+        <table class="listTable" id="logTable" border="1">
             <thead>
                 <th>No.</th>
                 <th>User ID</th>
@@ -224,14 +73,14 @@
             </tbody>
         </table>
     </div>
+</div>
 
     <!-- Pagination -->
-    <div id="pagination" style="display: flex; justify-content: center; align-items: center; margin-top: 20px;
-    margin-left: 200px;">
+    <div id="pagination" class="nextprev">
         <button onclick="prevPage()" class="elastic-btn">
             <i class="fas fa-caret-left"></i>
         </button>
-        <span id="pageNumbers" style="margin: 0 20px;"></span>
+        <span class="pages" id="pageNumbers" style="margin: 0 20px;"></span>
         <button onclick="nextPage()" class="elastic-btn">
                 <i class="fas fa-caret-right"></i>
     </button>

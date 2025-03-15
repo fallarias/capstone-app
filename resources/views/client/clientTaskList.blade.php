@@ -80,7 +80,7 @@
             overflow: hidden;
             background-color: #222;
             color: white;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
             position: relative;
         }
 
@@ -95,9 +95,21 @@
         }
 
         .card-title {
-            color: #222;
+            color:rgb(73, 125, 104);
             font-size: 18px;
             font-weight: bold;
+            font-family: 'Open Sans', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .card-title1 {
+            color:rgb(140, 171, 159);
+            font-size: 12px;
+            font-family: 'Open Sans', sans-serif;
+            margin-top: -20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+
         }
 
         .progress-container {
@@ -132,6 +144,39 @@
             justify-content: center;
         }
 
+
+        .container h1{
+            margin-top: -70px;
+            margin-bottom: 20px;
+            margin-left: -70px;
+            font-size: 36px;
+            color: #00b894;
+            font-weight: bold;
+            font-family: 'Open Sans', sans-serif;
+
+        }
+
+        .viewButton {
+            background-color: #00b894;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .viewButton:hover {
+            background-color: #009374; /* Darker green */
+            transform: scale(1.1); /* Slightly enlarges the button */
+        }
+
+
+
+
+
+        
+
     </style>
 </head>
 <body>
@@ -152,7 +197,7 @@
 
     <div style="display: flex; justify-content: center; margin-top: 40px; width:1000px; margin-left:400px">
         <div class="container">
-            <h2>Document Request</h2>
+            <h1>Document Request</h1>
             <div class="card-container">
             @if ($tasks->isEmpty())
                 <p>No tasks available.</p>
@@ -165,11 +210,11 @@
                             <div class="progress-text">{{ $list->progress }}%</div>
                                 <div class="progress-bar" style="width: {{ $list->progress }}%; background-color:white"></div>
                                 </div> -->
-                                <div class="card-title">Transaction ID : {{ $list->transaction_id }}</div>
                                 <div class="card-title">Name: {{ $list->name }}</div>
+                                <div class="card-title1">Transaction No. {{ $list->transaction_id }}</div>
                                 <form action="{{ route('client.clientTrackDocument', ['task_id' => $list->task_id,'transaction_id'=>$list->transaction_id]) }}" method="get" style="margin-top: 10px;">
                                     @csrf
-                                    <button type="submit" class="btn btn-primary"style="background-color: #00b894; color: black;">View</button>
+                                    <button type="submit" class="viewButton">View</button>
                                 </form>
                             </div>
                         </div>

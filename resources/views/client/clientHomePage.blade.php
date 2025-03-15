@@ -90,14 +90,28 @@
         }
 
         .dashboard-card {
-            width:300px; /* Adjusted width to fit four cards within 300px */
+            text-decoration: none;
+            color: #18392B;
+            width:300px;
+            height: 100px;
             padding: 10px; /* Reduced padding */
             margin-left: 20px;
             text-align: start;
             background-color: white;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
+        .dashboard-card:hover {
+            text-decoration: none;
+            color: #00b894;
+
+        }
+
+
+        .client-card{
+            font-size: 200px;
+        }
+
 
         .dashboard-card1 {
             width:955px; /* Adjusted width to fit four cards within 300px */
@@ -110,22 +124,41 @@
         }
 
         .dashboard-title {
-            font-size: 24px;
+            color: #00b894;
+            font-size: 34px;
             font-weight: bold;
-            margin-top: -80px;
+            margin-top: -60px;
             text-align: start;
             margin-left: 150px;
+            font-family: 'Open Sans', sans-serif;
         }
+
 
         /* Adjust font size in cards to keep content readable */
         .dashboard-card h1 {
             font-size: 26px;
             color: #00b894;
+            margin-left:40px;
         }
 
         .dashboard-card p {
-            font-size: 12px;
+            font-size: 20px;
+            margin-top:10px; 
+            margin-left:10px;
         }
+
+        .app-bar .nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    margin-bottom: -5px;
+}
+
+.app-bar .nav-links a:hover {
+    text-decoration: none; /* Ensure no underline appears */
+}
+
+
 
     </style>
 </head>
@@ -142,7 +175,12 @@
             </button>
         </form>
         </div>
+
+        
     -->
+
+
+
     </div>
 
 
@@ -184,31 +222,30 @@
         </script>
     @endif
 
-    @include('components.clientDrawer')
+    @include('components.clientDrawer', ['client' => $client])
 
     <!-- Main Content -->
     <!-- Main Content -->
     <div style="display: flex; justify-content: center; margin-top: 40px;max-width:1400">
         <div class="container">
-            <h2 class="dashboard-title">Dashboard</h2>
+            <h2 class="dashboard-title">Status Overview</h2>
             <div class="dashboard-container">
-                <div class="dashboard-card">
-                    <h1>{{ $documents }}</h1>
-                    <p>Available Document</p>
-                </div>
-                <div class="dashboard-card">
-                    <h1>{{ $messages}}</h1>
+                <a href="{{ url('/client/task/list') }}" class="dashboard-card">
+                    <h1 >{{ $documents }}</h1>
+                    <p style="">Available Document</p>
+                </a>
+                <a href="{{ url('/client/notification') }}" class="dashboard-card">
+                    <h1>{{ $messages }}</h1>
                     <p>Message</p>
-                </div>
-                <div class="dashboard-card">
+                </a>
+                <a href="{{ url('/client/task/list') }}" class="dashboard-card">
                     <h1>{{ $pending }}</h1>
                     <p>Pending</p>
-                </div>
-                <div class="dashboard-card">
+                </a>
+                <a href="{{ url('/client/transaction') }}" class="dashboard-card">
                     <h1>{{ $complete }}</h1>
                     <p>Completed</p>
-                </div>
-                
+                </a>
             </div>
 
             <!-- <div class="dashboard-card1">

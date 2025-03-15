@@ -200,9 +200,10 @@ a:hover {
 }
 
 .stat-container2 {
-  width: 600px; /* Adjust this value to your preferred width */
+  width: 730px; /* Adjust this value to your preferred width */
   height: auto;
   margin: 0 auto; /* Centers the container horizontally */
+  margin-bottom: 100px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -450,8 +451,7 @@ table tbody tr td{
 
 .checkbox-container {
   position: absolute; 
-  top: 10px; 
-  right: 20px; 
+
 }
 
 .custom-file-upload {
@@ -706,14 +706,14 @@ background-color: rgba(100, 200, 100, 0.2);
 }
 
 .side-menu{
-  width: 150px; 
+  width: 130px; 
   height: 100vh; 
   background-color: #18392B; 
   color: white; 
   position: fixed; 
   top: 0; left: 0; 
   padding: 50px; 
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .head-menu{
@@ -773,8 +773,8 @@ span{
 
 
         .checkbox-container {
-          top: 20px;
-          left: 400px;
+          top: 40px;
+          left: 450px;
           display: flex;
           gap: 20px;
           align-items: center;
@@ -946,14 +946,24 @@ span{
               .listTable{
                 width: 100%;
                 border-collapse: collapse;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 4px 6px rgba(86, 57, 57, 0.1);
                 border-radius: 8px;
                 overflow: hidden;
             }
 
             .table-responsive {
               width: 100%;
+                  border-collapse: collapse;
           }
+
+         .listTable td{
+            border: 1px solid black;
+          }
+
+          .no-border {
+            border-top: 1px solid black !important; /* Adds top border */
+          }
+        
 
 
                       
@@ -1143,7 +1153,7 @@ span{
                             .title4 {
                               font-size: 60px;
                               margin-left: 5px;
-                              margin-top: 15px;
+                              margin-top: 35px;
                               font-weight: bolder;
                               font-family: 'Courier New', Courier, monospace;
                               background: linear-gradient(90deg, #005733, #04ad2b, #2acb4f);
@@ -1290,6 +1300,18 @@ span{
                       }
 
 
+                      .holiday-table th:first-child label {
+                        gap: 1px; /* Adds spacing between checkbox and text */
+                    }
+                    
+                    #selectAllCheckboxHeader {
+                        width: 16px; /* Adjust checkbox size if needed */
+                        height: 16px;
+                        cursor: pointer;
+                    }
+                    
+
+
                       
 
 
@@ -1418,10 +1440,8 @@ span{
           border-radius: 40px;
         
         }
-
-        .no-border {
-          border: none !important;
-      }
+        
+      
         
      
         .icon-container:hover i {

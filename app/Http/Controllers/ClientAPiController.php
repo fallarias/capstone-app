@@ -239,11 +239,12 @@ class ClientAPiController extends Controller
     
         $UnfinishedAudits = Audit::with(['user', 'staff'])->where('user_id', $userId)
                         // Uncomment if you only want finished audits
-                        //->whereNotNull('finished')
+                        ->whereNotNull('start')
                         ->get();
 
         $finishedAudits = Audit::with(['user', 'staff'])->where('user_id', $userId)
                         // Uncomment if you only want finished audits
+                        ->whereNotNull('start')
                         ->whereNotNull('finished')
                         ->get();
                         
@@ -272,10 +273,16 @@ class ClientAPiController extends Controller
         $availableDocuments = Task::where('status', 1)->count();
     
         $audit = Audit::where('user_id', $id)
+                            ->whereNotNull('start')
                             ->whereNotNull('finished')
                             ->count();
+        $audits = Audit::where('user_id', $id)
+                            ->whereNotNull('start')
+                            ->whereNull('finished')
+                            ->count();
+                            
         $requerements = Requirements::where('user_id', $id)->count();
-        $messages = $audit + $requerements;
+        $messages = $audit + $requerements + $audits;
         $ongoing = 'ongoing';
         $pendingDocuments = Transaction::where('status', $ongoing)
                                         ->where('user_id', $id)

@@ -129,7 +129,7 @@
             <div id="form-container">
                 <label for="">Task Name</label>
                 <input type="text" value="{{ $data_task->name }}" name="task_name" required><br>
-                <input type="file" name="filepath" accept=".pdf">
+                <input type="file" name="filepath" accept=".docx,.docs,.lxs,.xlsx">
 
                 @foreach($data as $item)
                     <div class="form-content">
@@ -194,14 +194,12 @@
 
     <script>
         let formCount = {{ count($data) }}; 
-        let stepCount = formCount;
+
 function createForm() {
     formCount++;
-    stepCount++;
     const formContent = `
         <div class="form-content">
             <i class="minus-icon fas fa-minus-circle" onclick="removeForm(this)"></i>
-            <label style="font-size: 30px; font-weight:bold; margin-left:-10px;margin-bottom:20px">Step ${stepCount}</label>
             <label for="office_name_${formCount}">Office Name:</label>
             <select name="office_name[]" id="office_name_${formCount}" required>
                  @foreach($offices as $office)

@@ -16,17 +16,6 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
 
     <style>
-        .title3 {
-            font-size: 60px;
-            margin-left: 5px;
-            margin-top: 15px;
-            font-weight: bolder;
-            font-family: 'Courier New', Courier, monospace;
-            background: linear-gradient(90deg, #005733, #04ad2b, #2acb4f);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
 
         label {
             display: block;
@@ -72,13 +61,7 @@
             margin-left: 1030px;
             margin-top: -300px;
         }
-        .line2 {
-            height: 2px;
-            background-color: #04ad2b;
-            margin: 20px 0;
-            width: 160%;
-            margin-left:-32px;
-        }
+
         .line3 {
             height: 2px;
             background-color: #04ad2b;
@@ -87,75 +70,8 @@
             margin-left:-32px;
         }
 
-        #calendar {
-            max-width: 100%;
-            margin: 500px ;
-            margin-bottom: -60px;
-            margin-left:1090px;
-            margin-top:-410px;
-            margin-right:30px;
-        }
 
-        .fc-header-toolbar {
-            background-color: #04ad2b;
-            color: white;
-            border-radius: 5px;
-            padding: 5px;
-        }
 
-        .fc-daygrid-day-top {
-            color: #04ad2b; 
-        }
-
-        .fc-event {
-            background-color: #04ad2b;
-            border-color: #028c1f;
-            color: white;
-        }
-
-        .fc-daygrid-day-frame {
-            border: 1px solid #04ad2b; 
-        }
-
-        .fc-day-today {
-            background-color: rgba(4, 173, 43, 0.2); 
-        }
-
-        .fc-day-sat, .fc-day-sun {
-            background-color: rgba(4, 173, 43, 0.1);
-        }
-        .fc .fc-col-header-cell {
-                color: black !important; 
-                background-color: #04ad2b; 
-                font-weight: bold;
-            }
-
-        .fc-daygrid-day-number {
-            color: black; 
-            font-weight: bold;
-        }
-
-        .btn.deleteBtn {
-            border: none;
-            background: none;
-            padding: 5px; 
-            font-size: 16px; 
-            cursor: pointer; 
-            color: #dc3545; 
-        }
-
-        .btn.deleteBtn:hover {
-            color: #ff4d4d; 
-        }
-
-        td {
-            padding: 0; 
-            text-align: center; 
-        }
-
-        td .fas {
-            font-size: 20px; 
-        }
 
 
     </style>
@@ -190,35 +106,31 @@
     @include('components.app-bar', ['admin' => $admin])
     
     <div class="main-content">
-        <h1 class="title3">Create Holiday</h1>
-        <div class="line2"></div>
+        <h1 class="title4">Create Holiday</h1>
 
-        <form style="margin-left: 25px;" method="POST" action="{{ route('admin.holidays') }}">
+        <form class="description" method="POST" action="{{ route('admin.holidays') }}">
             @csrf
             @method('post')
-            <label for="Name">Description:</label>
+            <label class="description-text" for="Name">Description:</label>
             <textarea name="desc" id="desc" rows="6" required>{{ old('desc') }}</textarea>
-            <label for="date">School Holiday Date</label>
-            <input type="date" name="date" required>
+            <label class="sched" for="date">Holiday Date</label>
+            <input type="date" name="date" class="date-input" required>
             <button type="submit" class="btn4" style="margin-top: 5px;">Save</button>
         </form>
     </div>
 
     <div class="line1"></div>
 
-    <div id="calendar"></div>
+    <div id="calendar"></div>z
 
-    <div class="line3" style="margin-top: 100px;"></div>
     
     
-<div style="text-align: start; margin-bottom: 120px; margin-left:300px; margin-top:40px; margin-right:30px;">
-    <label>
-        <input type="checkbox" id="selectAllCheckbox" style="margin-bottom: 10px;"> view all
-    </label>
-    <table class="table table-striped">
+    <div class="holiday-table">
+    <div class="table-responsive">
+        <table class="listTable" id="logTable" border="1">
         <thead>
             <tr>
-                <th><input type="checkbox" id="selectAllCheckboxHeader">Select all</th>
+                <th><label><input type="checkbox" id="selectAllCheckboxHeader">Select all</label></th>
                 <th>Description</th>
                 <th>Date</th>
                 <th>Actions</th>
@@ -239,6 +151,7 @@
             @endforeach
         </tbody>
     </table>
+</div>
 </div>
 
 <script>
