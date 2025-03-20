@@ -172,7 +172,7 @@
         <p>Transaction Name: {{$name->name}}</p>
             @foreach ($beyondFour as $four)
 
-                {{$four->office_name}}: Accepted the document beyond 4 PM <br>
+                {{$four->office_name}}: Accepted the document beyond 5 PM <br>
 
             @endforeach
     </div>
@@ -242,10 +242,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 progressBetween.style.width = '550px';
             } else if (step1.task_status === 'Completed' && step2.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '1150px';
+                progressBetween.style.width = '1130px';
             } else if (step1.task_status === 'Completed' && step2.task_status === 'Completed') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '1150px';
+                progressBetween.style.width = '1130px';
             }
         }
 
@@ -253,17 +253,17 @@ document.addEventListener('DOMContentLoaded', function () {
             // Handle for 3 steps
             if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '650px'; // Triple complete condition
+                progressBetween.style.width = '1130px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '490px';
+                progressBetween.style.width = '850px';
             } else if (step1.task_status === 'Completed' && step2.task_status === 'Completed') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '650px';
+                progressBetween.style.width = '1130px';
             } else if (step1.task_status === 'Ongoing' && step2.task_status === 'Waiting') {
                 progressBetween.style.backgroundColor = '#28a745'; // Yellow
-                progressBetween.style.width = '160px';
+                progressBetween.style.width = '270px';
             }
         }
 
@@ -271,24 +271,24 @@ document.addEventListener('DOMContentLoaded', function () {
             // Handle for 4 steps
             if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '650px'; // four complete condition
+                progressBetween.style.width = '1130px'; // four complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '650px'; // Triple complete condition
+                progressBetween.style.width = '1130px'; // Triple complete condition
             }
             
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '540px'; // Triple complete condition
+                progressBetween.style.width = '940px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '325px';
+                progressBetween.style.width = '565px';
 
             } else if (step1.task_status === 'Ongoing' && step2.task_status === 'Waiting') {
                 progressBetween.style.backgroundColor = '#28a745'; // Yellow
-                progressBetween.style.width = '110px';
+                progressBetween.style.width = '180px';
             }
         }
 
@@ -296,19 +296,19 @@ document.addEventListener('DOMContentLoaded', function () {
             // Handle for 5 steps
             if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '1150px'; // four complete condition
+                progressBetween.style.width = '1130px'; // four complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed' && step5.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '1150px'; // Triple complete condition
+                progressBetween.style.width = '1130px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '1000px'; // Triple complete condition
+                progressBetween.style.width = '990px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '718px'; // Triple complete condition
+                progressBetween.style.width = '708px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
@@ -324,66 +324,66 @@ document.addEventListener('DOMContentLoaded', function () {
             // Handle for 6 steps
             if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '650px'; // four complete condition
+                progressBetween.style.width = '1130px'; // four complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '650px'; // four complete condition
+                progressBetween.style.width = '1130px'; // four complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed' && step5.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '590px'; // Triple complete condition
+                progressBetween.style.width = '1010px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '460px'; // Triple complete condition
+                progressBetween.style.width = '790px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '325px'; // Triple complete condition
+                progressBetween.style.width = '555px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '190px';
+                progressBetween.style.width = '340px';
 
             } else if (step1.task_status === 'Ongoing' && step2.task_status === 'Waiting') {
                 progressBetween.style.backgroundColor = '#28a745'; // Yellow
-                progressBetween.style.width = '60px';
+                progressBetween.style.width = '120px';
             }
         }
 
         if (tasks.length === 7) {
             if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Complete') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '650px'; // four complete condition
+                progressBetween.style.width = '1130px'; // four complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '650px'; // four complete condition
+                progressBetween.style.width = '1130px'; // four complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '650px'; // four complete condition
+                progressBetween.style.width = '1030px'; // four complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed' && step5.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '590px'; // Triple complete condition
+                progressBetween.style.width = '840px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '460px'; // Triple complete condition
+                progressBetween.style.width = '650px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '325px'; // Triple complete condition
+                progressBetween.style.width = '465px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '190px';
+                progressBetween.style.width = '280px';
 
             } else if (step1.task_status === 'Ongoing' && step2.task_status === 'Waiting') {
                 progressBetween.style.backgroundColor = '#28a745'; // Yellow
-                progressBetween.style.width = '60px';
+                progressBetween.style.width = '100px';
             }
         }
 
@@ -392,39 +392,39 @@ document.addEventListener('DOMContentLoaded', function () {
             // Handle for 6 steps
             if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Complete'&& step8.task_status === 'Completed') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '650px'; // four complete condition
+                progressBetween.style.width = '1130px'; // four complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Complete'&& step8.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '650px'; // four complete condition
+                progressBetween.style.width = '1130px'; // four complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '650px'; // four complete condition
+                progressBetween.style.width = '1040px'; // four complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '650px'; // four complete condition
+                progressBetween.style.width = '880px'; // four complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed' && step5.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '590px'; // Triple complete condition
+                progressBetween.style.width = '720px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '460px'; // Triple complete condition
+                progressBetween.style.width = '560px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '325px'; // Triple complete condition
+                progressBetween.style.width = '395px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '190px';
+                progressBetween.style.width = '240px';
 
             } else if (step1.task_status === 'Ongoing' && step2.task_status === 'Waiting') {
                 progressBetween.style.backgroundColor = '#28a745'; // Yellow
-                progressBetween.style.width = '60px';
+                progressBetween.style.width = '80px';
             }
         }
 
@@ -433,39 +433,39 @@ document.addEventListener('DOMContentLoaded', function () {
             // Handle for 6 steps
             if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Complete'&& step8.task_status === 'Completed'&& step9.task_status === 'Completed') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '650px'; // four complete condition
+                progressBetween.style.width = '1130px'; // four complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Complete'&& step8.task_status === 'Completed'&& step9.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '650px'; // four complete condition
+                progressBetween.style.width = '1130px'; // four complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Complete'&& step8.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '990px'; // four complete condition
+                progressBetween.style.width = '1000px'; // four complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Completed'&& step7.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '940px'; // four complete condition
+                progressBetween.style.width = '910px'; // four complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed'  && step5.task_status === 'Completed' && step6.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '795px'; // four complete condition
+                progressBetween.style.width = '775px'; // four complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Completed' && step5.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '650px'; // Triple complete condition
+                progressBetween.style.width = '630px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Completed' && step4.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '505px'; // Triple complete condition
+                progressBetween.style.width = '490px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Completed' && step3.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '360px'; // Triple complete condition
+                progressBetween.style.width = '350px'; // Triple complete condition
             }
               else if (step1.task_status === 'Completed' && step2.task_status === 'Ongoing') {
                 progressBetween.style.backgroundColor = '#28a745'; // Green
-                progressBetween.style.width = '215px';
+                progressBetween.style.width = '210px';
 
             } else if (step1.task_status === 'Ongoing' && step2.task_status === 'Waiting') {
                 progressBetween.style.backgroundColor = '#28a745'; // Yellow

@@ -1,964 +1,971 @@
-        body {
-            background-color: #ebe7e7;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        .form-container {
-            margin-top: 20px;
-            
+body {
+    background-color: #ebe7e7;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.form-container {
+    margin-top: 20px;
+    
+}
+
+.form-content {
+    width: 75%;
+    position: relative;
+    padding: 20px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+.close-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    margin : auto;
+    background-color: white;
+    color: red;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    cursor: pointer;
+    font-size: 30px;
+}
+
+
+
+
+
+
+input, select {
+    width: 13%;
+    height: 100%;
+    font-size: medium;
+}
+
+
+
+.main-content {
+    max-width: 600px;
+    margin-left: 300px;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+.title1 {
+    margin-left: -550px;
+    text-align: center;
+    font-size: 60px;
+    margin-bottom: 20px;
+    font-family:'Courier New', Courier, monospace;
+    background: linear-gradient(90deg, #005733, #04ad2b, #2acb4f);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+label, input {
+    width: 95%;
+    margin: auto;
+    display: block;
+    margin-bottom: 10px;
+}
+input[type="text"], input[type="file"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px; /* Adds spacing between buttons */
+    margin-top: 10px;
+}
+
+.btn3, .btn2, .btn-clear {
+    width:296px;
+    background-color: #18392B;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+.btn3:hover, .btn2:hover {
+    background-color: #555;
+}
+
+.btn-clear:hover {
+    background-color: red;
+}
+
+.btn4{
+    width:296px;
+    height: 38px;
+    background-color: #18392B;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 13px;
+
+}
+.btn4:hover{
+    background-color: #28a745;
+}
+
+
+
+
+
+select {
+    width: 100%; /* Makes the select take up the full width of its container */
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+
+
+
+#openModalButton {
+    padding: 10px 20px;
+    background-color: #18392B;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-top: -36.5px;
+}
+
+#openModalButton:hover {
+    background-color: #318392B3;
+}
+
+/* Modal container */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal content box */
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-height: 80%; /* Max height as a percentage of the viewport */
+    overflow-y: auto; 
+}
+
+/* Close button styling */
+.close {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: red;
+}
+
+.close:hover, .close:focus {
+    color: #a42914;
+}
+
+
+
+
+/* Custom Save button styling */
+button[type="submit"],
+button[type="button"] {
+    width: 100%;
+    padding: 12px 25px;
+    background-color: #18392B; /* Blue background */
+    color: white; /* White text */
+    border: none;
+    border-radius: 8px; /* Rounded corners */
+    font-size: 16px; /* Medium font size */
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    transition: all 0.3s ease;
+}
+
+/* Hover and active effects for Save button */
+button[type="submit"]:hover,
+button[type="button"]:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Increased shadow */
+    transform: translateY(-2px); /* Lift effect */
+}
+
+button[type="submit"]:active,
+button[type="button"]:active {
+    transform: translateY(2px); /* Slight push-down effect */
+    background-color: #004085; /* Even darker blue when clicked */
+}
+
+
+
+
+.recent-task-container.loading {
+    position: fixed;
+    right: 110px;
+    top: 200px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    padding: 15px;
+    width: 390px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.loading-item {
+    background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 4px;
+    height: 20px; /* Adjust height */
+    margin: 5px 0;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: 0 0; }
+}
+
+
+
+@keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        .form-content {
-            width: 75%;
+        .main-content:hover {
+            transform: translateY(-5px);
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+        }
+
+
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background: #007bff;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #0056b3;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .close-icon {
+            cursor: pointer;
+            color: red;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+.form-group label {
+    position: absolute;
+    left: 15px; /* Adjusted left position */
+    top: 15px; /* You can also adjust the top position if needed */
+    transition: 0.2s ease all;
+    opacity: 0.7;
+    font-size: 14px; /* Font size */
+    color: #333; /* Color */
+    font-weight: bold; /* Bold text */
+    pointer-events: none; /* Prevent label from blocking input */
+}
+
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+    top: -25px; /* Raise the label higher */
+    left: 15px; /* Keep the left position consistent when focused */
+    font-size: 22px; /* Adjust as needed */
+    opacity: 1;
+    color: #005733; /* Color when focused or filled */
+}
+
+    .form-group input {
+    width: 90%;
+    padding: 12px 10px; /* Increased top and bottom padding */
+    margin-bottom: 30px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+    margin-top: 40px; /* Added margin for spacing between the input and label */
+    }
+
+    .form-group {
+        margin-bottom: 40px; /* Increased space between form groups */
+    }
+    .form-content {
+            width: 95%;
             position: relative;
             padding: 20px;
             border: 1px solid #ddd;
             margin-bottom: 20px;
             border-radius: 8px;
-        }
-        .close-icon {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            margin : auto;
-            background-color: white;
-            color: red;
-            border: none;
-            border-radius: 50%;
-            width: 25px;
-            height: 25px;
-            text-align: center;
-            line-height: 25px;
-            cursor: pointer;
-            font-size: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add this line */
         }
 
+    .form-content1 {
+        margin-top: 20px;
+        width: 170%;
+        position: relative;
+        padding: 20px;
+        border: 2px solid #ddd;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add this line */
+       }
 
-
-
-
-
-        input, select {
-            width: 13%;
-            height: 100%;
-            font-size: medium;
+    .form-content1 label{
+        margin-left: 0px;
         }
 
+    input[type="text"], input[type="file"] , input[type="password"]{
+        border: 2px solid green; /* Green border */
+        background-color: rgba(0, 128, 0, 0.1); /* Transparent green background */
+        padding: 8px;
+        border-radius: 4px;
+    }
+
+    input[type="text"]:focus, input[type="file"]:focus, input[type="password"]:focus {
+        outline: none;
+        border-color: darkgreen; /* Darker green when focused */
+        background-color: rgba(0, 128, 0, 0.2); 
+    }
+
+    select {
+        border: 2px solid green; 
+        background-color: rgba(0, 128, 0, 0.1); 
+        padding: 8px;
+        border-radius: 4px;
+        appearance: none;
+    }
+
+    select:focus {
+        outline: none;
+        border-color: darkgreen; 
+        background-color: rgba(0, 128, 0, 0.2); /* Slightly more opaque green on focus */
+    }
 
 
-        .main-content {
-            max-width: 600px;
-            margin-left: 300px;
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-        }
-        .title1 {
-            margin-left: -550px;
-            text-align: center;
-            font-size: 60px;
-            margin-bottom: 20px;
-            font-family:'Courier New', Courier, monospace;
-            background: linear-gradient(90deg, #005733, #04ad2b, #2acb4f);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        label, input {
-            width: 95%;
-            margin: auto;
-            display: block;
-            margin-bottom: 10px;
-        }
-        input[type="text"], input[type="file"] {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .btn3, .btn2, .btn-clear {
-            width: 49%;
-            background-color: #18392B;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-        }
-        .btn3:hover, .btn2:hover {
-            background-color: #555;
-        }
-
-        .btn-clear:hover {
-            background-color: red;
-        }
-
-        .btn4{
-            width: 100%;
-            background-color: #18392B;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .btn4:hover{
-            background-color: #28a745;
-        }
+    .plus-icon {
+        display: inline-block;
+        background-color: #28a745;
+        color: white; 
+        border-radius: 50%; 
+        width: 40px; 
+        height: 40px; 
+        text-align: center; 
+        line-height: 40px; 
+        font-size: 24px; 
+        cursor: pointer; 
+    }
+    .plus-icon:hover {
+        background-color: #218838; 
+    }
 
 
 
+    .plus-icon {
+    font-weight:bold;
+    text-align: center;
+    text-decoration:none;
+    color: #fff;
+    background-color: #28a745;
+    border: 2px solid #000;
+    border-radius: 40px;
+    box-shadow: 5px 5px 0px #000;
+    transition: all 0.3s ease;
+}
 
 
-        select {
-            width: 100%; /* Makes the select take up the full width of its container */
-            padding: 8px;
-            margin-top: 5px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
+
+.plus-icon:hover {
+    background-color: #fff;
+    color: green;
+    border: 2px solid #28a745;
+    box-shadow: 5px 5px 0px #28a745;
+}
+
+.plus-icon:active {
+    color: white;
+    background-color: #28a745;
+    box-shadow: none;
+    transform: traslateY(4px);
+}
+
+.recentTask-text{
+    font-size:35px;
+    position: fixed; 
+    right: 290px;
+    top: 100px; 
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;  
+    background: linear-gradient(90deg, #005733, #0ede3e, #00b029);
+    -webkit-background-clip: text;background-clip: text;-webkit-text-fill-color: transparent;
+}
 
 
 
-       
-        #openModalButton {
-            padding: 10px 20px;
-            background-color: #18392B;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 14px;
-            margin-top: -36.5px;
-        }
+.design-step{
+    font-size: 30px; 
+    font-weight:bold; 
+    margin-left:-10px;
+    margin-bottom:20px
+}
 
-        #openModalButton:hover {
-            background-color: #318392B3;
-        }
 
-        /* Modal container */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
+.officeTask{
+    width: 97%;
+    height: 18px; 
+    font-size: 12px;
+    padding: 5px 10px; 
+    text-align: left; 
+    line-height: 10px; 
+}
 
-        /* Modal content box */
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            max-height: 80%; /* Max height as a percentage of the viewport */
-            overflow-y: auto; 
-        }
 
-        /* Close button styling */
-        .close {
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            color: red;
-        }
 
-        .close:hover, .close:focus {
-            color: #a42914;
-        }
+input[type="text"], input[type="file"] , input[type="password"],.officeTask{
+    border: 2px solid green; 
+    background-color: rgba(0, 128, 0, 0.1);
+    padding: 8px;
+    border-radius: 4px;
+}
+
+input[type="text"]:focus, input[type="file"]:focus, input[type="password"]:focus,.officeTask:focus {
+    outline: none;
+    border-color: darkgreen; 
+    background-color: rgba(0, 128, 0, 0.2); 
+}
 
 
 
 
-        /* Custom Save button styling */
-        button[type="submit"],
-        button[type="button"] {
-            width: 100%;
-            padding: 12px 25px;
-            background-color: #18392B; /* Blue background */
-            color: white; /* White text */
-            border: none;
-            border-radius: 8px; /* Rounded corners */
-            font-size: 16px; /* Medium font size */
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
-            transition: all 0.3s ease;
-        }
-
-        /* Hover and active effects for Save button */
-        button[type="submit"]:hover,
-        button[type="button"]:hover {
-            background-color: #0056b3; /* Darker blue on hover */
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Increased shadow */
-            transform: translateY(-2px); /* Lift effect */
-        }
-
-        button[type="submit"]:active,
-        button[type="button"]:active {
-            transform: translateY(2px); /* Slight push-down effect */
-            background-color: #004085; /* Even darker blue when clicked */
-        }
 
 
-        
 
-        .recent-task-container.loading {
-            position: fixed;
-            right: 110px;
-            top: 200px;
-            background: #f0f0f0;
-            border-radius: 8px;
-            padding: 15px;
-            width: 390px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .loading-item {
-            background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-            border-radius: 4px;
-            height: 20px; /* Adjust height */
-            margin: 5px 0;
-        }
-        
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: 0 0; }
-        }
-        
-        
-        
-        @keyframes fadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
-                }
-        
-                .main-content:hover {
-                    transform: translateY(-5px);
-                }
-        
-                .form-group {
-                    position: relative;
-                    margin-bottom: 20px;
-                }
-        
-                .form-group input {
-                    width: 100%;
-                    padding: 10px;
-                    border: 1px solid #ddd;
-                    border-radius: 5px;
-                    transition: border-color 0.3s;
-                }
-        
+@media screen and (max-width: 780px ) {
 
-        
-                .submit-btn {
-                    width: 100%;
-                    padding: 12px;
-                    border: none;
-                    border-radius: 5px;
-                    background: #007bff;
-                    color: #fff;
-                    font-size: 16px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    transition: background 0.3s;
-                }
-        
-                .submit-btn:hover {
-                    background: #0056b3;
-                }
-        
-                .submit-btn:active {
-                    transform: scale(0.98);
-                }
-        
-                @keyframes slideIn {
-                    to {
-                        opacity: 1;
-                        transform: translateX(0);
-                    }
-                }
-        
-                .close-icon {
-                    cursor: pointer;
-                    color: red;
-                    font-size: 18px;
-                    margin-bottom: 10px;
-                }
-        .form-group label {
-            position: absolute;
-            left: 15px; /* Adjusted left position */
-            top: 15px; /* You can also adjust the top position if needed */
-            transition: 0.2s ease all;
-            opacity: 0.7;
-            font-size: 14px; /* Font size */
-            color: #333; /* Color */
-            font-weight: bold; /* Bold text */
-            pointer-events: none; /* Prevent label from blocking input */
-        }
-        
-        .form-group input:focus + label,
-        .form-group input:not(:placeholder-shown) + label {
-            top: -25px; /* Raise the label higher */
-            left: 15px; /* Keep the left position consistent when focused */
-            font-size: 22px; /* Adjust as needed */
-            opacity: 1;
-            color: #005733; /* Color when focused or filled */
-        }
-        
-            .form-group input {
-            width: 90%;
-            padding: 12px 10px; /* Increased top and bottom padding */
-            margin-bottom: 30px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            transition: border-color 0.3s;
-            margin-top: 40px; /* Added margin for spacing between the input and label */
-            }
-        
-            .form-group {
-                margin-bottom: 40px; /* Increased space between form groups */
-            }
-            .form-content {
-                    width: 95%;
-                    position: relative;
-                    padding: 20px;
-                    border: 1px solid #ddd;
-                    margin-bottom: 20px;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add this line */
-                }
-        
-            .form-content1 {
-                margin-top: 20px;
-                width: 150%;
-                position: relative;
-                padding: 20px;
-                border: 2px solid #ddd;
-                margin-bottom: 20px;
-                border-radius: 8px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add this line */
-               }
+    html, body {
+        background-color: #ebe7e7;
+        font-family: Arial, sans-serif;
+        box-sizing: border-box;
+        overflow-x: hidden; 
+        width: 100%;
+        height: -webkit-fill-available;
 
-            .form-content1 label{
-                margin-left: 0px;
-                }
-        
-            input[type="text"], input[type="file"] , input[type="password"]{
-                border: 2px solid green; /* Green border */
-                background-color: rgba(0, 128, 0, 0.1); /* Transparent green background */
-                padding: 8px;
-                border-radius: 4px;
-            }
-        
-            input[type="text"]:focus, input[type="file"]:focus, input[type="password"]:focus {
-                outline: none;
-                border-color: darkgreen; /* Darker green when focused */
-                background-color: rgba(0, 128, 0, 0.2); 
-            }
-        
-            select {
-                border: 2px solid green; 
-                background-color: rgba(0, 128, 0, 0.1); 
-                padding: 8px;
-                border-radius: 4px;
-                appearance: none;
-            }
-        
-            select:focus {
-                outline: none;
-                border-color: darkgreen; 
-                background-color: rgba(0, 128, 0, 0.2); /* Slightly more opaque green on focus */
-            }
-
-
-            .plus-icon {
-                display: inline-block;
-                background-color: #28a745;
-                color: white; 
-                border-radius: 50%; 
-                width: 40px; 
-                height: 40px; 
-                text-align: center; 
-                line-height: 40px; 
-                font-size: 24px; 
-                cursor: pointer; 
-            }
-            .plus-icon:hover {
-                background-color: #218838; 
-            }
-
-
-        
-            .plus-icon {
-            font-weight:bold;
-            text-align: center;
-            text-decoration:none;
-            color: #fff;
-            background-color: #28a745;
-            border: 2px solid #000;
-            border-radius: 40px;
-            box-shadow: 5px 5px 0px #000;
-            transition: all 0.3s ease;
-        }
-        
-        
-        
-        .plus-icon:hover {
-            background-color: #fff;
-            color: green;
-            border: 2px solid #28a745;
-            box-shadow: 5px 5px 0px #28a745;
-        }
-        
-        .plus-icon:active {
-            color: white;
-            background-color: #28a745;
-            box-shadow: none;
-            transform: traslateY(4px);
-        }
-
-        .recentTask-text{
-            font-size:35px;
-            position: fixed; 
-            right: 290px;
-            top: 100px; 
-            font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;  
-            background: linear-gradient(90deg, #005733, #0ede3e, #00b029);
-            -webkit-background-clip: text;background-clip: text;-webkit-text-fill-color: transparent;
-        }
-
-        .addUser{
-            margin-left: 305px;
-            margin-top: -38px;
-        }
-
-        .design-step{
-            font-size: 30px; 
-            font-weight:bold; 
-            margin-left:-10px;
-            margin-bottom:20px
-        }
-
-
-        .officeTask{
-            width: 97%;
-            height: 18px; 
-            font-size: 12px;
-            padding: 5px 10px; 
-            text-align: left; 
-            line-height: 10px; 
-        }
-        
-
-
-        input[type="text"], input[type="file"] , input[type="password"],.officeTask{
-            border: 2px solid green; 
-            background-color: rgba(0, 128, 0, 0.1);
-            padding: 8px;
-            border-radius: 4px;
-        }
+    }
     
-        input[type="text"]:focus, input[type="file"]:focus, input[type="password"]:focus,.officeTask:focus {
-            outline: none;
-            border-color: darkgreen; 
-            background-color: rgba(0, 128, 0, 0.2); 
-        }
+    .main-content {
+        max-width: 90%;
+        margin-left: 180px;
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        margin-bottom: 20px;
+    }
 
-        
-
-        
-
-
-
-        @media screen and (max-width: 780px ) {
-
-            html, body {
-                background-color: #ebe7e7;
-                font-family: Arial, sans-serif;
-                box-sizing: border-box;
-                overflow-x: hidden; 
-                width: 100%;
-                height: -webkit-fill-available;
-
-            }
-            
-            .main-content {
-                max-width: 90%;
-                margin-left: 180px;
-                margin-top: 30px;
-                padding: 20px;
-                background-color: #f9f9f9;
-                border-radius: 8px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-                margin-bottom: 20px;
-            }
-
-            .recentTask-text {
-                margin-left: 68px;
-                margin-top: -90px;
-                font-size: 25px;
-                font-weight: bold;
-                font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-                background: linear-gradient(90deg, #005733, #0ede3e, #00b029);
-                -webkit-background-clip: text;
-                background-clip: text;
-                -webkit-text-fill-color: transparent;
-                margin-bottom: 10px; 
-                position: relative; 
-                text-align: left;
-            }
+    .recentTask-text {
+        margin-left: 68px;
+        margin-top: -90px;
+        font-size: 25px;
+        font-weight: bold;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        background: linear-gradient(90deg, #005733, #0ede3e, #00b029);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 10px; 
+        position: relative; 
+        text-align: left;
+    }
 
 
-            .recent-task-container.loading {
-                margin-top: -100px;
-                margin-left: -110px;
-                background: #f0f0f0;
-                border-radius: 8px;
-                padding: 15px;
-                width: 50%;
-                max-width: 350px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-                position: relative;
-            }
+    .recent-task-container.loading {
+        margin-top: -100px;
+        margin-left: -110px;
+        background: #f0f0f0;
+        border-radius: 8px;
+        padding: 15px;
+        width: 50%;
+        max-width: 350px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
 
-            .loading-item {
-                background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
-                background-size: 200% 100%;
-                animation: loading 1.5s infinite;
-                border-radius: 4px;
-                height: 18px;
-                margin: 5px 0;
-                font-size: 13px;
-            }
-            
-            @keyframes loading {
-                0% { background-position: 200% 0; }
-                100% { background-position: 0 0; }
-            }
-
-            .addUser-btn{
-                width:45%;
-                font-size: 10px;
-                border: none;
-                border-radius: 4px;
-                margin-left: 100px;
-
-
-            }
-
-
-            .task-container {
-                display: flex;
-                justify-content: center;
-                flex-direction: column; 
-                align-items: center;
-                width: 100%;
-                margin-left: -60px;
-                
-            }
-            
-            .form-section {
-                width: 95%;
-                max-width: 1200px;
-                margin-left: -30px;
-                
-            }
-            
-            .recent-tasks {
-                margin-left: 800px;
-                width: 100%;
-                max-width: 600px;
-                margin-top: 20px; 
-                position: relative; 
-                text-align: left;
-            }
-
-            .form-content {
-                width: 88%;
-                position: relative;
-                padding: 20px;
-                border: 1px solid #ddd;
-                margin-bottom: 20px;
-                border-radius: 8px;
-            }
-
-
-            .form-content1 {
-                margin-top: 20px;
-                width: 82%;
-                position: relative;
-                padding: 20px;
-                border: 2px solid #ddd;
-                margin-bottom: 20px;
-                border-radius: 8px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); 
-            }
-
-
-
-            .modal-content {
-                margin-top: -280px;
-                background-color: white;
-                padding: 20px;
-                border-radius: 8px;
-                max-width: 500px;
-                width: 60%;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-                max-height: 60%; 
-                overflow-y: auto; 
-            }
-
-            .title1 {
-                margin-left: 20px;
-                text-align: center;
-                font-size: 30px;
-                margin-bottom: 20px;
-                font-family:'Courier New', Courier, monospace;
-                background: linear-gradient(90deg, #005733, #04ad2b, #2acb4f);
-                -webkit-background-clip: text;
-                background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }
-
-            .modal {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 60%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.5);
-                justify-content: center;
-                align-items: center;
-            }
-            
-            .container{
-                width: 450px;
-            }
-
-            label{
-                font-size: 12px;
-            }
-
-            input[type="text"], 
-            input[type="file"],
-            input[type="password"]{
-                width: 95%;
-                height: 15px; 
-                font-size: 12px;
-                padding: 5px 10px; 
-                text-align: center; 
-                line-height: 10px;
-            }
-
-            .officeTask{
-                width: 97%;
-                height: 8px; 
-                font-size: 12px;
-                padding: 5px 10px; 
-                text-align: center; 
-                line-height: 10px; 
-            }
-
-
-            input[type="text"], input[type="file"] , input[type="password"],.officeTask{
-                border: 2px solid green; 
-                background-color: rgba(0, 128, 0, 0.1); 
-                padding: 8px;
-                border-radius: 4px;
-            }
-        
-            input[type="text"]:focus, input[type="file"]:focus, input[type="password"]:focus,.officeTask:focus {
-                outline: none;
-                border-color: darkgreen; 
-                background-color: rgba(0, 128, 0, 0.2);
-            }
-            
-
-
-            .plus-icon {
-                display: inline-block;
-                background-color: #28a745;
-                color: white; 
-                border-radius: 50%; 
-                width: 25px; 
-                height: 25px; 
-                text-align: center; 
-                line-height: 26px;
-                font-size: 20px; 
-                cursor: pointer; 
-            }
-            .plus-icon:hover {
-                background-color: #218838;
-            }
-
-
-        
-            .plus-icon {
-            font-weight:bold;
-            text-align: center;
-            text-decoration:none;
-            color: #fff;
-            background-color: #28a745;
-            border: 2px solid #000;
-            border-radius: 40px;
-            box-shadow: 5px 5px 0px #000;
-            transition: all 0.3s ease;
-        }
-        
-        
-        
-        .plus-icon:hover {
-            background-color: #fff;
-            color: green;
-            border: 2px solid #28a745;
-            box-shadow: 5px 5px 0px #28a745;
-        }
-        
-        .plus-icon:active {
-            color: white;
-            background-color: #28a745;
-            box-shadow: none;
-            transform: traslateY(4px);
-        }
-
-        .btn3, .btn2, .btn-clear {
-            width:50%;
-            background-color: #18392B;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 10px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-
-        .btn-clear:hover {
-            background-color: red;
-        }
-
-        .btn3:hover, .btn2:hover {
-            background-color: #555;
-        }
-
-        #openModalButton {
-            padding: 10px 20px;
-            background-color: #18392B;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 10px;
-            margin-top: -31.5px;
-            margin-left: 115px;
-        }
-
-        #openModalButton:hover {
-            background-color: #318392B3;
-        }
-
-        button[type="submit"] {
-            width: 102%;
-            padding: 12px 25px;
-            background-color: #18392B; 
-            color: white; 
-            border: none;
-            border-radius: 8px; 
-            font-size: 10px; 
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
-            transition: all 0.3s ease;
-        }
-
-        /* Hover and active effects for Save button */
-        button[type="submit"]:hover {
-            background-color: #0056b3;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); 
-            transform: translateY(-2px);
-        }
-
-        button[type="submit"]:active {
-            transform: translateY(2px);
-            background-color: #004085;
-        }
-
-        .design-step{
-            font-size: 20px; 
-            font-weight:bold; 
-            margin-left:-10px;
-            margin-bottom:20px
-        }
-
-        select, 
-        option {
-            width: 107%;
-            height: 25px; 
-            font-size: 12px;
-            padding: 5px 10px; 
-            text-align: start; 
-            line-height: 10px; 
-        }
-
-
-
-
-        /* Modal container */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Modal content box */
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 500px;
-            margin-top: 30px;
-            width: 68%;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            max-height: 80%; 
-            overflow-y: auto; 
-        }
-
-
-        
-     
-        button[type="submit"],
-        button[type="button"] {
-            width: 100%;
-            padding: 12px 25px;
-            background-color: #18392B; 
-            color: white; 
-            border: none;
-            border-radius: 8px; 
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
-            transition: all 0.3s ease;
-        }
-
-        
-        button[type="button"]{
-            background-color: #0056b3; 
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); 
-            transform: translateY(-2px); 
-        }
-
-        button[type="button"] {
-            transform: translateY(2px); 
-            background-color: #004085; 
-        }
-
-        button[type="submit"]:hover{
-            background-color: #19c909; 
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); 
-            transform: translateY(-2px);
-        }
-
-        button[type="submit"]:active{
-            transform: translateY(2px); 
-            background-color: #19c909; 
-        }
-
-        .btn4{
-            width: 101%;
-            background-color: #18392B;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .btn4:hover{
-            background-color: #28a745;
-        }
-
-        .labelForm2{
-            margin-left: -18px;
-            font-size: 4px;
-        }
-
-        
-
-
-        .form-group label {
-            position: absolute;
-            left: 15px; 
-            top: 15px; 
-            transition: 0.2s ease all;
-            opacity: 0.7;
-            font-size: 12px; 
-            color: #333; 
-            font-weight: bold; 
-            pointer-events: none; 
-        }
-        
-        .form-group input:focus + label,
-        .form-group input:not(:placeholder-shown) + label {
-            top: -25px; 
-            left: 15px; 
-            font-size: 16px; 
-            opacity: 1;
-            color: #005733; 
-        }
-        
-            .form-group input {
-            width: 90%;
-            height: 10px;
-            padding: 12px 10px; 
-            margin-bottom: -10px;
-            border: 1px solid #0c6502;
-            border-radius: 5px;
-            transition: border-color 0.3s;
-            margin-top: 50px; 
-            text-align: start;
-            }
-
-
-
-            
+    .loading-item {
+        background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+        border-radius: 4px;
+        height: 18px;
+        margin: 5px 0;
+        font-size: 13px;
+    }
     
-          
-          }
+    @keyframes loading {
+        0% { background-position: 200% 0; }
+        100% { background-position: 0 0; }
+    }
+
+    .addUser-btn{
+        width:45%;
+        font-size: 10px;
+        border: none;
+        border-radius: 4px;
+        margin-left: 100px;
+
+
+    }
+
+
+    .task-container {
+        display: flex;
+        justify-content: center;
+        flex-direction: column; 
+        align-items: center;
+        width: 100%;
+        margin-left: -60px;
         
+    }
+    
+    .form-section {
+        width: 95%;
+        max-width: 1200px;
+        margin-left: -30px;
         
-        
-        
+    }
+    
+    .recent-tasks {
+        margin-left: 800px;
+        width: 100%;
+        max-width: 600px;
+        margin-top: 20px; 
+        position: relative; 
+        text-align: left;
+    }
+
+    .form-content {
+        width: 88%;
+        position: relative;
+        padding: 20px;
+        border: 1px solid #ddd;
+        margin-bottom: 20px;
+        border-radius: 8px;
+    }
+
+
+    .form-content1 {
+        margin-top: 20px;
+        width: 82%;
+        position: relative;
+        padding: 20px;
+        border: 2px solid #ddd;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); 
+    }
+
+
+
+    .modal-content {
+        margin-top: -280px;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 500px;
+        width: 60%;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        max-height: 60%; 
+        overflow-y: auto; 
+    }
+
+    .title1 {
+        margin-left: 20px;
+        text-align: center;
+        font-size: 30px;
+        margin-bottom: 20px;
+        font-family:'Courier New', Courier, monospace;
+        background: linear-gradient(90deg, #005733, #04ad2b, #2acb4f);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 60%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .container{
+        width: 450px;
+    }
+
+    label{
+        font-size: 12px;
+    }
+
+    input[type="text"], 
+    input[type="file"],
+    input[type="password"]{
+        width: 95%;
+        height: 15px; 
+        font-size: 12px;
+        padding: 5px 10px; 
+        text-align: center; 
+        line-height: 10px;
+    }
+
+    .officeTask{
+        width: 97%;
+        height: 8px; 
+        font-size: 12px;
+        padding: 5px 10px; 
+        text-align: center; 
+        line-height: 10px; 
+    }
+
+
+    input[type="text"], input[type="file"] , input[type="password"],.officeTask{
+        border: 2px solid green; 
+        background-color: rgba(0, 128, 0, 0.1); 
+        padding: 8px;
+        border-radius: 4px;
+    }
+
+    input[type="text"]:focus, input[type="file"]:focus, input[type="password"]:focus,.officeTask:focus {
+        outline: none;
+        border-color: darkgreen; 
+        background-color: rgba(0, 128, 0, 0.2);
+    }
+    
+
+
+    .plus-icon {
+        display: inline-block;
+        background-color: #28a745;
+        color: white; 
+        border-radius: 50%; 
+        width: 25px; 
+        height: 25px; 
+        text-align: center; 
+        line-height: 26px;
+        font-size: 20px; 
+        cursor: pointer; 
+    }
+    .plus-icon:hover {
+        background-color: #218838;
+    }
+
+
+
+    .plus-icon {
+    font-weight:bold;
+    text-align: center;
+    text-decoration:none;
+    color: #fff;
+    background-color: #28a745;
+    border: 2px solid #000;
+    border-radius: 40px;
+    box-shadow: 5px 5px 0px #000;
+    transition: all 0.3s ease;
+}
+
+
+
+.plus-icon:hover {
+    background-color: #fff;
+    color: green;
+    border: 2px solid #28a745;
+    box-shadow: 5px 5px 0px #28a745;
+}
+
+.plus-icon:active {
+    color: white;
+    background-color: #28a745;
+    box-shadow: none;
+    transform: traslateY(4px);
+}
+
+.btn3, .btn2, .btn-clear {
+    width:50%;
+    background-color: #18392B;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+
+.btn-clear:hover {
+    background-color: red;
+}
+
+.btn3:hover, .btn2:hover {
+    background-color: #555;
+}
+
+#openModalButton {
+    padding: 10px 20px;
+    background-color: #18392B;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 10px;
+    margin-top: -31.5px;
+    margin-left: 115px;
+}
+
+#openModalButton:hover {
+    background-color: #318392B3;
+}
+
+button[type="submit"] {
+    width: 102%;
+    padding: 12px 25px;
+    background-color: #18392B; 
+    color: white; 
+    border: none;
+    border-radius: 8px; 
+    font-size: 10px; 
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    transition: all 0.3s ease;
+}
+
+/* Hover and active effects for Save button */
+button[type="submit"]:hover {
+    background-color: #0056b3;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); 
+    transform: translateY(-2px);
+}
+
+button[type="submit"]:active {
+    transform: translateY(2px);
+    background-color: #004085;
+}
+
+.design-step{
+    font-size: 20px; 
+    font-weight:bold; 
+    margin-left:-10px;
+    margin-bottom:20px
+}
+
+select, 
+option {
+    width: 107%;
+    height: 25px; 
+    font-size: 12px;
+    padding: 5px 10px; 
+    text-align: start; 
+    line-height: 10px; 
+}
+
+
+
+
+/* Modal container */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal content box */
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    margin-top: 30px;
+    width: 68%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-height: 80%; 
+    overflow-y: auto; 
+}
+
+
+
+
+button[type="submit"],
+button[type="button"] {
+    width: 100%;
+    padding: 12px 25px;
+    background-color: #18392B; 
+    color: white; 
+    border: none;
+    border-radius: 8px; 
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    transition: all 0.3s ease;
+}
+
+
+button[type="button"]{
+    background-color: #0056b3; 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); 
+    transform: translateY(-2px); 
+}
+
+button[type="button"] {
+    transform: translateY(2px); 
+    background-color: #004085; 
+}
+
+button[type="submit"]:hover{
+    background-color: #19c909; 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); 
+    transform: translateY(-2px);
+}
+
+button[type="submit"]:active{
+    transform: translateY(2px); 
+    background-color: #19c909; 
+}
+
+.btn4{
+    width: 101%;
+    background-color: #18392B;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    
+}
+.btn4:hover{
+    background-color: #28a745;
+}
+
+.labelForm2{
+    margin-left: -18px;
+    font-size: 4px;
+}
+
+
+
+
+.form-group label {
+    position: absolute;
+    left: 15px; 
+    top: 15px; 
+    transition: 0.2s ease all;
+    opacity: 0.7;
+    font-size: 12px; 
+    color: #333; 
+    font-weight: bold; 
+    pointer-events: none; 
+}
+
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+    top: -25px; 
+    left: 15px; 
+    font-size: 16px; 
+    opacity: 1;
+    color: #005733; 
+}
+
+    .form-group input {
+    width: 90%;
+    height: 10px;
+    padding: 12px 10px; 
+    margin-bottom: -10px;
+    border: 1px solid #0c6502;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+    margin-top: 50px; 
+    text-align: start;
+    }
+
+
+
+    
+
+  
+  }
+
+
+

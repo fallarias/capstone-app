@@ -118,7 +118,7 @@ class GetRouteController extends Controller
 
         // Fetch holidays for the current year
         $holidays = Holiday::whereYear('holiday_date', $currentYear)->get();
-        $this->populateHolidays(2024, 2030);
+        //$this->populateHolidays(2024, 2027);
         //app-bar
         
         $admin = User::select('firstname','lastname','middlename','user_id')->where('account_type','Admin')->first();

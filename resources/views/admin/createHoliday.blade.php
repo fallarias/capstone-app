@@ -95,11 +95,7 @@
                 title: 'Great...',
                 text: @json(session('success')),
                 confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '{{ route("admin.listOfTaskPage") }}';
-                }
-            });
+            })
         </script>
     @endif
 
@@ -137,7 +133,7 @@
             </tr>
         </thead>
         <tbody id="holidayList">
-            @foreach ($holidays->take(5) as $holiday)
+            @foreach ($holidays as $holiday)
                 <tr>
                     <td><input type="checkbox" class="holidayCheckbox"></td>
                     <td>{{ $holiday->description }}</td>

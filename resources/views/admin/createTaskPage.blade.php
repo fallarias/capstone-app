@@ -69,9 +69,10 @@
                     <!-- Plus icon to add more forms -->
                     <i class="plus-icon" id="add-form">+</i>
                 </div>
-                <button type="reset" class="btn-clear">Clear All</button>
-                <button class="btn3 addUser" id="openModalButton" >Add User</button>
-                <button class="btn4" style="margin-top: 5px;">CREATE</button>
+                <div class="button-container">
+                    <button type="reset" class="btn-clear">Clear All</button>
+                    <button class="btn4">CREATE</button>
+                </div>
             </form>
             <!--<button type="button" class="btn2" style="height:40px; padding:auto; margin-top:20px; margin-left:390px" onclick="window.history.back();">Go Back</button> -->
         </div>
@@ -106,8 +107,8 @@
             <button type="submit" name="btnsave" class="submit-btn" style="margin-top: 10px; background-color: #005733;">Save</button>
         </form>
 
-        </div>
-        </div>
+    </div>
+</div>
 
         </div>
 

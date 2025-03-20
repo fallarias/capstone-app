@@ -14,8 +14,8 @@
 <body>
 @include('components.app-bar', ['admin' => $admin])
 <div style="display: flex; justify-content: center; margin-top: 40px; width:1000px; margin-left:400px">
-
-<table border = "1">
+<div class="table-responsive">
+<table class="listTable1" border = "1">
 		<thead>
 			<th>#</th>
             <th>User ID</th>
@@ -54,6 +54,7 @@
             @endforelse
 		</tbody>
 	</table><br>
+</div>
     </div>
 </body>
 <script>

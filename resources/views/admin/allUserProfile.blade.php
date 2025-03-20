@@ -239,14 +239,17 @@
                 <td>{{ $row->status }}</td>
                 <td>{{ $row->profile_picture }}</td>
                 <td style="display: flex; gap: 20px; justify-content: center; padding: 10px;">
-                    <form id="acceptForm{{ $row->user_id }}" action="{{ route('admin.accept', $row->user_id) }}" method="POST">
-                        @csrf
-                        <button style="background-color:#28a745; color:wheat; border-radius: 3px; width:90px; border:none; padding:5px; cursor: pointer;" type="button" onclick="confirmAction(event, 'accept', 'acceptForm{{ $row->user_id }}')">Accept <br> User</button>
-                    </form>
-                    <form id="rejectForm{{ $row->user_id }}" action="{{ route('admin.reject', $row->user_id) }}" method="POST">
-                        @csrf
-                        <button style="background-color:red; color:wheat; border-radius: 3px; width:90px; border:none; padding:5px ;cursor: pointer;" type="button" onclick="confirmAction(event, 'deactivate ', 'rejectForm{{ $row->user_id }}')">Not Accept User</button>
-                    </form>
+                    @if ($row->status == "Not Accepted" || $row->status == "Not accepted")
+                        <form id="acceptForm{{ $row->user_id }}" action="{{ route('admin.accept', $row->user_id) }}" method="POST">
+                            @csrf
+                            <button style="background-color:#28a745; color:wheat; border-radius: 3px; width:90px; border:none; padding:5px; cursor: pointer;" type="button" onclick="confirmAction(event, 'accept', 'acceptForm{{ $row->user_id }}')">Accept <br> User</button>
+                        </form>
+                    @else
+                        <form id="rejectForm{{ $row->user_id }}" action="{{ route('admin.reject', $row->user_id) }}" method="POST">
+                            @csrf
+                            <button style="background-color:red; color:wheat; border-radius: 3px; width:90px; border:none; padding:5px ;cursor: pointer;" type="button" onclick="confirmAction(event, 'deactivate ', 'rejectForm{{ $row->user_id }}')">Deactivate User</button>
+                        </form>
+                    @endif
                 </td>
             </tr>
         @empty

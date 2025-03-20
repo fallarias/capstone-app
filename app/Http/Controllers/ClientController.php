@@ -101,14 +101,14 @@ class ClientController extends Controller
                             ->whereNull('finished')
                             ->whereNotNull('start')
                             ->count();
-        $overtime = Audit::where('user_id', $UserId)
-                            ->whereColumn('finished', '>', 'deadline')
-                            ->whereNotNull('finished')
-                            ->whereNotNull('start')
-                            ->count();
+        // $overtime = Audit::where('user_id', $UserId)
+        //                     ->whereColumn('finished', '>', 'deadline')
+        //                     ->whereNotNull('finished')
+        //                     ->whereNotNull('start')
+        //                     ->count();
 
         $requerements = Requirements::where('user_id', $UserId)->count();
-        $messages = $audit + $requerements + $beyond + $overtime;
+        $messages = $audit + $requerements + $beyond;
         $ongoing = 'ongoing';
         $pending = Transaction::where('status', $ongoing)
                                         ->where('user_id', $UserId)
@@ -136,19 +136,19 @@ class ClientController extends Controller
         $finishedAudits = $finishedAuditsQuery->get();
         $countfinishedAudits = $finishedAuditsQuery->count();
 
-        $overFinishedAuditsQuery = Audit::with(['user','staff'])->where('user_id', $UserId)
-                        // Uncomment if you only want finished audits
-                        //->whereNotNull('finished')
-                        ->whereColumn('finished', '>', 'deadline')
-                        ->whereNotNull('start');
+        // $overFinishedAuditsQuery = Audit::with(['user','staff'])->where('user_id', $UserId)
+        //                 // Uncomment if you only want finished audits
+        //                 //->whereNotNull('finished')
+        //                 ->whereColumn('finished', '>', 'deadline')
+        //                 ->whereNotNull('start');
 
-        $overFinishedAudits = $overFinishedAuditsQuery->get();
-        $countoverFinishedAudits = $overFinishedAuditsQuery->count();
+        // $overFinishedAudits = $overFinishedAuditsQuery->get();
+        // $countoverFinishedAudits = $overFinishedAuditsQuery->count();
 
         $auditQuery = Audit::with(['user', 'staff'])
                         ->where('user_id', $UserId)
                         ->whereNotNull('start')
-                        ->whereRaw("TIME(start) >= ?", ['16:00:00']);
+                        ->whereRaw("TIME(start) >= ?", ['17:00:00']);
                     
         $auditEntry = $auditQuery->get();
         $countAuditEntry = $auditQuery->count();
@@ -161,7 +161,7 @@ class ClientController extends Controller
         $requirementMessages = $requirementMessagesQuery->get();
         $countRequirementMessages = $requirementMessagesQuery->count();
 
-        $totalNotifications = $countRequirementMessages + $countAuditEntry + $countfinishedAudits + $countoverFinishedAudits;
+        $totalNotifications = $countRequirementMessages + $countAuditEntry + $countfinishedAudits;
 
         if ($finishedAudits->isEmpty()) {
             return view('client.clientNotfication', compact('finishedAudits','requirementMessages','auditEntry'))->with('null', 'No Notification found');

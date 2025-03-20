@@ -13,9 +13,10 @@
 </head>
 <body>
 @include('components.app-bar', ['admin' => $admin])
-<div style="display: flex; justify-content: center; margin-top: 40px; width:1000px; margin-left:400px">
+<div style="display: flex; justify-content: center; margin-top: -10px; width: 1100px; margin-left: 400px;margin-left: 350px;margin-top: 70px;">
+<div class="table-responsive">
 
-<table border = "1">
+<table class="listTable1" border = "1">
 		<thead>
             <th>#</th>
             <th>User ID</th>
@@ -58,6 +59,7 @@
 	</table><br>
 
     </div>
+</div>
 </body>
 <script>
     // Function to refresh the stats every 5 seconds

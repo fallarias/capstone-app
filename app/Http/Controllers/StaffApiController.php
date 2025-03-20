@@ -374,6 +374,7 @@ class StaffApiController extends Controller
         Requirements::create([
             'message' => $attrs['message'],
             'stop_transaction' => now(),
+            'staff_id' => $user_id,
             'transaction_id' => $transactionId,
             'user_id' => $transaction->user_id, // Associate with the user
             'department' => $department,

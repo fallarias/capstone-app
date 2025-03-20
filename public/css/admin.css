@@ -220,7 +220,7 @@ a:hover {
   width: 410px; /* Adjust this value to your preferred width */
   height: auto;
   margin-left: 770px;
-  margin-top: -445px;
+  margin-top: -435px;
   margin-bottom: 570px;
   display: flex;
   justify-content: space-between;
@@ -560,6 +560,28 @@ border-collapse: collapse;
 .modal-content table td {
 border: 1px solid #ddd;
 padding: 8px;
+}
+
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  background: #007bff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.submit-btn:hover {
+  background: #0056b3;
+}
+
+.submit-btn:active {
+  transform: scale(0.98);
 }
 
 
@@ -960,6 +982,21 @@ span{
             border: 1px solid black;
           }
 
+          .listTable1{
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 4px 6px rgba(86, 57, 57, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+          .listTable1 td{
+            border: 1px solid black;
+            padding: 10px;
+            padding-bottom: 10px;
+
+          }
+
           .no-border {
             border-top: 1px solid black !important; /* Adds top border */
           }
@@ -1310,6 +1347,122 @@ span{
                         cursor: pointer;
                     }
                     
+
+
+                    .form-content {
+                      width: 95%;
+                      position: relative;
+                      padding: 20px;
+                      border: 1px solid #ddd;
+                      margin-bottom: 20px;
+                      border-radius: 8px;
+                      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add this line */
+                  }
+          
+              .form-content1 {
+                  margin-top: 20px;
+                  width: 150%;
+                  position: relative;
+                  padding: 20px;
+                  border: 2px solid #ddd;
+                  margin-bottom: 20px;
+                  border-radius: 8px;
+                  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Add this line */
+                 }
+  
+              .form-content1 label{
+                  margin-left: 0px;
+                  }
+          
+              input[type="text"], input[type="file"] , input[type="password"]{
+                  border: 2px solid green; /* Green border */
+                  background-color: rgba(0, 128, 0, 0.1); /* Transparent green background */
+                  padding: 8px;
+                  border-radius: 4px;
+              }
+          
+              input[type="text"]:focus, input[type="file"]:focus, input[type="password"]:focus {
+                  outline: none;
+                  border-color: darkgreen; /* Darker green when focused */
+                  background-color: rgba(0, 128, 0, 0.2); 
+              }
+          
+              select {
+                  border: 2px solid green; 
+                  background-color: rgba(0, 128, 0, 0.1); 
+                  padding: 8px;
+                  border-radius: 4px;
+                  appearance: none;
+              }
+          
+              select:focus {
+                  outline: none;
+                  border-color: darkgreen; 
+                  background-color: rgba(0, 128, 0, 0.2); /* Slightly more opaque green on focus */
+              }
+              .close-icon {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                margin : auto;
+                background-color: white;
+                color: red;
+                border: none;
+                border-radius: 50%;
+                width: 25px;
+                height: 25px;
+                text-align: center;
+                line-height: 25px;
+                cursor: pointer;
+                font-size: 30px;
+            }
+            .close-icon {
+              cursor: pointer;
+              color: red;
+              font-size: 18px;
+              margin-bottom: 10px;
+          }
+
+
+          .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+          margin-top: 10px;
+            position: absolute;
+            left: 15px; /* Adjusted left position */
+            top: 15px; /* You can also adjust the top position if needed */
+            transition: 0.2s ease all;
+            opacity: 0.7;
+            font-size: 14px; /* Font size */
+            color: #333; /* Color */
+            font-weight: bold; /* Bold text */
+            pointer-events: none; /* Prevent label from blocking input */
+        }
+        
+        .form-group input:focus + label,
+        .form-group input:not(:placeholder-shown) + label {
+            top: -25px; /* Raise the label higher */
+            left: 15px; /* Keep the left position consistent when focused */
+            font-size: 22px; /* Adjust as needed */
+            opacity: 1;
+            color: #005733; /* Color when focused or filled */
+        }
+        
+            .form-group input {
+            width: 90%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s;
+            margin-top: 20px; /* Added margin for spacing between the input and label */
+            }
+
+              .labelForm2{
+                margin-left: -18px;
+                font-size: 4px;
+            }
 
 
                       
@@ -2093,6 +2246,62 @@ td .fas {
   width:1000px; 
   margin-left:400px;
 }
+
+.form-group label {
+  position: absolute;
+  left: 15px; 
+  top: 15px; 
+  transition: 0.2s ease all;
+  opacity: 0.7;
+  font-size: 12px; 
+  color: #333; 
+  font-weight: bold; 
+  pointer-events: none; 
+}
+
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+  top: -25px; 
+  left: 15px; 
+  font-size: 16px; 
+  opacity: 1;
+  color: #005733; 
+}
+
+  .form-group input {
+  width: 90%;
+  height: 10px;
+  padding: 12px 10px; 
+  margin-bottom: -10px;
+  border: 1px solid #0c6502;
+  border-radius: 5px;
+  transition: border-color 0.3s;
+  margin-top: 50px; 
+  text-align: start;
+  }
+
+
+  .form-content {
+    width: 88%;
+    position: relative;
+    padding: 20px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+
+.form-content1 {
+    margin-top: 20px;
+    width: 82%;
+    position: relative;
+    padding: 20px;
+    border: 2px solid #ddd;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); 
+}
+
 
 
 

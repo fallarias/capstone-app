@@ -85,11 +85,11 @@
 
 .user-container {
   width: 55%;
-  max-height: 500px; /* Limits height */
+  max-height: 300px; /* Limits height */
   overflow-y: auto; /* Enables scrolling if content exceeds max height */
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); /* Adds a shadow */
   margin-left: 770px;
-  margin-top: -552px;
+  margin-top: -610px;
   border-radius: 10px;
   background-color: #f9f9f9;
 
@@ -160,6 +160,41 @@
   margin-right: 5px;
   margin-left: -100px;
 }
+
+
+        #openModalButton {
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+
+
+        /* Modal container */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Modal content box */
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-height: 80%; /* Max height as a percentage of the viewport */
+            overflow-y: auto; 
+        }
 
 
 
@@ -245,7 +280,31 @@
     </style>
 </head>
 <body>
+@if($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Error',
+                text: @json($errors->first()),
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
 
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Great...',
+                text: @json(session('success')),
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '{{ route("admin.dashboard") }}'; // Replace with your actual dashboard route
+                }
+            });
+        </script>
+    @endif
 <div class="container">
     
     <!-- App Bar -->
@@ -276,17 +335,23 @@
         </div>
 
         <div class="stat-container3" >
-    <div class="chart-container3">
-        <canvas id="reviewChart" style="margin-bottom:-20px; margin-top: 60px;"></canvas>
-    </div>
-    <div class="legend-container" >
+            <div class="chart-container3">
+                <canvas id="reviewChart" style="margin-bottom:-20px; margin-top: 60px;"></canvas>
+            </div>
+        <div class="legend-container" >
 
         <ul style="list-style: none; margin-left: -220px;margin-top: -20px;">
             @foreach($departments as $department)
-                <li style="color: #36A2EB;">{{ $department }}</li>
+                <li style="color: #005733;">{{ $department }}</li>
             @endforeach
         </ul>
 
+        </div>
+    </div>
+
+    <div class="stat-container2" style="margin-left:0px; margin-top: -295px;">
+        <div class="chart-container4">
+            <canvas id="barChart" width="600" height="200"></canvas>
         </div>
     </div>
 
@@ -296,10 +361,11 @@
   <div class="header">
     <h2>Users</h2>
     <p id="user-count">{{ $users }} registered users</p>
-    <button class="add-user-btn"  onclick="window.location='{{ route('admin.createTaskPage') }}'">
+    <button class="add-user-btn" id="openModalButton">
       <i class="icon">+</i> Add new user
     </button>
   </div>
+
 
   <div class="user-list">
     @forelse($online as $counter)
@@ -323,12 +389,25 @@
   </div>
 </div>
 
-<div class="stat-container2" style="margin-left:0px; margin-top: 100px;">
-    <div class="chart-container4">
-        <canvas id="barChart" width="600" height="200"></canvas>
-    </div>
 </div>
 
+
+
+<div id="inputModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h1 class="title1" style="margin-left: 110px; font-size:28px">Create New Office</h1>
+        <form id="inputForm" method="POST" action="{{ route('admin.newOfficeAccounts') }}">
+        @csrf
+            <div id="modal-form-container" class="form-container">
+                <!-- Forms will be dynamically added here -->
+            </div>
+            <!-- Button to add more forms -->
+            <button type="button" class="submit-btn" style="background-color: #005733;" id="modal-add-form">Add User</button>
+            <button type="submit" name="btnsave" class="submit-btn" style="margin-top: 10px; background-color: #005733;">Save</button>
+        </form>
+
+    </div>
 </div>
 
 
@@ -377,7 +456,7 @@ function initializeCharts() {
             labels: departments,
             datasets: [{
                 data: stars,
-                backgroundColor: ["#36A2EB", "#FFCE56", "#FF6384", "#4BC0C0", "#9966FF"]
+                backgroundColor: ["#005733", "#FFCE56", "#FF6384", "#4BC0C0", "#9966FF"]
             }]
         };
 
@@ -555,6 +634,113 @@ const barChart = new Chart(bar, {
 
     // Refresh every 60 seconds (adjust interval as needed)
     setInterval(refreshAppBar, 5000); 
+</script>
+
+
+<script>
+        // Get modal and button elements
+        var modal = document.getElementById("inputModal");
+        var btn = document.getElementById("openModalButton");
+        var closeBtn = document.querySelector(".close");
+
+        // Show modal when button is clicked
+        btn.onclick = function() {
+            modal.style.display = "flex";
+        }
+
+        // Close modal when "x" is clicked
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // Close modal when user clicks outside the modal content
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+
+<script>
+    let formCounts = 0; // Counter to give unique IDs to each form element
+    let stepCounts = 0;
+
+    // Function to create a new form and add it to the container
+    function createForms(first = '', middle = '', last = '', email = '', password = '', department = '') {
+        formCounts++;
+        stepCounts++;
+
+        const formContents = `
+          <div class="form-content" id="form_${formCounts}">
+            <button class="close-icon" onclick="removeForm(${formCounts})">&times;</button>
+            <div class="form-group">
+                <input type="text" name="first[]" id="first_${formCounts}" value="${first}" required>
+                <label class="labelForm2">Firstname</label>
+            </div>
+            <div class="form-group">
+                <input type="text" name="middle[]" id="middle_${formCounts}" value="${middle}" required>
+                <label class="labelForm2">Middlename</label>
+            </div>
+            <div class="form-group">
+                <input type="text" name="last[]" id="last_${formCounts}" value="${last}" required>
+                <label class="labelForm2">Lastname</label>
+            </div>
+            <div class="form-group">
+                <input type="text" name="email[]" id="email_${formCounts}" value="${email}" required>
+                <label class="labelForm2">Email</label>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password[]" id="password_${formCounts}" value="${password}" required>
+                <label class="labelForm2">Password</label>
+            </div>
+            <div class="form-group">
+                <input type="text" name="department[]" id="department_${formCounts}" value="${department}" required>
+                <label class="labelForm2">Office Name</label>
+            </div>
+          </div>
+        `;
+
+        // Create a new div and set its inner HTML to the new form content
+        const newFormDiv = document.createElement('div');
+        newFormDiv.innerHTML = formContents;
+
+        // Append the new form to the modal's form container
+        document.getElementById('modal-form-container').appendChild(newFormDiv);
+    }
+
+    // Function to remove a form
+    function removeForm(formId) {
+        const formToRemove = document.getElementById(`form_${formId}`);
+        if (formToRemove) formToRemove.remove();
+        stepCounts--; // Decrement step count
+    }
+
+    // Add the event listener to the modal's add form button
+    document.getElementById('modal-add-form').addEventListener('click', function () {
+        createForms(); // Call createForm without passing any arguments
+    });
+    
+
+
+    // Re-populate old values when the page loads
+    document.addEventListener('DOMContentLoaded', function () {
+        const firsts = @json(old('first', []));
+        const middles = @json(old('middle', []));
+        const lasts = @json(old('last', []));
+        const emails = @json(old('email', []));
+        const passwords = @json(old('password', []));
+        const departments = @json(old('department', []));
+        
+        firsts.forEach((first, index) => {
+            const middle = middles[index] || '';
+            const last = lasts[index] || '';
+            const email = emails[index] || '';
+            const password = passwords[index] || '';
+            const department = departments[index] || '';
+            createForms(first, middle, last, email, password, department);
+        });
+    });
 </script>
 </body>
 </html>
