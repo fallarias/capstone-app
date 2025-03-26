@@ -117,7 +117,7 @@
 
     <div class="line1"></div>
 
-    <div id="calendar"></div>z
+    <div id="calendar"></div>
 
     
     
@@ -182,26 +182,30 @@
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const calendarEl = document.getElementById('calendar');
-            const calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                },
-                events: [
-                    @foreach ($holidays as $holiday)
-                    {
-                        title: '{{ $holiday->description }}',
-                        start: '{{ $holiday->holiday_date }}',
-                    },
-                    @endforeach
-                ]
-            });
-            calendar.render();
-        });
+document.addEventListener('DOMContentLoaded', function () {
+    if (window.calendarInitialized) return; // Prevent reinitialization
+    window.calendarInitialized = true;
+
+    const calendarEl = document.getElementById('calendar');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: [
+            @foreach ($holidays as $holiday)
+            {
+                title: '{{ $holiday->description }}',
+                start: '{{ $holiday->holiday_date }}',
+            },
+            @endforeach
+        ]
+    });
+    calendar.render();
+});
+
     </script>
 </body>
 </html>

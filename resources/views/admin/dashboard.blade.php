@@ -89,7 +89,7 @@
   overflow-y: auto; /* Enables scrolling if content exceeds max height */
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); /* Adds a shadow */
   margin-left: 770px;
-  margin-top: -610px;
+  margin-top: -585px;
   border-radius: 10px;
   background-color: #f9f9f9;
 

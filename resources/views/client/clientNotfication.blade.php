@@ -4,10 +4,11 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         .app-bar {
             background-color: #18392B;
@@ -184,7 +185,7 @@
     <h2>All Notifications ({{ $totalNotifications }}) Messages</h2>
 </div>
 
-<div class="email-container">
+<div class="email-container" id="notification">
     <div class="email-header">
         <div class="email-sender1">All</div>
         <div class="email-owner">Name</div>
@@ -192,59 +193,61 @@
         <div class="email-date">Date</div>
     </div>
 
-    <!-- @foreach ($auditEntry->reverse() as $time)
-        <div class="email-row" onclick="showModal('Accepted Beyond 5 PM', 'The task will be continued tomorrow at 8:30 AM for Transaction ID Number {{$time->transaction_id}}.')">
-            <div class="email-sender">{{ $time->staff->lastname }}, {{ $time->staff->firstname }}</div>
-            <div class="email-subject">Accepted Beyond 5 PM</div>
-            <div class="email-subject1">{{ $time->office_name }} - The task will be continued tomorrow at 8:30 AM for Transaction ID Number {{$time->transaction_id}}</div>
-            <div class="email-date1">{{ \Carbon\Carbon::parse($time->created_at)->format('M d') }}</div>
-        </div>
-    @endforeach -->
+    <div id="notification-refresh">
+        <!-- @foreach ($auditEntry->reverse() as $time)
+            <div class="email-row" onclick="showModal('Accepted Beyond 5 PM', 'The task will be continued tomorrow at 8:30 AM for Transaction ID Number {{$time->transaction_id}}.')">
+                <div class="email-sender">{{ $time->staff->lastname }}, {{ $time->staff->firstname }}</div>
+                <div class="email-subject">Accepted Beyond 5 PM</div>
+                <div class="email-subject1">{{ $time->office_name }} - The task will be continued tomorrow at 8:30 AM for Transaction ID Number {{$time->transaction_id}}</div>
+                <div class="email-date1">{{ \Carbon\Carbon::parse($time->created_at)->format('M d') }}</div>
+            </div>
+        @endforeach -->
 
-    <!-- @foreach ($finishedAudits->reverse() as $overtime)
-        @if(($overtime->finished > $overtime->deadline) || (empty($overtime->finished) && now() > $overtime->deadline))
-            <div class="email-row" onclick="showModal('New Message', 'The task {{ $overtime->task }} is finished at {{ \Carbon\Carbon::parse($overtime->finished)->format('g:i A') ?? 'No description available' }} exceeding the deadline at {{ \Carbon\Carbon::parse($overtime->deadline)->format('g:i A') ?? 'No description available' }} for transaction number {{$overtime->transaction_id}}.')">
-                <div class="email-sender">{{ $overtime->staff->lastname }}, {{ $overtime->staff->firstname }}</div>
-                <div class="email-subject">{{ $overtime->office_name }} </div>
-                <div class="email-subject1">The task {{ $overtime->task }} is finished at {{ \Carbon\Carbon::parse($overtime->finished)->format('g:i A') ?? 'No description available' }} exceeding the deadline at {{ \Carbon\Carbon::parse($overtime->deadline)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$overtime->transaction_id}}</div>
-                <div class="email-date1">{{ \Carbon\Carbon::parse($overtime->finished)->format('M d') }}</div>
-            </div>
-        @endif
-    @endforeach -->
+        <!-- @foreach ($finishedAudits->reverse() as $overtime)
+            @if(($overtime->finished > $overtime->deadline) || (empty($overtime->finished) && now() > $overtime->deadline))
+                <div class="email-row" onclick="showModal('New Message', 'The task {{ $overtime->task }} is finished at {{ \Carbon\Carbon::parse($overtime->finished)->format('g:i A') ?? 'No description available' }} exceeding the deadline at {{ \Carbon\Carbon::parse($overtime->deadline)->format('g:i A') ?? 'No description available' }} for transaction number {{$overtime->transaction_id}}.')">
+                    <div class="email-sender">{{ $overtime->staff->lastname }}, {{ $overtime->staff->firstname }}</div>
+                    <div class="email-subject">{{ $overtime->office_name }} </div>
+                    <div class="email-subject1">The task {{ $overtime->task }} is finished at {{ \Carbon\Carbon::parse($overtime->finished)->format('g:i A') ?? 'No description available' }} exceeding the deadline at {{ \Carbon\Carbon::parse($overtime->deadline)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$overtime->transaction_id}}</div>
+                    <div class="email-date1">{{ \Carbon\Carbon::parse($overtime->finished)->format('M d') }}</div>
+                </div>
+            @endif
+        @endforeach -->
 
-    @foreach ($finishedAudits->reverse() as $finish)
-        @if($finish->finished === null)
-            <div class="email-row" onclick="showModal('New Message', 'The task {{ $finish->task }} is started at {{ \Carbon\Carbon::parse($finish->start)->format('g:i A') ?? 'No description available' }} for transaction number {{$finish->transaction_id}}.')">
-                <div class="email-sender">{{ $finish->staff->lastname }}, {{ $finish->staff->firstname }}</div>
-                <div class="email-subject">{{ $finish->office_name }}</div>
-                <div class="email-subject1">The task {{ $finish->task }} is started at {{ \Carbon\Carbon::parse($finish->start)->format('g:i A') ?? 'No description available' }} deadline at {{ \Carbon\Carbon::parse($finish->deadline)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$finish->transaction_id}}</div>
-                <div class="email-date1">{{ \Carbon\Carbon::parse($finish->finished)->format('M d') }}</div>
-            </div>
-        @elseif(($finish->finished > $finish->deadline) || (empty($finish->finished) && now() > $finish->deadline))
-            <div class="email-row" onclick="showModal('Task Completed', 'The task {{ $finish->task }} is finished at {{ \Carbon\Carbon::parse($finish->finished)->format('g:i A') ?? 'No description available' }} but exceeded the deadline {{ \Carbon\Carbon::parse($finish->deadline)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$finish->transaction_id}}.')">
-                <div class="email-sender">{{ $finish->staff->lastname }}, {{ $finish->staff->firstname }}</div>
-                <div class="email-subject">{{ $finish->office_name }}</div>
-                <div class="email-subject1">Task Completed - The task {{ $finish->task }} is finished at {{ \Carbon\Carbon::parse($finish->finished)->format('g:i A') ?? 'No description available' }} but exceeded the deadline {{ \Carbon\Carbon::parse($finish->deadline)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$finish->transaction_id}}</div>
-                <div class="email-date1">{{ \Carbon\Carbon::parse($finish->finished)->format('M d') }}</div>
-            </div>
-        @else
-            <div class="email-row" onclick="showModal('Task Completed', 'The task {{ $finish->task }} is finished at {{ \Carbon\Carbon::parse($finish->finished)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$finish->transaction_id}}.')">
-                <div class="email-sender">{{ $finish->staff->lastname }}, {{ $finish->staff->firstname }}</div>
-                <div class="email-subject">{{ $finish->office_name }}</div>
-                <div class="email-subject1">Task Completed - The task {{ $finish->task }} is finished at {{ \Carbon\Carbon::parse($finish->finished)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$finish->transaction_id}}</div>
-                <div class="email-date1">{{ \Carbon\Carbon::parse($finish->finished)->format('M d') }}</div>
-            </div>
-        @endif
-    @endforeach
+        @foreach ($finishedAudits->reverse() as $finish)
+            @if($finish->finished === null)
+                <div class="email-row" onclick="showModal('New Message', 'The task {{ $finish->task }} is started at {{ \Carbon\Carbon::parse($finish->start)->format('g:i A') ?? 'No description available' }} for transaction number {{$finish->transaction_id}}.')">
+                    <div class="email-sender">{{ $finish->staff->lastname }}, {{ $finish->staff->firstname }}</div>
+                    <div class="email-subject">{{ $finish->office_name }}</div>
+                    <div class="email-subject1">The task {{ $finish->task }} is started at {{ \Carbon\Carbon::parse($finish->start)->format('g:i A') ?? 'No description available' }} deadline at {{ \Carbon\Carbon::parse($finish->deadline)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$finish->transaction_id}}</div>
+                    <div class="email-date1">{{ \Carbon\Carbon::parse($finish->finished)->format('M d') }}</div>
+                </div>
+            @elseif(($finish->finished > $finish->deadline) || (empty($finish->finished) && now() > $finish->deadline))
+                <div class="email-row" onclick="showModal('Task Completed', 'The task {{ $finish->task }} is finished at {{ \Carbon\Carbon::parse($finish->finished)->format('g:i A') ?? 'No description available' }} but exceeded the deadline {{ \Carbon\Carbon::parse($finish->deadline)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$finish->transaction_id}}.')">
+                    <div class="email-sender">{{ $finish->staff->lastname }}, {{ $finish->staff->firstname }}</div>
+                    <div class="email-subject">{{ $finish->office_name }}</div>
+                    <div class="email-subject1">Task Completed - The task {{ $finish->task }} is finished at {{ \Carbon\Carbon::parse($finish->finished)->format('g:i A') ?? 'No description available' }} but exceeded the deadline {{ \Carbon\Carbon::parse($finish->deadline)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$finish->transaction_id}}</div>
+                    <div class="email-date1">{{ \Carbon\Carbon::parse($finish->finished)->format('M d') }}</div>
+                </div>
+            @else
+                <div class="email-row" onclick="showModal('Task Completed', 'The task {{ $finish->task }} is finished at {{ \Carbon\Carbon::parse($finish->finished)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$finish->transaction_id}}.')">
+                    <div class="email-sender">{{ $finish->staff->lastname }}, {{ $finish->staff->firstname }}</div>
+                    <div class="email-subject">{{ $finish->office_name }}</div>
+                    <div class="email-subject1">Task Completed - The task {{ $finish->task }} is finished at {{ \Carbon\Carbon::parse($finish->finished)->format('g:i A') ?? 'No description available' }} for Transaction ID Number {{$finish->transaction_id}}</div>
+                    <div class="email-date1">{{ \Carbon\Carbon::parse($finish->finished)->format('M d') }}</div>
+                </div>
+            @endif
+        @endforeach
 
-    @foreach ($requirementMessages as $message)
-        <div class="email-row" onclick="showModal('{{ $message->department }}', '{{ $message->message }}.')">
-            <div class="email-sender">{{ $message->staff->lastname }}, {{ $message->staff->firstname }}</div>
-            <div class="email-subject">Lack of Requirement</div>
-            <div class="email-subject1">The task has stopped because of {{$message->message}}</div>
-            <div class="email-date1">{{ \Carbon\Carbon::parse($message->created_at)->format('M d') }}</div>
-        </div>
-    @endforeach
+        @foreach ($requirementMessages as $message)
+            <div class="email-row" onclick="showModal('{{ $message->department }}', '{{ $message->message }}.')">
+                <div class="email-sender">{{ $message->staff->lastname }}, {{ $message->staff->firstname }}</div>
+                <div class="email-subject">Lack of Requirement</div>
+                <div class="email-subject1">The task has stopped because of {{$message->message}}</div>
+                <div class="email-date1">{{ \Carbon\Carbon::parse($message->created_at)->format('M d') }}</div>
+            </div>
+        @endforeach
+    </div>
 </div>
 
 
@@ -274,6 +277,23 @@
         $('#messageModal').modal('show');
     }
 </script>
+<script>
+        function refreshStats() {
+            $.ajax({
+                url: '/client/notification/refresh',
+                method: 'GET',
+                success: function(response) {
+                    $("#notification-refresh").empty().append($(response).find("#notification-refresh").html());
 
+                    //console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX error:", status, error);
+                }
+            });
+        }
+        // Refresh every 3 seconds
+        setInterval(refreshStats, 3000);
+    </script>
 </body>
 </html>

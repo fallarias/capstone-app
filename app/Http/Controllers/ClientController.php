@@ -174,6 +174,56 @@ class ClientController extends Controller
 
     }
 
+    public function notification_refresh()
+    {
+        $UserId = session('user_id');
+    
+        $finishedAuditsQuery = Audit::with(['user','staff'])->where('user_id', $UserId)
+                        // Uncomment if you only want finished audits
+                        //->whereNotNull('finished')
+                        ->whereNotNull('start');
+
+        $finishedAudits = $finishedAuditsQuery->get();
+        $countfinishedAudits = $finishedAuditsQuery->count();
+
+        // $overFinishedAuditsQuery = Audit::with(['user','staff'])->where('user_id', $UserId)
+        //                 // Uncomment if you only want finished audits
+        //                 //->whereNotNull('finished')
+        //                 ->whereColumn('finished', '>', 'deadline')
+        //                 ->whereNotNull('start');
+
+        // $overFinishedAudits = $overFinishedAuditsQuery->get();
+        // $countoverFinishedAudits = $overFinishedAuditsQuery->count();
+
+        $auditQuery = Audit::with(['user', 'staff'])
+                        ->where('user_id', $UserId)
+                        ->whereNotNull('start')
+                        ->whereRaw("TIME(start) >= ?", ['17:00:00']);
+                    
+        $auditEntry = $auditQuery->get();
+        $countAuditEntry = $auditQuery->count();
+        
+
+        // Fetch all requirement messages for the user
+        $requirementMessagesQuery = Requirements::with(['user','staff'])->where('user_id', $UserId)
+                                            ->orderBy('stop_transaction', 'desc');  // Optional: Sort messages by stop_transaction
+                                              // Get all messages
+        $requirementMessages = $requirementMessagesQuery->get();
+        $countRequirementMessages = $requirementMessagesQuery->count();
+
+        $totalNotifications = $countRequirementMessages + $countAuditEntry + $countfinishedAudits;
+
+        if ($finishedAudits->isEmpty()) {
+            return view('client.clientNotfication', compact('finishedAudits','requirementMessages','auditEntry'))->with('null', 'No Notification found');
+        }                                    
+        // Prepare messages for response
+        //$messages = $requirementMessages->pluck('message')->filter(); // Get only the messages, filter out any null values
+        $user = $user = User::find($UserId);
+        event(new UserNotification($user));
+        return view('client.clientNotfication', compact('finishedAudits','requirementMessages','auditEntry','totalNotifications'));
+
+    }
+
     //returning the name of the task
     public function template()
     {
@@ -203,6 +253,7 @@ class ClientController extends Controller
     public function track_document($task_id, $transaction_id)
     {
         $UserId = session('user_id');
+        session(['transaction_id' => $transaction_id]);
         $task = Create::where('task_id', $task_id)->get();
         $transaction = Transaction::where('task_id', $task_id)
                                     ->where('transaction_id', $transaction_id)

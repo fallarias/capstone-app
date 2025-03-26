@@ -181,7 +181,7 @@
 <div style="text-align:center">
     @include('components.app-bar', ['admin' => $admin])
 
-    <div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px; margin-left: 200px;">
+    <div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px; margin-left: -50px;">
         <form id="searchForm" onsubmit="return searchTask()" style="display: flex; gap: 15px; align-items: center; margin-bottom: 20px;">
 
         <input type="text" id="task_name" class="form-control" placeholder="Search" title="Search by task name">

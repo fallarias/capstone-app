@@ -99,6 +99,7 @@ Route::group(['middleware'=> ['auth:sanctum']], function() {
             Route::get('/logout/client', 'logout')->name('admin.logout');
             Route::get('/client/home', 'homepage')->name('client.clientHomePage');
             Route::get('/client/notification', 'notification')->name('client.clientNotification');
+            Route::get('/client/notification/refresh', 'notification_refresh');
             Route::get('/client/template', 'template')->name('client.clientTemplate');
             Route::get('/client/track/{task_id}/{transaction_id}', 'track_document')->name('client.clientTrackDocument');
             Route::get('/client/transaction/', 'transaction_history')->name('client.clientTrasactionHistory');

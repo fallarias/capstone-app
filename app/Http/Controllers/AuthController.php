@@ -96,7 +96,7 @@ class AuthController extends Controller
         }
     
         // Handle login failure
-        return back()->withErrors(['email' => 'The provided credentials do not match our records.'])->withInput();
+        return redirect()->back()->with('error', 'The provided credentials do not match our records.')->withInput();
     }
     
     public function logout(Request $request): RedirectResponse {

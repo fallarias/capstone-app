@@ -90,7 +90,7 @@ class GetRouteController extends Controller
 
     public function transaction(){
 
-        $transactions = Transaction::with('user')->get();
+        $transactions = Transaction::with(['user','task'])->get();
         //app-bar
         $admin = User::select('firstname','lastname','middlename','user_id')->where('account_type','Admin')->first();
         $UserId = session('user_id');

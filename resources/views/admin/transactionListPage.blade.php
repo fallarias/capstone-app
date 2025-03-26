@@ -18,9 +18,9 @@
 <table class="listTable1" border = "1">
 		<thead>
 			<th>#</th>
-            <th>User ID</th>
+            <!-- <th>User ID</th> -->
 			<th>User Email</th>
-            <th>Task ID</th>
+            <th>Task Name</th>
             <th>Total of Office</th>
             <th>Office Done</th>
             <th>Status</th>
@@ -32,12 +32,17 @@
             @forelse($transactions as $transaction)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $transaction->user_id }}</td>
+                    <!-- <td>{{ $transaction->user_id }}</td> -->
                     <td>{{ $transaction->user->email ?? 'N/A' }}</td>
-                    <td>{{ $transaction->task_id }}</td>
+                    <td>{{ $transaction->task->name }}</td>
                     <td>{{ $transaction->Total_Office_of_Request }}</td>
                     <td>{{ $transaction->Office_Done }}</td>
-                    <td>{{ $transaction->status }}</td>
+                    <td>@if ($transaction->status === 'finished')
+                            Completed
+                        @else
+                            Ongoing
+                        @endif
+                    </td>
                     <td>{{ $transaction->created_at->format('Y-m-d h:i A') }}</td>
                     <td>
                         @if ($transaction->status === 'finished' && $transaction->updated_at)
